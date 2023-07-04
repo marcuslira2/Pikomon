@@ -1,18 +1,27 @@
 package br.com.pikomon.Pikomon.persistence;
 
-import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.FetchType;
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+
 @Entity
 @Table(name = "pokemon")
 public class Pokemon {
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Integer uuid;
+
     private Integer id;
 
     private String originalTrainer;
@@ -87,11 +96,31 @@ public class Pokemon {
 
     private Integer evSpeed;
 
+    private Boolean isShiny;
+
     @OneToMany
     private List<Move> moves;
 
+    private String description;
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
     public Pokemon() {
         this.moves = new ArrayList<>();
+    }
+
+    public Boolean getShiny() {
+        return isShiny;
+    }
+
+    public void setShiny(Boolean shiny) {
+        isShiny = shiny;
     }
 
     public Integer getId() {
@@ -397,12 +426,19 @@ public class Pokemon {
         this.moves.add(move);
     }
 
+    public Integer getUuid() {
+        return uuid;
+    }
 
+    public void setUuid(Integer uuid) {
+        this.uuid = uuid;
+    }
 
     @Override
     public String toString() {
         return "Pokemon{" +
-                "id=" + id +
+                "uuid=" + uuid +
+                ", id=" + id +
                 ", originalTrainer='" + originalTrainer + '\'' +
                 ", actualTrainer='" + actualTrainer + '\'' +
                 ", level=" + level +
@@ -439,7 +475,9 @@ public class Pokemon {
                 ", evSpAtk=" + evSpAtk +
                 ", evSpDef=" + evSpDef +
                 ", evSpeed=" + evSpeed +
+                ", isShiny=" + isShiny +
                 ", moves=" + moves +
+                ", description='" + description + '\'' +
                 '}';
     }
 }

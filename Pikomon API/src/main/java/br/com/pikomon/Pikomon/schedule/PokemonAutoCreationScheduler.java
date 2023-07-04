@@ -15,7 +15,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -35,7 +34,7 @@ public class PokemonAutoCreationScheduler {
     @PostConstruct
     public void create(){
         log.info("Creating pokemons on database");
-        for (int i=1;i<2;i++){
+        for (int i=1;i<3;i++){
             Pokemon pk = new Pokemon();
             PokemonData pokemonData = restTemplate.getForObject("https://pokeapi.co/api/v2/pokemon/"+i,PokemonData.class);
             log.info("Saving pokemon: " + pokemonData.getName());
@@ -51,6 +50,7 @@ public class PokemonAutoCreationScheduler {
             pk.setBaseSpDef(pokemonData.getStats().get(4).getBase_stat());
             pk.setBaseSpeed(pokemonData.getStats().get(5).getBase_stat());
             pk.setType1(pokemonData.getTypes().get(0).getType().getName());
+            pk.setShiny(false);
             if (pokemonData.getTypes().size()>1){
                 pk.setType2(pokemonData.getTypes().get(1).getType().getName());
             }

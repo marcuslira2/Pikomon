@@ -1,14 +1,15 @@
 package br.com.pikomon.Pikomon.persistence;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+import org.hibernate.annotations.Cascade;
 
 @Entity
 @Table(name = "move")
 public class Move {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Integer uuid;
     private Integer id;
 
     private String name;
@@ -28,6 +29,7 @@ public class Move {
     private Integer learnLevel;
 
     private String description;
+
 
     public Integer getId() {
         return id;
@@ -107,6 +109,14 @@ public class Move {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public Integer getUuid() {
+        return uuid;
+    }
+
+    public void setUuid(Integer uuid) {
+        this.uuid = uuid;
     }
 
     @Override
