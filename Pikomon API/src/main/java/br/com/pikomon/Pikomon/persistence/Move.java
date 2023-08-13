@@ -1,7 +1,7 @@
 package br.com.pikomon.Pikomon.persistence;
 
 import jakarta.persistence.*;
-import org.hibernate.annotations.Cascade;
+
 
 @Entity
 @Table(name = "move")
@@ -24,7 +24,7 @@ public class Move {
 
     private String type;
 
-    private String damage_class;
+    private String damageClass;
 
     private Integer learnLevel;
 
@@ -87,12 +87,12 @@ public class Move {
         this.type = type;
     }
 
-    public String getDamage_class() {
-        return damage_class;
+    public String getDamageClass() {
+        return damageClass;
     }
 
-    public void setDamage_class(String damage_class) {
-        this.damage_class = damage_class;
+    public void setDamageClass(String damageClass) {
+        this.damageClass = damageClass;
     }
 
     public Integer getLearnLevel() {
@@ -129,7 +129,7 @@ public class Move {
                 ", pp=" + pp +
                 ", priority=" + priority +
                 ", type='" + type + '\'' +
-                ", damage_class='" + damage_class + '\'' +
+                ", damage_class='" + damageClass + '\'' +
                 ", learnLevel=" + learnLevel +
                 ", description='" + description + '\'' +
                 '}';

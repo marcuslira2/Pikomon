@@ -6,9 +6,7 @@ import jakarta.persistence.Table;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.OneToMany;
-import jakarta.persistence.FetchType;
-import org.hibernate.annotations.Cascade;
-import org.hibernate.annotations.CascadeType;
+
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -99,17 +97,7 @@ public class Pokemon {
     private Boolean isShiny;
 
     @OneToMany
-    private List<Move> moves;
-
-    private String description;
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
+    private List<PokemonMove> moves;
 
     public Pokemon() {
         this.moves = new ArrayList<>();
@@ -419,12 +407,14 @@ public class Pokemon {
         this.evSpeed = evSpeed;
     }
 
-    public List<Move> getMoves() {
+    public List<PokemonMove> getMoves() {
         return Collections.unmodifiableList(moves);
     }
-    public void add (Move move){
+    public void add (PokemonMove move){
         this.moves.add(move);
     }
+
+    public void addAll(List<PokemonMove> moves) { this.moves.addAll(moves);}
 
     public Integer getUuid() {
         return uuid;
@@ -477,7 +467,6 @@ public class Pokemon {
                 ", evSpeed=" + evSpeed +
                 ", isShiny=" + isShiny +
                 ", moves=" + moves +
-                ", description='" + description + '\'' +
                 '}';
     }
 }
