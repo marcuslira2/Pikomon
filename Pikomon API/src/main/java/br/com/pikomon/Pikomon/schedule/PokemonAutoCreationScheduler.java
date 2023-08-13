@@ -40,7 +40,7 @@ public class PokemonAutoCreationScheduler {
 
         try {
             log.info("Creating pokemons on database");
-            for (int i=1;i<151;i++){
+            for (int i=1;i<10;i++){
                 Pokemon pk = new Pokemon();
                 PokemonData pokemonData = restTemplate.getForObject("https://pokeapi.co/api/v2/pokemon/"+i,PokemonData.class);
                 assert pokemonData != null;

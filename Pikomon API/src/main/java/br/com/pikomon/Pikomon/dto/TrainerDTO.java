@@ -1,4 +1,8 @@
 package br.com.pikomon.Pikomon.dto;
 
-public class TrainerDTO {
+public record TrainerDTO(
+        String name,
+        Integer money,
+        Integer pokemonId
+) {
 }
