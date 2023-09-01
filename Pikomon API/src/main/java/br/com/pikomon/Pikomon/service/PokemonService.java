@@ -10,6 +10,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
+import java.util.random.RandomGenerator;
 import java.util.stream.Collectors;
 
 @Service
@@ -41,9 +43,9 @@ public class PokemonService {
 
     public Pokemon create(int pokeId, int level, String trainerName) {
         Optional<Pokemon> pokeObject = this.findById(pokeId);
+        Random rd = new Random();
 
         Pokemon pokemon = new Pokemon();
-        if (pokeObject.isPresent()){
             pokemon.setName(pokeObject.get().getName());
             pokemon.setActualTrainer(trainerName);
             pokemon.setOriginalTrainer(trainerName);
@@ -60,8 +62,10 @@ public class PokemonService {
             pokemon.setBaseAtk(pokeObject.get().getBaseAtk());
             pokemon.setBaseDef(pokeObject.get().getBaseDef());
             pokemon.addAll(pokeObject.get().getMoves());
-        }
+            pokemon.setShiny(rd.nextBoolean());
+
         return pokemonRepository.save(pokemon);
+
     }
 
     public void deleteById(Integer id) {

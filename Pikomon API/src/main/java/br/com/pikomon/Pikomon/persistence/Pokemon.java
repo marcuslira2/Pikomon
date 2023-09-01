@@ -1,11 +1,6 @@
 package br.com.pikomon.Pikomon.persistence;
 
-import jakarta.persistence.Id;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.*;
 
 
 import java.util.ArrayList;
@@ -96,7 +91,7 @@ public class Pokemon {
 
     private Boolean isShiny;
 
-    @OneToMany
+    @ManyToMany
     private List<PokemonMove> moves;
 
     public Pokemon() {

@@ -7,6 +7,7 @@ import jakarta.persistence.*;
 public class PokemonMove {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    private Integer uuid;
     private Integer id;
 
     private String moveName;
@@ -25,6 +26,14 @@ public class PokemonMove {
 
     public String getMoveName() {
         return moveName;
+    }
+
+    public Integer getUuid() {
+        return uuid;
+    }
+
+    public void setUuid(Integer uuid) {
+        this.uuid = uuid;
     }
 
     public void setMoveName(String moveName) {

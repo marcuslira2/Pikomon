@@ -28,7 +28,6 @@ public class MoveAutoCreationScheduler {
             for (int i=1; i<166; i++){
                 String url = "https://pokeapi.co/api/v2/move/";
                 MoveRequestData movesResquest = restTemplate.getForObject(url+i,MoveRequestData.class);
-                //              nao é responsabilidade do golpe ter o level para ser usado e sim do pokemon.
                 Move move = new Move();
                 assert movesResquest != null;
                 move.setId(movesResquest.getId());

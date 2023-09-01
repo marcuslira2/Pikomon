@@ -26,7 +26,7 @@ public class Move {
 
     private String damageClass;
 
-    private Integer learnLevel;
+
 
     private String description;
 
@@ -95,14 +95,6 @@ public class Move {
         this.damageClass = damageClass;
     }
 
-    public Integer getLearnLevel() {
-        return learnLevel;
-    }
-
-    public void setLearnLevel(Integer learnLevel) {
-        this.learnLevel = learnLevel;
-    }
-
     public String getDescription() {
         return description;
     }
@@ -130,7 +122,6 @@ public class Move {
                 ", priority=" + priority +
                 ", type='" + type + '\'' +
                 ", damage_class='" + damageClass + '\'' +
-                ", learnLevel=" + learnLevel +
                 ", description='" + description + '\'' +
                 '}';
     }

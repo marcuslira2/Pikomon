@@ -21,11 +21,14 @@ public class TrainerService {
 
     public Trainer save(String name, Integer money, Integer pokemonId) {
         Trainer trainer = new Trainer();
+
         trainer.setName(name);
         trainer.setMoney(money);
         Pokemon pokemon = pokemonService.create(pokemonId,5,name);
         trainer.add(pokemon);
         return trainerRepository.save(trainer);
+
+
     }
 
     public List<Trainer> listAll() {

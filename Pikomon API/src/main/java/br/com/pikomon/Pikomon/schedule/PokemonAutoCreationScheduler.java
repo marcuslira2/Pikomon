@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -48,8 +49,6 @@ public class PokemonAutoCreationScheduler {
 
                 log.info(pokeSaved);
 
-                //Ajustar meu objeto de persistencia para que ele tenha uma lista com o nome e level que aprende o golpe.(isso vai ser outra classe)
-
                 pk.setName(pokemonData.getName());
                 pk.setDisplayName(pokemonData.getName());
                 pk.setId(pokemonData.getId());
@@ -66,6 +65,7 @@ public class PokemonAutoCreationScheduler {
                     pk.setType2(pokemonData.getTypes().get(1).getType().getName());
                 }
                 List<MoveData> moveData = pokemonData.getMoves();
+                List<PokemonMove> moveToAdd = new ArrayList<>();
                 for (MoveData moveDatum : moveData){
                     if (moveDatum.getVersion_group_details().get(0).getLevel_learned_at() !=0){
                         PokemonMove pokemonMove = new PokemonMove();
@@ -73,8 +73,10 @@ public class PokemonAutoCreationScheduler {
                         pokemonMove.setPokemonName(pokemonData.getName());
                         pokemonMove.setLevel(moveDatum.getVersion_group_details().get(0).getLevel_learned_at());
                         pkMoveRepository.save(pokemonMove);
+                        moveToAdd.add(pokemonMove);
                     }
                 }
+                pk.addAll(moveToAdd);
                 pokemonRepository.save(pk);
             }
         }catch (Exception e){
