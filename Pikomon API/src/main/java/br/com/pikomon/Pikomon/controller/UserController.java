@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -29,6 +30,7 @@ public class UserController {
 
     @PostMapping
     public ResponseEntity<User> create(@RequestBody User userObj){
+        userObj.setCreatedDate(new Date());
         User user = userService.save(userObj);
         return new ResponseEntity<>(user,HttpStatus.CREATED);
     }
@@ -42,15 +44,12 @@ public class UserController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteById(@PathVariable Integer id){
-        Optional<User> user = userService.findById(id);
-        String name;
-        if (user.isPresent()){
-            name ="User "+ user.get().getName()+" was deleted";
-        }else {
-            name ="User deleted";
+        try {
+            userService.deleteById(id);
+            return new ResponseEntity<>("User deleted",HttpStatus.ACCEPTED);
+        }catch (Exception e){
+            return new ResponseEntity<>(e.getMessage(),HttpStatus.NOT_FOUND);
         }
-        userService.deleteById(id);
 
-        return new ResponseEntity<>(name,HttpStatus.ACCEPTED);
     }
 }

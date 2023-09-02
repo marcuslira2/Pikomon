@@ -2,11 +2,11 @@ package br.com.pikomon.Pikomon.service;
 
 import br.com.pikomon.Pikomon.persistence.Pokemon;
 import br.com.pikomon.Pikomon.persistence.Trainer;
-import br.com.pikomon.Pikomon.repository.PokemonRepository;
 import br.com.pikomon.Pikomon.repository.TrainerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,7 +24,8 @@ public class TrainerService {
 
         trainer.setName(name);
         trainer.setMoney(money);
-        Pokemon pokemon = pokemonService.create(pokemonId,5,name);
+        trainer.setCreateDate(new Date());
+        Pokemon pokemon = pokemonService.save(pokemonId,5,name);
         trainer.add(pokemon);
         return trainerRepository.save(trainer);
 
@@ -41,6 +42,12 @@ public class TrainerService {
 
 
     public void deleteById(Integer id) {
-        trainerRepository.deleteById(id);
+        Optional<Trainer> trainer = this.findById(id);
+        if (trainer.isPresent()){
+            trainer.get().setDeleted(true);
+            trainer.get().setDeletedDate(new Date());
+            trainerRepository.save(trainer.get());
+        }
+
     }
 }

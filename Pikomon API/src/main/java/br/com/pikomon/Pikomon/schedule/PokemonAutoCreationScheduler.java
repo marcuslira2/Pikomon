@@ -16,6 +16,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class PokemonAutoCreationScheduler {
@@ -45,39 +46,43 @@ public class PokemonAutoCreationScheduler {
                 Pokemon pk = new Pokemon();
                 PokemonData pokemonData = restTemplate.getForObject("https://pokeapi.co/api/v2/pokemon/"+i,PokemonData.class);
                 assert pokemonData != null;
-                String pokeSaved = "Saving pokemon: " + pokemonData.getName();
+                Optional<Pokemon> isPokemonExists = pokemonRepository.findById(pokemonData.getId());
+                if (isPokemonExists.isEmpty()){
+                    String pokeSaved = "Saving pokemon: " + pokemonData.getName();
 
-                log.info(pokeSaved);
+                    log.info(pokeSaved);
 
-                pk.setName(pokemonData.getName());
-                pk.setDisplayName(pokemonData.getName());
-                pk.setId(pokemonData.getId());
-                pk.setBaseExp(pokemonData.getBase_experience());
-                pk.setBaseHp(pokemonData.getStats().get(0).getBase_stat());
-                pk.setBaseAtk(pokemonData.getStats().get(1).getBase_stat());
-                pk.setBaseDef(pokemonData.getStats().get(2).getBase_stat());
-                pk.setBaseSpAtk(pokemonData.getStats().get(3).getBase_stat());
-                pk.setBaseSpDef(pokemonData.getStats().get(4).getBase_stat());
-                pk.setBaseSpeed(pokemonData.getStats().get(5).getBase_stat());
-                pk.setType1(pokemonData.getTypes().get(0).getType().getName());
-                pk.setShiny(false);
-                if (pokemonData.getTypes().size()>1){
-                    pk.setType2(pokemonData.getTypes().get(1).getType().getName());
-                }
-                List<MoveData> moveData = pokemonData.getMoves();
-                List<PokemonMove> moveToAdd = new ArrayList<>();
-                for (MoveData moveDatum : moveData){
-                    if (moveDatum.getVersion_group_details().get(0).getLevel_learned_at() !=0){
-                        PokemonMove pokemonMove = new PokemonMove();
-                        pokemonMove.setMoveName(moveDatum.getMove().getName());
-                        pokemonMove.setPokemonName(pokemonData.getName());
-                        pokemonMove.setLevel(moveDatum.getVersion_group_details().get(0).getLevel_learned_at());
-                        pkMoveRepository.save(pokemonMove);
-                        moveToAdd.add(pokemonMove);
+                    pk.setName(pokemonData.getName());
+                    pk.setDisplayName(pokemonData.getName());
+                    pk.setId(pokemonData.getId());
+                    pk.setBaseExp(pokemonData.getBase_experience());
+                    pk.setBaseHp(pokemonData.getStats().get(0).getBase_stat());
+                    pk.setBaseAtk(pokemonData.getStats().get(1).getBase_stat());
+                    pk.setBaseDef(pokemonData.getStats().get(2).getBase_stat());
+                    pk.setBaseSpAtk(pokemonData.getStats().get(3).getBase_stat());
+                    pk.setBaseSpDef(pokemonData.getStats().get(4).getBase_stat());
+                    pk.setBaseSpeed(pokemonData.getStats().get(5).getBase_stat());
+                    pk.setType1(pokemonData.getTypes().get(0).getType().getName());
+                    pk.setShiny(false);
+                    if (pokemonData.getTypes().size()>1){
+                        pk.setType2(pokemonData.getTypes().get(1).getType().getName());
                     }
+                    List<MoveData> moveData = pokemonData.getMoves();
+                    List<PokemonMove> moveToAdd = new ArrayList<>();
+                    for (MoveData moveDatum : moveData){
+                        if (moveDatum.getVersion_group_details().get(0).getLevel_learned_at() !=0){
+                            PokemonMove pokemonMove = new PokemonMove();
+                            pokemonMove.setMoveName(moveDatum.getMove().getName());
+                            pokemonMove.setPokemonName(pokemonData.getName());
+                            pokemonMove.setLevel(moveDatum.getVersion_group_details().get(0).getLevel_learned_at());
+                            pkMoveRepository.save(pokemonMove);
+                            moveToAdd.add(pokemonMove);
+                        }
+                    }
+                    pk.addAll(moveToAdd);
+                    pokemonRepository.save(pk);
                 }
-                pk.addAll(moveToAdd);
-                pokemonRepository.save(pk);
+
             }
         }catch (Exception e){
             log.info(e.getMessage());

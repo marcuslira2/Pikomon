@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -42,6 +43,7 @@ public class UserService {
             user.setLogin(userObj.getLogin());
             user.setName(userObj.getName());
             user.setPassword(userObj.getPassword());
+            user.setCreatedDate(new Date());
             return userRepository.save(user);
 
         }catch (Exception e){
@@ -54,7 +56,22 @@ public class UserService {
         return userRepository.findById(id);
     }
 
-    public void deleteById(Integer id){ userRepository.deleteById(id);}
+    public void deleteById(Integer id){
+        try {
+            Optional<User> user = this.findById(id);
+            if (user.isPresent()){
+                user.get().setDeleted(true);
+                user.get().setDeletedDate(new Date());
+                userRepository.save(user.get());
+            }else {
+                throw new RuntimeException("User not found");
+            }
+        }catch (Exception e){
+            log.info(e.getMessage());
+        }
+
+
+    }
 
     public User changePWD(Integer id,User userObj){
         Optional<User> user = userRepository.findById(id);

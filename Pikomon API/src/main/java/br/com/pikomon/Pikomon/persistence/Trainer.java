@@ -4,6 +4,7 @@ package br.com.pikomon.Pikomon.persistence;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
@@ -17,6 +18,13 @@ public class Trainer {
     private String name;
 
     private Integer money;
+
+    private Boolean isDeleted;
+
+    private Date deletedDate;
+
+    private Date createdDate;
+
 
     @OneToMany
     private List<Pokemon> pokemons = new ArrayList<>();
@@ -60,18 +68,41 @@ public class Trainer {
         this.money = money;
     }
 
+    public Boolean getDeleted() {
+        return isDeleted;
+    }
+
+    public void setDeleted(Boolean deleted) {
+        isDeleted = deleted;
+    }
+
+    public Date getDeletedDate() {
+        return deletedDate;
+    }
+
+    public void setDeletedDate(Date deletedDate) {
+        this.deletedDate = deletedDate;
+    }
+
+    public Date getCreatedDate() {
+        return createdDate;
+    }
+
+    public void setCreateDate(Date createDate) {
+        this.createdDate = createDate;
+    }
+
     @Override
     public boolean equals(Object o) {
-
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Trainer trainer = (Trainer) o;
-        return Objects.equals(id, trainer.id) && Objects.equals(name, trainer.name) && Objects.equals(money, trainer.money) && Objects.equals(pokemons, trainer.pokemons);
+        return Objects.equals(id, trainer.id) && Objects.equals(name, trainer.name) && Objects.equals(money, trainer.money) && Objects.equals(isDeleted, trainer.isDeleted) && Objects.equals(deletedDate, trainer.deletedDate) && Objects.equals(createdDate, trainer.createdDate) && Objects.equals(pokemons, trainer.pokemons);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, money, pokemons);
+        return Objects.hash(id, name, money, isDeleted, deletedDate, createdDate, pokemons);
     }
 
     @Override
@@ -80,6 +111,9 @@ public class Trainer {
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", money=" + money +
+                ", isDeleted=" + isDeleted +
+                ", deletedDate=" + deletedDate +
+                ", createdDate=" + createdDate +
                 ", pokemons=" + pokemons +
                 '}';
     }

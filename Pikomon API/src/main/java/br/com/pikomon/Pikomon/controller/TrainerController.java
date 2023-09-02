@@ -36,8 +36,9 @@ public class TrainerController {
     }
 
     @DeleteMapping(path = "/{id}")
-    public void delete(@PathVariable Integer id){
+    public ResponseEntity<String> delete(@PathVariable Integer id){
         trainerService.deleteById(id);
+        return new ResponseEntity<>("Trainer deleted",HttpStatus.ACCEPTED);
     }
 
 }

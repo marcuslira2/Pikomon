@@ -3,9 +3,7 @@ package br.com.pikomon.Pikomon.persistence;
 import jakarta.persistence.*;
 
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 
 @Entity
@@ -90,6 +88,10 @@ public class Pokemon {
     private Integer evSpeed;
 
     private Boolean isShiny;
+
+    private Boolean isDeleted;
+    private Date deletedDate;
+    private Date createdDate;
 
     @ManyToMany
     private List<PokemonMove> moves;
@@ -419,6 +421,43 @@ public class Pokemon {
         this.uuid = uuid;
     }
 
+    public Boolean getDeleted() {
+        return isDeleted;
+    }
+
+    public void setDeleted(Boolean deleted) {
+        isDeleted = deleted;
+    }
+
+    public Date getDeletedDate() {
+        return deletedDate;
+    }
+
+    public void setDeletedDate(Date deletedDate) {
+        this.deletedDate = deletedDate;
+    }
+
+    public Date getCreatedDate() {
+        return createdDate;
+    }
+
+    public void setCreatedDate(Date createdDate) {
+        this.createdDate = createdDate;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Pokemon pokemon = (Pokemon) o;
+        return Objects.equals(uuid, pokemon.uuid) && Objects.equals(id, pokemon.id) && Objects.equals(originalTrainer, pokemon.originalTrainer) && Objects.equals(actualTrainer, pokemon.actualTrainer) && Objects.equals(level, pokemon.level) && Objects.equals(name, pokemon.name) && Objects.equals(displayName, pokemon.displayName) && Objects.equals(type1, pokemon.type1) && Objects.equals(type2, pokemon.type2) && Objects.equals(nextLevel, pokemon.nextLevel) && Objects.equals(exp, pokemon.exp) && Objects.equals(baseExp, pokemon.baseExp) && Objects.equals(effortType, pokemon.effortType) && Objects.equals(effortValue, pokemon.effortValue) && Objects.equals(hp, pokemon.hp) && Objects.equals(atk, pokemon.atk) && Objects.equals(def, pokemon.def) && Objects.equals(spAtk, pokemon.spAtk) && Objects.equals(spDef, pokemon.spDef) && Objects.equals(speed, pokemon.speed) && Objects.equals(baseHp, pokemon.baseHp) && Objects.equals(baseAtk, pokemon.baseAtk) && Objects.equals(baseDef, pokemon.baseDef) && Objects.equals(baseSpAtk, pokemon.baseSpAtk) && Objects.equals(baseSpDef, pokemon.baseSpDef) && Objects.equals(baseSpeed, pokemon.baseSpeed) && Objects.equals(ivHp, pokemon.ivHp) && Objects.equals(ivAtk, pokemon.ivAtk) && Objects.equals(ivDef, pokemon.ivDef) && Objects.equals(ivSpAtk, pokemon.ivSpAtk) && Objects.equals(ivSpDef, pokemon.ivSpDef) && Objects.equals(ivSpeed, pokemon.ivSpeed) && Objects.equals(evHp, pokemon.evHp) && Objects.equals(evAtk, pokemon.evAtk) && Objects.equals(evDef, pokemon.evDef) && Objects.equals(evSpAtk, pokemon.evSpAtk) && Objects.equals(evSpDef, pokemon.evSpDef) && Objects.equals(evSpeed, pokemon.evSpeed) && Objects.equals(isShiny, pokemon.isShiny) && Objects.equals(isDeleted, pokemon.isDeleted) && Objects.equals(deletedDate, pokemon.deletedDate) && Objects.equals(createdDate, pokemon.createdDate) && Objects.equals(moves, pokemon.moves);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(uuid, id, originalTrainer, actualTrainer, level, name, displayName, type1, type2, nextLevel, exp, baseExp, effortType, effortValue, hp, atk, def, spAtk, spDef, speed, baseHp, baseAtk, baseDef, baseSpAtk, baseSpDef, baseSpeed, ivHp, ivAtk, ivDef, ivSpAtk, ivSpDef, ivSpeed, evHp, evAtk, evDef, evSpAtk, evSpDef, evSpeed, isShiny, isDeleted, deletedDate, createdDate, moves);
+    }
+
     @Override
     public String toString() {
         return "Pokemon{" +
@@ -461,6 +500,9 @@ public class Pokemon {
                 ", evSpDef=" + evSpDef +
                 ", evSpeed=" + evSpeed +
                 ", isShiny=" + isShiny +
+                ", isDeleted=" + isDeleted +
+                ", deletedDate=" + deletedDate +
+                ", createdDate=" + createdDate +
                 ", moves=" + moves +
                 '}';
     }

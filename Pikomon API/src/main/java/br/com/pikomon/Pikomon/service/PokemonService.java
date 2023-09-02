@@ -2,16 +2,15 @@ package br.com.pikomon.Pikomon.service;
 
 import br.com.pikomon.Pikomon.dto.PokemonDTO;
 import br.com.pikomon.Pikomon.persistence.Pokemon;
-import br.com.pikomon.Pikomon.persistence.Trainer;
 import br.com.pikomon.Pikomon.repository.PokemonRepository;
 import br.com.pikomon.Pikomon.repository.TrainerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
-import java.util.random.RandomGenerator;
 import java.util.stream.Collectors;
 
 @Service
@@ -41,11 +40,12 @@ public class PokemonService {
         return pokemonRepository.findById(id);
     }
 
-    public Pokemon create(int pokeId, int level, String trainerName) {
-        Optional<Pokemon> pokeObject = this.findById(pokeId);
+    public Pokemon save(int id, int level, String trainerName) {
+        Optional<Pokemon> pokeObject = this.findById(id);
         Random rd = new Random();
 
         Pokemon pokemon = new Pokemon();
+        if (pokeObject.isPresent()){
             pokemon.setName(pokeObject.get().getName());
             pokemon.setActualTrainer(trainerName);
             pokemon.setOriginalTrainer(trainerName);
@@ -63,12 +63,20 @@ public class PokemonService {
             pokemon.setBaseDef(pokeObject.get().getBaseDef());
             pokemon.addAll(pokeObject.get().getMoves());
             pokemon.setShiny(rd.nextBoolean());
+            pokemon.setCreatedDate(new Date());
+        }
 
         return pokemonRepository.save(pokemon);
 
     }
 
     public void deleteById(Integer id) {
-        pokemonRepository.deleteById(id);
+        Optional<Pokemon> pokemon = this.findById(id);
+        if (pokemon.isPresent()){
+            pokemon.get().setDeleted(true);
+            pokemon.get().setDeletedDate(new Date());
+            pokemonRepository.save(pokemon.get());
+        }
+
     }
 }
