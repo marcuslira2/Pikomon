@@ -27,13 +27,14 @@ public class TrainerService {
         trainer.setCreateDate(new Date());
         Pokemon pokemon = pokemonService.save(pokemonId,5,name);
         trainer.add(pokemon);
+        trainer.setDeleted(false);
         return trainerRepository.save(trainer);
 
 
     }
 
     public List<Trainer> listAll() {
-        return trainerRepository.findAll();
+        return  trainerRepository.findAll().stream().filter(trainer -> !trainer.getDeleted()).toList();
     }
 
     public Optional<Trainer> findById(Integer id) {

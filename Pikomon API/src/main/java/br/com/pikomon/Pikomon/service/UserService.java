@@ -23,10 +23,9 @@ public class UserService {
 
 
     public List<UserDTO> listAll(){
-        List<User> users = userRepository.findAll();
-
-        return users.stream().map(this::converterToDTO).collect(Collectors.toList());
-
+        return userRepository.findAll().stream()
+                .filter(user -> !user.getDeleted()).toList()
+                .stream().map(this::converterToDTO).toList();
     }
 
     private UserDTO converterToDTO(User user) {
@@ -44,6 +43,7 @@ public class UserService {
             user.setName(userObj.getName());
             user.setPassword(userObj.getPassword());
             user.setCreatedDate(new Date());
+            user.setDeleted(false);
             return userRepository.save(user);
 
         }catch (Exception e){
@@ -52,25 +52,16 @@ public class UserService {
         }
     }
 
+
     public Optional<User> findById(Integer id){
         return userRepository.findById(id);
     }
 
     public void deleteById(Integer id){
-        try {
-            Optional<User> user = this.findById(id);
-            if (user.isPresent()){
-                user.get().setDeleted(true);
-                user.get().setDeletedDate(new Date());
-                userRepository.save(user.get());
-            }else {
-                throw new RuntimeException("User not found");
-            }
-        }catch (Exception e){
-            log.info(e.getMessage());
-        }
-
-
+            Optional<User> user = userRepository.findById(id);
+            user.get().setDeleted(true);
+            user.get().setDeletedDate(new Date());
+            userRepository.save(user.get());
     }
 
     public User changePWD(Integer id,User userObj){

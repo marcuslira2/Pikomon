@@ -4,8 +4,10 @@ import br.com.pikomon.Pikomon.dto.CreatePokemonDTO;
 import br.com.pikomon.Pikomon.dto.PokemonDTO;
 import br.com.pikomon.Pikomon.persistence.Pokemon;
 import br.com.pikomon.Pikomon.service.PokemonService;
+import jakarta.transaction.Transactional;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -35,15 +37,17 @@ public class PokemonController {
     }
 
     @PostMapping
+    @Transactional
     public ResponseEntity<Pokemon> create(@RequestBody CreatePokemonDTO dto){
         Pokemon pokemon = pokemonService.save(dto.id(),dto.level(),dto.trainer());
         return new ResponseEntity<>(pokemon,HttpStatus.CREATED);
     }
 
     @DeleteMapping(path = "/{id}")
+    @Transactional
     public ResponseEntity<String> delete(@PathVariable Integer id){
         pokemonService.deleteById(id);
-        return new ResponseEntity<>("Pokemon deleted",HttpStatus.ACCEPTED);
+        return new ResponseEntity<>("Pokemon deleted",HttpStatus.NO_CONTENT);
     }
 
 }

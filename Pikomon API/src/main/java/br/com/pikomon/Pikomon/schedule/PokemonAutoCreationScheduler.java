@@ -43,11 +43,13 @@ public class PokemonAutoCreationScheduler {
         try {
             log.info("Creating pokemons on database");
             for (int i=1;i<10;i++){
-                Pokemon pk = new Pokemon();
-                PokemonData pokemonData = restTemplate.getForObject("https://pokeapi.co/api/v2/pokemon/"+i,PokemonData.class);
-                assert pokemonData != null;
-                Optional<Pokemon> isPokemonExists = pokemonRepository.findById(pokemonData.getId());
+
+                Optional<Pokemon> isPokemonExists = pokemonRepository.findById(i);
                 if (isPokemonExists.isEmpty()){
+
+                    Pokemon pk = new Pokemon();
+                    PokemonData pokemonData = restTemplate.getForObject("https://pokeapi.co/api/v2/pokemon/"+i,PokemonData.class);
+                    assert pokemonData != null;
                     String pokeSaved = "Saving pokemon: " + pokemonData.getName();
 
                     log.info(pokeSaved);
@@ -64,6 +66,7 @@ public class PokemonAutoCreationScheduler {
                     pk.setBaseSpeed(pokemonData.getStats().get(5).getBase_stat());
                     pk.setType1(pokemonData.getTypes().get(0).getType().getName());
                     pk.setShiny(false);
+                    pk.setDeleted(false);
                     if (pokemonData.getTypes().size()>1){
                         pk.setType2(pokemonData.getTypes().get(1).getType().getName());
                     }

@@ -29,11 +29,12 @@ public class MoveAutoCreationScheduler {
         try{
 //            for (int i=1; i<901; i++){
             for (int i=1; i<166; i++){
-                String url = "https://pokeapi.co/api/v2/move/";
-                MoveRequestData movesResquest = restTemplate.getForObject(url+i,MoveRequestData.class);
-                assert movesResquest !=null;
-                Optional<Move> isMoveExists = moveRepository.findById(movesResquest.getId());
+
+                Optional<Move> isMoveExists = moveRepository.findById(i);
                 if(isMoveExists.isEmpty()){
+                    String url = "https://pokeapi.co/api/v2/move/";
+                    MoveRequestData movesResquest = restTemplate.getForObject(url+i,MoveRequestData.class);
+                    assert movesResquest !=null;
                     Move move = new Move();
                     move.setId(movesResquest.getId());
                     move.setName(movesResquest.getName());

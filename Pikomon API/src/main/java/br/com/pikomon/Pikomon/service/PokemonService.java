@@ -23,8 +23,9 @@ public class PokemonService {
     private TrainerRepository trainerRepository;
 
     public List<PokemonDTO> listAll() {
-        List<Pokemon> pokemons = pokemonRepository.findAll();
-        return pokemons.stream().map(this::converterToDTO).collect(Collectors.toList());
+        return pokemonRepository.findAll().stream()
+                .filter(pokemon -> !pokemon.getDeleted()).toList()
+                .stream().map(this::converterToDTO).toList();
     }
 
     private PokemonDTO converterToDTO(Pokemon pokemon) {
@@ -37,6 +38,7 @@ public class PokemonService {
     }
 
     public Optional<Pokemon> findById(Integer id) {
+
         return pokemonRepository.findById(id);
     }
 
@@ -64,6 +66,7 @@ public class PokemonService {
             pokemon.addAll(pokeObject.get().getMoves());
             pokemon.setShiny(rd.nextBoolean());
             pokemon.setCreatedDate(new Date());
+            pokemon.setDeleted(false);
         }
 
         return pokemonRepository.save(pokemon);

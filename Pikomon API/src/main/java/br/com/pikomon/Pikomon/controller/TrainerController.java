@@ -19,12 +19,6 @@ public class TrainerController {
     @Autowired
     TrainerService trainerService;
 
-    @PostMapping
-    public ResponseEntity<Trainer> create(@RequestBody TrainerDTO trainerDTO){
-        Trainer trainer = trainerService.save(trainerDTO.name(),trainerDTO.money(), trainerDTO.pokemonId());
-        return new ResponseEntity<>(trainer, HttpStatus.CREATED);
-    }
-
     @GetMapping
     public ResponseEntity<List<Trainer>> listAll(){
         return new ResponseEntity<>(trainerService.listAll(),HttpStatus.OK);
@@ -35,10 +29,16 @@ public class TrainerController {
         return new ResponseEntity<>(trainerService.findById(id),HttpStatus.ACCEPTED);
     }
 
+    @PostMapping
+    public ResponseEntity<Trainer> create(@RequestBody TrainerDTO trainerDTO){
+        Trainer trainer = trainerService.save(trainerDTO.name(),trainerDTO.money(), trainerDTO.pokemonId());
+        return new ResponseEntity<>(trainer, HttpStatus.CREATED);
+    }
+
     @DeleteMapping(path = "/{id}")
     public ResponseEntity<String> delete(@PathVariable Integer id){
         trainerService.deleteById(id);
-        return new ResponseEntity<>("Trainer deleted",HttpStatus.ACCEPTED);
+        return new ResponseEntity<>("Trainer deleted",HttpStatus.NO_CONTENT);
     }
 
 }

@@ -25,7 +25,14 @@ public class UserController {
     @GetMapping
     public ResponseEntity<List<UserDTO>> listAll(){
         List<UserDTO> users = userService.listAll();
+
         return new ResponseEntity<>(users, HttpStatus.OK);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<User> findById(@PathVariable Integer id){
+        Optional<User> user = userService.findById(id);
+        return new ResponseEntity<>(user.get(),HttpStatus.OK);
     }
 
     @PostMapping
@@ -43,12 +50,12 @@ public class UserController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteById(@PathVariable Integer id){
+    public ResponseEntity deleteById(@PathVariable Integer id){
         try {
             userService.deleteById(id);
-            return new ResponseEntity<>("User deleted",HttpStatus.ACCEPTED);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }catch (Exception e){
-            return new ResponseEntity<>(e.getMessage(),HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
     }
