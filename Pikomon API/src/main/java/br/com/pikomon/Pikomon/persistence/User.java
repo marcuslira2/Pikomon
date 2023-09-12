@@ -23,7 +23,7 @@ public class User {
 
     private String password;
 
-    private Boolean isDeleted;
+    private Integer deleted;
 
     private Date createdDate;
 
@@ -40,7 +40,7 @@ public class User {
                 ", name='" + name + '\'' +
                 ", login='" + login + '\'' +
                 ", password='" + password + '\'' +
-                ", isDeleted=" + isDeleted +
+                ", deleted=" + deleted +
                 ", createdDate=" + createdDate +
                 ", deletedDate=" + deletedDate +
                 '}';
@@ -51,44 +51,12 @@ public class User {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         User user = (User) o;
-        return Objects.equals(id, user.id) && Objects.equals(trainers, user.trainers) && Objects.equals(name, user.name) && Objects.equals(login, user.login) && Objects.equals(password, user.password) && Objects.equals(isDeleted, user.isDeleted) && Objects.equals(createdDate, user.createdDate) && Objects.equals(deletedDate, user.deletedDate);
-    }
-
-    public Boolean getDeleted() {
-        return isDeleted;
-    }
-
-    public void setDeleted(Boolean deleted) {
-        isDeleted = deleted;
-    }
-
-    public Date getCreatedDate() {
-        return createdDate;
-    }
-
-    public void setCreatedDate(Date createdDate) {
-        this.createdDate = createdDate;
-    }
-
-    public Date getDeletedDate() {
-        return deletedDate;
-    }
-
-    public void setDeletedDate(Date deletedDate) {
-        this.deletedDate = deletedDate;
+        return Objects.equals(id, user.id) && Objects.equals(trainers, user.trainers) && Objects.equals(name, user.name) && Objects.equals(login, user.login) && Objects.equals(password, user.password) && Objects.equals(deleted, user.deleted) && Objects.equals(createdDate, user.createdDate) && Objects.equals(deletedDate, user.deletedDate);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, trainers, name, login, password);
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
+        return Objects.hash(id, trainers, name, login, password, deleted, createdDate, deletedDate);
     }
 
     public Integer getId() {
@@ -107,6 +75,14 @@ public class User {
         this.trainers = trainers;
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
     public String getLogin() {
         return login;
     }
@@ -121,5 +97,29 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public Integer getDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(Integer deleted) {
+        this.deleted = deleted;
+    }
+
+    public Date getCreatedDate() {
+        return createdDate;
+    }
+
+    public void setCreatedDate(Date createdDate) {
+        this.createdDate = createdDate;
+    }
+
+    public Date getDeletedDate() {
+        return deletedDate;
+    }
+
+    public void setDeletedDate(Date deletedDate) {
+        this.deletedDate = deletedDate;
     }
 }

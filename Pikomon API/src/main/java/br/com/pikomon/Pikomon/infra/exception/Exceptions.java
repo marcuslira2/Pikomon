@@ -1,22 +1,19 @@
 package br.com.pikomon.Pikomon.infra.exception;
 
 
-import jakarta.persistence.EntityNotFoundException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.client.HttpClientErrorException;
+
 
 
 @RestControllerAdvice
 public class Exceptions {
 
-    @ExceptionHandler(EntityNotFoundException.class)
-    public ResponseEntity notFound404(){
+    @ExceptionHandler(HttpClientErrorException.NotFound.class)
+    public ResponseEntity userNotFoundException(Integer id){
         return ResponseEntity.notFound().build();
     }
 
-    @ExceptionHandler(NoSuchMethodException.class)
-    public ResponseEntity elementNull(){
-        return ResponseEntity.notFound().build();
-    }
 }

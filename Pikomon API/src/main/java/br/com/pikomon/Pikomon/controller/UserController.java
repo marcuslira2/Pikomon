@@ -2,6 +2,7 @@ package br.com.pikomon.Pikomon.controller;
 
 import br.com.pikomon.Pikomon.dto.ChangePWDDTO;
 import br.com.pikomon.Pikomon.dto.UserDTO;
+import br.com.pikomon.Pikomon.infra.exception.UserNotFoundException;
 import br.com.pikomon.Pikomon.persistence.User;
 import br.com.pikomon.Pikomon.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,9 +31,10 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<User> findById(@PathVariable Integer id){
+    public ResponseEntity<User> findById(@PathVariable Integer id) throws UserNotFoundException {
         Optional<User> user = userService.findById(id);
-        return new ResponseEntity<>(user.get(),HttpStatus.OK);
+        return user.map(value -> new ResponseEntity<>(value, HttpStatus.OK)).orElseGet(() -> ResponseEntity.notFound().build());
+
     }
 
     @PostMapping
@@ -43,7 +45,7 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
-    public  ResponseEntity<String> updatePWD(@PathVariable Integer id, @RequestBody ChangePWDDTO pwd){
+    public  ResponseEntity<String> updatePWD(@PathVariable Integer id, @RequestBody ChangePWDDTO pwd) throws UserNotFoundException{
         Optional<User> user = userService.findById(id);
         user.ifPresent(value -> value.setPassword(pwd.password()));
         return new ResponseEntity<>("Password changed",HttpStatus.ACCEPTED);

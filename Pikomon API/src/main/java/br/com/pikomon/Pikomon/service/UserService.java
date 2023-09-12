@@ -1,6 +1,7 @@
 package br.com.pikomon.Pikomon.service;
 
 import br.com.pikomon.Pikomon.dto.UserDTO;
+import br.com.pikomon.Pikomon.infra.exception.UserNotFoundException;
 import br.com.pikomon.Pikomon.persistence.User;
 import br.com.pikomon.Pikomon.repository.UserRepository;
 import org.slf4j.Logger;
@@ -11,7 +12,6 @@ import org.springframework.stereotype.Service;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 public class UserService {
@@ -24,7 +24,7 @@ public class UserService {
 
     public List<UserDTO> listAll(){
         return userRepository.findAll().stream()
-                .filter(user -> !user.getDeleted()).toList()
+                .filter(user -> user.getDeleted()==0).toList()
                 .stream().map(this::converterToDTO).toList();
     }
 
@@ -43,7 +43,7 @@ public class UserService {
             user.setName(userObj.getName());
             user.setPassword(userObj.getPassword());
             user.setCreatedDate(new Date());
-            user.setDeleted(false);
+            user.setDeleted(0);
             return userRepository.save(user);
 
         }catch (Exception e){
@@ -53,13 +53,17 @@ public class UserService {
     }
 
 
-    public Optional<User> findById(Integer id){
-        return userRepository.findById(id);
+    public Optional<User> findById(Integer id) throws UserNotFoundException {
+        return Optional.ofNullable(
+                this.userRepository
+                        .findByIdAndDeletedFalse(id)
+                        .orElseThrow(UserNotFoundException::new)
+        );
     }
 
     public void deleteById(Integer id){
             Optional<User> user = userRepository.findById(id);
-            user.get().setDeleted(true);
+            user.get().setDeleted(1);
             user.get().setDeletedDate(new Date());
             userRepository.save(user.get());
     }
