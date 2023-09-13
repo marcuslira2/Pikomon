@@ -6,9 +6,9 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 @RestControllerAdvice
-public class UserNotFoundException extends Exception{
-    @ExceptionHandler(UserNotFoundException.class)
-    public ResponseEntity<String> notFoundException(){
-        return new ResponseEntity<>("User not found", HttpStatus.NOT_FOUND);
+public class BadRequestCreation extends Exception{
+    @ExceptionHandler(BadRequestCreation.class)
+    public ResponseEntity<String> badRequest(){
+        return new ResponseEntity<>("Error when passing object attributes", HttpStatus.BAD_REQUEST);
     }
 }

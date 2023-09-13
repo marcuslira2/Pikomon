@@ -1,12 +1,14 @@
 package br.com.pikomon.Pikomon.service;
 
 import br.com.pikomon.Pikomon.dto.UserDTO;
+import br.com.pikomon.Pikomon.infra.exception.BadRequestCreation;
 import br.com.pikomon.Pikomon.infra.exception.UserNotFoundException;
 import br.com.pikomon.Pikomon.persistence.User;
 import br.com.pikomon.Pikomon.repository.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -36,20 +38,18 @@ public class UserService {
         );
     }
 
-    public User save(User userObj){
-        try{
-            User user = new User();
-            user.setLogin(userObj.getLogin());
-            user.setName(userObj.getName());
-            user.setPassword(userObj.getPassword());
-            user.setCreatedDate(new Date());
-            user.setDeleted(0);
-            return userRepository.save(user);
-
-        }catch (Exception e){
-            log.info(e.getMessage());
-            return null;
-        }
+    public Optional<User> save(User userObj) throws BadRequestCreation {
+            Optional<User> user = Optional.of(new User());
+            user.get().setLogin(userObj.getLogin());
+            user.get().setName(userObj.getName());
+            user.get().setPassword(userObj.getPassword());
+            user.get().setCreatedDate(new Date());
+            user.get().setDeleted(0);
+            return Optional.ofNullable(Optional.of(
+                            this.userRepository
+                                    .save(user.get()))
+                                    .orElseThrow(BadRequestCreation::new)
+            );
     }
 
 
