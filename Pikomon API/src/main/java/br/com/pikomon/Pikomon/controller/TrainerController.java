@@ -1,8 +1,12 @@
 package br.com.pikomon.Pikomon.controller;
 
+import br.com.pikomon.Pikomon.dto.CreateTrainerDTO;
 import br.com.pikomon.Pikomon.dto.TrainerDTO;
+import br.com.pikomon.Pikomon.infra.exceptions.ObjectBadRequestException;
+import br.com.pikomon.Pikomon.infra.exceptions.ObjectNotFoundException;
 import br.com.pikomon.Pikomon.persistence.Trainer;
 import br.com.pikomon.Pikomon.service.TrainerService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,25 +24,23 @@ public class TrainerController {
     TrainerService trainerService;
 
     @GetMapping
-    public ResponseEntity<List<Trainer>> listAll(){
+    public ResponseEntity<List<TrainerDTO>> listAll(){
         return new ResponseEntity<>(trainerService.listAll(),HttpStatus.OK);
     }
 
     @GetMapping(path = "/{id}")
-    public ResponseEntity<Optional<Trainer>> findById(@PathVariable Integer id){
-        return new ResponseEntity<>(trainerService.findById(id),HttpStatus.ACCEPTED);
+    public ResponseEntity<?> findById(@PathVariable Integer id) throws ObjectNotFoundException {
+        return trainerService.findById(id);
     }
 
     @PostMapping
-    public ResponseEntity<Trainer> create(@RequestBody TrainerDTO trainerDTO){
-        Trainer trainer = trainerService.save(trainerDTO.name(),trainerDTO.money(), trainerDTO.pokemonId());
-        return new ResponseEntity<>(trainer, HttpStatus.CREATED);
+    public ResponseEntity<?> create(@RequestBody @Valid CreateTrainerDTO trainerDTO) throws ObjectBadRequestException {
+        return trainerService.save(trainerDTO);
     }
 
     @DeleteMapping(path = "/{id}")
-    public ResponseEntity<String> delete(@PathVariable Integer id){
-        trainerService.deleteById(id);
-        return new ResponseEntity<>("Trainer deleted",HttpStatus.NO_CONTENT);
+    public ResponseEntity<?> delete(@PathVariable Integer id) throws ObjectNotFoundException{
+        return trainerService.deleteById(id);
     }
 
 }

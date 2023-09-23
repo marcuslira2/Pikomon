@@ -19,7 +19,7 @@ public class Trainer {
 
     private Integer money;
 
-    private Boolean isDeleted;
+    private Integer deleted;
 
     private Date deletedDate;
 
@@ -68,12 +68,16 @@ public class Trainer {
         this.money = money;
     }
 
-    public Boolean getDeleted() {
-        return isDeleted;
+    public Integer getDeleted() {
+        return deleted;
     }
 
-    public void setDeleted(Boolean deleted) {
-        isDeleted = deleted;
+    public void setDeleted(Integer deleted) {
+        this.deleted = deleted;
+    }
+
+    public void setCreatedDate(Date createdDate) {
+        this.createdDate = createdDate;
     }
 
     public Date getDeletedDate() {
@@ -92,30 +96,27 @@ public class Trainer {
         this.createdDate = createDate;
     }
 
+    public Trainer(Integer id, String name, Integer money, Integer deleted, Date deletedDate, Date createdDate, List<Pokemon> pokemons) {
+        this.id = id;
+        this.name = name;
+        this.money = money;
+        this.deleted = deleted;
+        this.deletedDate = deletedDate;
+        this.createdDate = createdDate;
+        this.pokemons = pokemons;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Trainer trainer = (Trainer) o;
-        return Objects.equals(id, trainer.id) && Objects.equals(name, trainer.name) && Objects.equals(money, trainer.money) && Objects.equals(isDeleted, trainer.isDeleted) && Objects.equals(deletedDate, trainer.deletedDate) && Objects.equals(createdDate, trainer.createdDate) && Objects.equals(pokemons, trainer.pokemons);
+        return Objects.equals(id, trainer.id) && Objects.equals(name, trainer.name) && Objects.equals(money, trainer.money) && Objects.equals(deleted, trainer.deleted) && Objects.equals(deletedDate, trainer.deletedDate) && Objects.equals(createdDate, trainer.createdDate) && Objects.equals(pokemons, trainer.pokemons);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, money, isDeleted, deletedDate, createdDate, pokemons);
-    }
-
-    @Override
-    public String toString() {
-        return "Trainer{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", money=" + money +
-                ", isDeleted=" + isDeleted +
-                ", deletedDate=" + deletedDate +
-                ", createdDate=" + createdDate +
-                ", pokemons=" + pokemons +
-                '}';
+        return Objects.hash(id, name, money, deleted, deletedDate, createdDate, pokemons);
     }
 }
 

@@ -3,8 +3,8 @@ package br.com.pikomon.Pikomon.service;
 import br.com.pikomon.Pikomon.dto.ChangePWDDTO;
 import br.com.pikomon.Pikomon.dto.CreateUserDTO;
 import br.com.pikomon.Pikomon.dto.UserDTO;
-import br.com.pikomon.Pikomon.infra.exceptions.UserBadRequestException;
-import br.com.pikomon.Pikomon.infra.exceptions.UserNotFoundException;
+import br.com.pikomon.Pikomon.infra.exceptions.ObjectBadRequestException;
+import br.com.pikomon.Pikomon.infra.exceptions.ObjectNotFoundException;
 import br.com.pikomon.Pikomon.persistence.User;
 import br.com.pikomon.Pikomon.repository.UserRepository;
 import org.slf4j.Logger;
@@ -42,7 +42,7 @@ public class UserService {
         );
     }
 
-    public ResponseEntity<?> save(CreateUserDTO dto) throws UserBadRequestException {
+    public ResponseEntity<?> save(CreateUserDTO dto) throws ObjectBadRequestException {
         User user = new User();
         log.info("Saving user: "+ dto.name());
         user.setLogin(dto.login());
@@ -54,14 +54,14 @@ public class UserService {
         return ResponseEntity.status(HttpStatus.CREATED).body("User: " + user.getName() + " saved.");
     }
 
-    public ResponseEntity<?> findById(Integer id) throws UserNotFoundException {
-        User user = userRepository.findByIdAndDeletedFalse(id).orElseThrow(UserNotFoundException::new);
+    public ResponseEntity<?> findById(Integer id) throws ObjectNotFoundException {
+        User user = userRepository.findByIdAndDeletedFalse(id).orElseThrow(ObjectNotFoundException::new);
         log.info("Searching user...");
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(user);
     }
 
-    public ResponseEntity<?> deleteById(Integer id) throws UserNotFoundException{
-        User user = userRepository.findByIdAndDeletedFalse(id).orElseThrow(UserNotFoundException::new);
+    public ResponseEntity<?> deleteById(Integer id) throws ObjectNotFoundException {
+        User user = userRepository.findByIdAndDeletedFalse(id).orElseThrow(ObjectNotFoundException::new);
         log.info("Deleting user...");
         user.setDeleted(1);
         user.setDeletedDate(new Date());
@@ -69,8 +69,8 @@ public class UserService {
         return ResponseEntity.status(HttpStatus.OK).body("User: "+user.getName()+" was deteled.");
     }
 
-    public ResponseEntity<?> changePWD(Integer id, ChangePWDDTO pwddto) throws UserNotFoundException{
-        User user = userRepository.findByIdAndDeletedFalse(id).orElseThrow(UserNotFoundException::new);
+    public ResponseEntity<?> changePWD(Integer id, ChangePWDDTO pwddto) throws ObjectNotFoundException {
+        User user = userRepository.findByIdAndDeletedFalse(id).orElseThrow(ObjectNotFoundException::new);
         log.info("Updating user...");
         user.setPassword(pwddto.password());
         return ResponseEntity.status(HttpStatus.ACCEPTED).body("Password from user "+user.getName()+" was changed.");

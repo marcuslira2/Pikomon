@@ -6,10 +6,10 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 @RestControllerAdvice
-public class UserNotFoundException extends Exception{
+public class ObjectNotFoundException extends RuntimeException{
 
-    @ExceptionHandler(UserNotFoundException.class)
-    public ResponseEntity<String> userNotFoundException(){
-        return new ResponseEntity<>("User not found", HttpStatus.NOT_FOUND);
+    @ExceptionHandler(ObjectNotFoundException.class)
+    public ResponseEntity<String> ObjectNotFoundException( ObjectNotFoundException e){
+        return new ResponseEntity<>("Object not found", HttpStatus.NOT_FOUND);
     }
 }

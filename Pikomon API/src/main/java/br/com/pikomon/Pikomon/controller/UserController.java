@@ -3,8 +3,8 @@ package br.com.pikomon.Pikomon.controller;
 import br.com.pikomon.Pikomon.dto.ChangePWDDTO;
 import br.com.pikomon.Pikomon.dto.CreateUserDTO;
 import br.com.pikomon.Pikomon.dto.UserDTO;
-import br.com.pikomon.Pikomon.infra.exceptions.UserBadRequestException;
-import br.com.pikomon.Pikomon.infra.exceptions.UserNotFoundException;
+import br.com.pikomon.Pikomon.infra.exceptions.ObjectBadRequestException;
+import br.com.pikomon.Pikomon.infra.exceptions.ObjectNotFoundException;
 import br.com.pikomon.Pikomon.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,22 +31,22 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> findById(@PathVariable Integer id) throws UserNotFoundException {
+    public ResponseEntity<?> findById(@PathVariable Integer id) throws ObjectNotFoundException {
         return userService.findById(id);
     }
 
     @PostMapping
-    public ResponseEntity<?> create(@RequestBody @Valid CreateUserDTO dto) throws UserBadRequestException {
+    public ResponseEntity<?> create(@RequestBody @Valid CreateUserDTO dto) throws ObjectBadRequestException {
         return userService.save(dto);
     }
 
     @PutMapping("/{id}")
-    public  ResponseEntity<?> updatePWD(@PathVariable Integer id, @RequestBody ChangePWDDTO pwd) throws UserNotFoundException{
+    public  ResponseEntity<?> updatePWD(@PathVariable Integer id, @RequestBody @Valid ChangePWDDTO pwd) throws ObjectNotFoundException {
         return userService.changePWD(id,pwd);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteById(@PathVariable Integer id) throws UserNotFoundException{
+    public ResponseEntity<?> deleteById(@PathVariable Integer id) throws ObjectNotFoundException {
         return userService.deleteById(id);
 
     }
