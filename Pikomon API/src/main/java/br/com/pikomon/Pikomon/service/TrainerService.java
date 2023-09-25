@@ -2,12 +2,10 @@ package br.com.pikomon.Pikomon.service;
 
 import br.com.pikomon.Pikomon.dto.CreateTrainerDTO;
 import br.com.pikomon.Pikomon.dto.TrainerDTO;
-import br.com.pikomon.Pikomon.dto.UserDTO;
 import br.com.pikomon.Pikomon.infra.exceptions.ObjectBadRequestException;
 import br.com.pikomon.Pikomon.infra.exceptions.ObjectNotFoundException;
 import br.com.pikomon.Pikomon.persistence.Pokemon;
 import br.com.pikomon.Pikomon.persistence.Trainer;
-import br.com.pikomon.Pikomon.persistence.User;
 import br.com.pikomon.Pikomon.repository.TrainerRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,7 +16,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class TrainerService {

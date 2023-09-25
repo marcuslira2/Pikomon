@@ -7,7 +7,6 @@ import br.com.pikomon.Pikomon.persistence.PokemonMove;
 import br.com.pikomon.Pikomon.repository.MoveRepository;
 import br.com.pikomon.Pikomon.repository.PokemonMoveRepository;
 import br.com.pikomon.Pikomon.repository.PokemonRepository;
-import br.com.pikomon.Pikomon.service.PokemonService;
 import jakarta.annotation.PostConstruct;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

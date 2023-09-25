@@ -4,7 +4,6 @@ import br.com.pikomon.Pikomon.dto.CreateTrainerDTO;
 import br.com.pikomon.Pikomon.dto.TrainerDTO;
 import br.com.pikomon.Pikomon.infra.exceptions.ObjectBadRequestException;
 import br.com.pikomon.Pikomon.infra.exceptions.ObjectNotFoundException;
-import br.com.pikomon.Pikomon.persistence.Trainer;
 import br.com.pikomon.Pikomon.service.TrainerService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +13,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @Controller
 @RequestMapping("/trainer")
