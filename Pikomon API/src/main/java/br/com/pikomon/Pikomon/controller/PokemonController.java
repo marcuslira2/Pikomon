@@ -2,6 +2,8 @@ package br.com.pikomon.Pikomon.controller;
 
 import br.com.pikomon.Pikomon.dto.CreatePokemonDTO;
 import br.com.pikomon.Pikomon.dto.PokemonDTO;
+import br.com.pikomon.Pikomon.infra.exceptions.ObjectBadRequestException;
+import br.com.pikomon.Pikomon.infra.exceptions.ObjectNotFoundException;
 import br.com.pikomon.Pikomon.persistence.Pokemon;
 import br.com.pikomon.Pikomon.service.PokemonService;
 import jakarta.transaction.Transactional;
@@ -30,24 +32,23 @@ public class PokemonController {
     }
 
     @GetMapping(path = "/{id}")
-    public ResponseEntity<Optional<Pokemon>> listById(@PathVariable Integer id){
-        Optional<Pokemon> pokemon = pokemonService.findById(id);
-        return new ResponseEntity<>(pokemon,HttpStatus.ACCEPTED);
-
+    public ResponseEntity<?> findById(@PathVariable Integer id) throws ObjectNotFoundException {
+        return pokemonService.findById(id);
     }
 
     @PostMapping
     @Transactional
-    public ResponseEntity<Pokemon> create(@RequestBody CreatePokemonDTO dto){
+    public ResponseEntity<?> create(@RequestBody CreatePokemonDTO dto) throws ObjectBadRequestException {
         Pokemon pokemon = pokemonService.save(dto.id(),dto.level(),dto.trainer());
-        return new ResponseEntity<>(pokemon,HttpStatus.CREATED);
+        return ResponseEntity.status(HttpStatus.CREATED).body(pokemon);
+
     }
 
     @DeleteMapping(path = "/{id}")
     @Transactional
-    public ResponseEntity<String> delete(@PathVariable Integer id){
-        pokemonService.deleteById(id);
-        return new ResponseEntity<>("Pokemon deleted",HttpStatus.NO_CONTENT);
+    public ResponseEntity<?> deleteById(@PathVariable Integer id) throws ObjectNotFoundException{
+        return pokemonService.deleteById(id);
+
     }
 
 }

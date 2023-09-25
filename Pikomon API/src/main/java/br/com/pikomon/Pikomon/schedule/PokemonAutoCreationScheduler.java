@@ -7,6 +7,7 @@ import br.com.pikomon.Pikomon.persistence.PokemonMove;
 import br.com.pikomon.Pikomon.repository.MoveRepository;
 import br.com.pikomon.Pikomon.repository.PokemonMoveRepository;
 import br.com.pikomon.Pikomon.repository.PokemonRepository;
+import br.com.pikomon.Pikomon.service.PokemonService;
 import jakarta.annotation.PostConstruct;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,8 +34,6 @@ public class PokemonAutoCreationScheduler {
     @Autowired
     private MoveRepository moveRepository;
 
-
-
     private static final Logger log = LoggerFactory.getLogger(PokemonAutoCreationScheduler.class);
 
     @PostConstruct
@@ -58,15 +57,12 @@ public class PokemonAutoCreationScheduler {
                     pk.setDisplayName(pokemonData.getName());
                     pk.setId(pokemonData.getId());
                     pk.setBaseExp(pokemonData.getBase_experience());
-                    pk.setBaseHp(pokemonData.getStats().get(0).getBase_stat());
-                    pk.setBaseAtk(pokemonData.getStats().get(1).getBase_stat());
-                    pk.setBaseDef(pokemonData.getStats().get(2).getBase_stat());
-                    pk.setBaseSpAtk(pokemonData.getStats().get(3).getBase_stat());
-                    pk.setBaseSpDef(pokemonData.getStats().get(4).getBase_stat());
-                    pk.setBaseSpeed(pokemonData.getStats().get(5).getBase_stat());
+                    for (int j =0; j< 6; j++){
+                    pk.getBase().add(pokemonData.getStats().get(j).getBase_stat());
+                    }
                     pk.setType1(pokemonData.getTypes().get(0).getType().getName());
                     pk.setShiny(false);
-                    pk.setDeleted(false);
+                    pk.setDeleted(0);
                     if (pokemonData.getTypes().size()>1){
                         pk.setType2(pokemonData.getTypes().get(1).getType().getName());
                     }
@@ -82,7 +78,7 @@ public class PokemonAutoCreationScheduler {
                             moveToAdd.add(pokemonMove);
                         }
                     }
-                    pk.addAll(moveToAdd);
+                    pk.getMoves().addAll(moveToAdd);
                     pokemonRepository.save(pk);
                 }
 
