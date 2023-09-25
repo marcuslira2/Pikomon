@@ -32,7 +32,7 @@ public class PokemonController {
     }
 
     @GetMapping(path = "/{id}")
-    public ResponseEntity<?> findById(@PathVariable Integer id) throws ObjectNotFoundException {
+    public ResponseEntity<?> findById(@PathVariable Long id) throws ObjectNotFoundException {
         return pokemonService.findById(id);
     }
 
@@ -46,7 +46,7 @@ public class PokemonController {
 
     @DeleteMapping(path = "/{id}")
     @Transactional
-    public ResponseEntity<?> deleteById(@PathVariable Integer id) throws ObjectNotFoundException{
+    public ResponseEntity<?> deleteById(@PathVariable Long id) throws ObjectNotFoundException{
         return pokemonService.deleteById(id);
 
     }

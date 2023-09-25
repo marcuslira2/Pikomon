@@ -39,12 +39,15 @@ public class PokemonService {
         );
     }
 
-    public ResponseEntity<?> findById(Integer id) throws ObjectNotFoundException {
-        Pokemon pokemon = pokemonRepository.findByIdAndDeletedFalse(id).orElseThrow(ObjectNotFoundException::new);
+    public ResponseEntity<?> findById(Long id) throws ObjectNotFoundException {
+        Pokemon pokemon = pokemonRepository.findById(id).orElseThrow(ObjectNotFoundException::new);
+        if (pokemon.getDeleted()==1){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Pokemon deleted");
+        }
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(pokemon);
     }
 
-    public Pokemon save(int id, int level, String trainerName) throws ObjectNotFoundException {
+    public Pokemon save(Long id, int level, String trainerName) throws ObjectNotFoundException {
         Pokemon pokemonObj = pokemonRepository.findById(id).orElseThrow(ObjectNotFoundException::new);
         Pokemon pokemon = new Pokemon();
         Integer isShiny = rnd.nextInt(500);
@@ -163,8 +166,11 @@ public class PokemonService {
         return ivList;
     }
 
-    public ResponseEntity<?> deleteById(Integer id) throws ObjectNotFoundException {
-        Pokemon pokemon = pokemonRepository.findByIdAndDeletedFalse(id).orElseThrow(ObjectNotFoundException::new);
+    public ResponseEntity<?> deleteById(Long id) throws ObjectNotFoundException {
+        Pokemon pokemon = pokemonRepository.findById(id).orElseThrow(ObjectNotFoundException::new);
+        if (pokemon.getDeleted()==1){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Pokemon already gone");
+        }
         pokemon.setDeleted(1);
         pokemon.setDeletedDate(new Date());
         pokemonRepository.save(pokemon);

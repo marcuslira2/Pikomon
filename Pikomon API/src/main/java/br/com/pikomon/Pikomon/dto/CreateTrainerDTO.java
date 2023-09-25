@@ -5,6 +5,6 @@ import jakarta.validation.constraints.NotNull;
 public record CreateTrainerDTO(
         @NotNull String name,
         @NotNull Integer money,
-        @NotNull Integer pokemonId
+        @NotNull Long pokemonId
 ) {
 }

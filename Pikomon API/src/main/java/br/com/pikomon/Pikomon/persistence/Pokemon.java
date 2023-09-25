@@ -10,8 +10,8 @@ import java.util.*;
 @Table(name = "pokemon")
 public class Pokemon {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Integer uuid;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long uuid;
 
     private Integer id;
 
@@ -69,11 +69,11 @@ public class Pokemon {
 
     }
 
-    public Integer getUuid() {
+    public Long getUuid() {
         return uuid;
     }
 
-    public void setUuid(Integer uuid) {
+    public void setUuid(Long uuid) {
         this.uuid = uuid;
     }
 

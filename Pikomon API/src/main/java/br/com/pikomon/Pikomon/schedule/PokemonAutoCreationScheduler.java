@@ -43,7 +43,7 @@ public class PokemonAutoCreationScheduler {
             log.info("Creating pokemons on database");
             for (int i=1;i<10;i++){
 
-                Optional<Pokemon> isPokemonExists = pokemonRepository.findById(i);
+                Optional<Pokemon> isPokemonExists = pokemonRepository.findById((long) i);
                 if (isPokemonExists.isEmpty()){
 
                     Pokemon pk = new Pokemon();
