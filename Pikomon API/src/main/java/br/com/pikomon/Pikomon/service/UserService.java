@@ -14,7 +14,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
 import java.util.List;
 
 @Service
@@ -29,7 +28,7 @@ public class UserService {
     public List<UserDTO> listAll(){
         log.info("Listing all users");
         return userRepository.findAll().stream()
-                .filter(user -> user.getDeleted()==0).toList()
+                .filter(User::isEnabled).toList()
                 .stream().map(this::converterToDTO).toList();
     }
 
@@ -37,8 +36,7 @@ public class UserService {
         log.info("Converting user into DTO");
         return new UserDTO(
                 user.getId(),
-                user.getName(),
-                user.getTrainers()
+                user.getLogin()
         );
     }
 
@@ -46,34 +44,29 @@ public class UserService {
         User user = new User();
         log.info("Saving user: "+ dto.name());
         user.setLogin(dto.login());
-        user.setName(dto.name());
         user.setPassword(dto.password());
-        user.setCreatedDate(new Date());
-        user.setDeleted(0);
         this.userRepository.save(user);
-        return ResponseEntity.status(HttpStatus.CREATED).body("User: " + user.getName() + " saved.");
+        return ResponseEntity.status(HttpStatus.CREATED).body("User saved.");
     }
 
     public ResponseEntity<?> findById(Integer id) throws ObjectNotFoundException {
-        User user = userRepository.findByIdAndDeletedFalse(id).orElseThrow(ObjectNotFoundException::new);
+        User user = userRepository.findById(id).orElseThrow(ObjectNotFoundException::new);
         log.info("Searching user...");
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(user);
     }
 
     public ResponseEntity<?> deleteById(Integer id) throws ObjectNotFoundException {
-        User user = userRepository.findByIdAndDeletedFalse(id).orElseThrow(ObjectNotFoundException::new);
+        User user = userRepository.findById(id).orElseThrow(ObjectNotFoundException::new);
         log.info("Deleting user...");
-        user.setDeleted(1);
-        user.setDeletedDate(new Date());
         userRepository.save(user);
-        return ResponseEntity.status(HttpStatus.OK).body("User: "+user.getName()+" was deteled.");
+        return ResponseEntity.status(HttpStatus.OK).body("User was deteled.");
     }
 
     public ResponseEntity<?> changePWD(Integer id, ChangePWDDTO pwddto) throws ObjectNotFoundException {
-        User user = userRepository.findByIdAndDeletedFalse(id).orElseThrow(ObjectNotFoundException::new);
+        User user = userRepository.findById(id).orElseThrow(ObjectNotFoundException::new);
         log.info("Updating user...");
         user.setPassword(pwddto.password());
-        return ResponseEntity.status(HttpStatus.ACCEPTED).body("Password from user "+user.getName()+" was changed.");
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body("Password was changed.");
     }
 
 }
