@@ -1,6 +1,9 @@
 package br.com.pikomon.Pikomon.controller;
 
 import br.com.pikomon.Pikomon.dto.LoginDTO;
+import br.com.pikomon.Pikomon.dto.tokenDTO;
+import br.com.pikomon.Pikomon.infra.security.TokenService;
+import br.com.pikomon.Pikomon.persistence.User;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -20,13 +23,14 @@ public class LoginController {
     @Autowired
     private AuthenticationManager authenticationManager;
 
+    @Autowired
+    private TokenService tokenService;
 
     @PostMapping
     public ResponseEntity<?> login(@RequestBody @Valid LoginDTO dto){
-        UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(dto.login(), dto.pwd());
-        Authentication authenticate = authenticationManager.authenticate(token);
-
-        return ResponseEntity.status(HttpStatus.OK).build();
-
+        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(dto.login(), dto.pwd());
+        Authentication authenticate = authenticationManager.authenticate(authenticationToken);
+        String token = tokenService.gerarToken((User) authenticate.getPrincipal());
+        return ResponseEntity.status(HttpStatus.OK).body(new tokenDTO(token));
     }
 }
