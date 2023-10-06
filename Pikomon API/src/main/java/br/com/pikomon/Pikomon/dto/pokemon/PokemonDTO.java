@@ -1,4 +1,4 @@
-package br.com.pikomon.Pikomon.dto;
+package br.com.pikomon.Pikomon.dto.pokemon;
 
 import java.util.Optional;
 

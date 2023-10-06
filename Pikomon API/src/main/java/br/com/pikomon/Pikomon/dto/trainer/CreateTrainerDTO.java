@@ -1,4 +1,4 @@
-package br.com.pikomon.Pikomon.dto;
+package br.com.pikomon.Pikomon.dto.trainer;
 
 import jakarta.validation.constraints.NotNull;
 

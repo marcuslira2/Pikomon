@@ -1,7 +1,7 @@
 package br.com.pikomon.Pikomon.service;
 
-import br.com.pikomon.Pikomon.dto.CreateTrainerDTO;
-import br.com.pikomon.Pikomon.dto.TrainerDTO;
+import br.com.pikomon.Pikomon.dto.trainer.CreateTrainerDTO;
+import br.com.pikomon.Pikomon.dto.trainer.TrainerDTO;
 import br.com.pikomon.Pikomon.infra.exceptions.ObjectBadRequestException;
 import br.com.pikomon.Pikomon.infra.exceptions.ObjectNotFoundException;
 import br.com.pikomon.Pikomon.persistence.Pokemon;

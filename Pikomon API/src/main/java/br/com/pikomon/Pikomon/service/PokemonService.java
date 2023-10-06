@@ -1,6 +1,6 @@
 package br.com.pikomon.Pikomon.service;
 
-import br.com.pikomon.Pikomon.dto.PokemonDTO;
+import br.com.pikomon.Pikomon.dto.pokemon.PokemonDTO;
 import br.com.pikomon.Pikomon.infra.exceptions.ObjectNotFoundException;
 import br.com.pikomon.Pikomon.persistence.Pokemon;
 import br.com.pikomon.Pikomon.repository.PokemonRepository;

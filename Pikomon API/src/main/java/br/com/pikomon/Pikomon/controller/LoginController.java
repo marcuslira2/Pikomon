@@ -1,7 +1,7 @@
 package br.com.pikomon.Pikomon.controller;
 
-import br.com.pikomon.Pikomon.dto.LoginDTO;
-import br.com.pikomon.Pikomon.dto.tokenDTO;
+import br.com.pikomon.Pikomon.dto.user.LoginDTO;
+import br.com.pikomon.Pikomon.dto.user.tokenDTO;
 import br.com.pikomon.Pikomon.infra.security.TokenService;
 import br.com.pikomon.Pikomon.persistence.User;
 import jakarta.validation.Valid;

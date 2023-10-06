@@ -1,4 +1,4 @@
-package br.com.pikomon.Pikomon.dto;
+package br.com.pikomon.Pikomon.dto.user;
 
 import jakarta.validation.constraints.NotNull;
 

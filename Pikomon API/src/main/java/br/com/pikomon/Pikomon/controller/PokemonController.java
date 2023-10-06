@@ -1,7 +1,7 @@
 package br.com.pikomon.Pikomon.controller;
 
-import br.com.pikomon.Pikomon.dto.CreatePokemonDTO;
-import br.com.pikomon.Pikomon.dto.PokemonDTO;
+import br.com.pikomon.Pikomon.dto.pokemon.CreatePokemonDTO;
+import br.com.pikomon.Pikomon.dto.pokemon.PokemonDTO;
 import br.com.pikomon.Pikomon.infra.exceptions.ObjectBadRequestException;
 import br.com.pikomon.Pikomon.infra.exceptions.ObjectNotFoundException;
 import br.com.pikomon.Pikomon.persistence.Pokemon;

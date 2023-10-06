@@ -9,6 +9,8 @@ import org.springframework.cglib.core.Local;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.Date;
 
 @Service
@@ -22,14 +24,28 @@ public class TokenService {
             return JWT.create()
                     .withIssuer("Pikomon API")
                     .withSubject(user.getLogin())
-                    //.withExpiresAt(new Date().toInstant().plus(2 ,2))
+                    .withExpiresAt(loginTimeExpiration())
                     .sign(algorithm);
         } catch (JWTCreationException exception){
             throw new RuntimeException("Error: ",exception);
         }
     }
 
-//    private Instant loginTimeExpiration(){
-//        return new LocalDateTime
-//    }
+    public String getSubject(String tokenJWT){
+        try{
+            Algorithm algorithm = Algorithm.HMAC256(secret);
+            return JWT.require(algorithm)
+                    .withIssuer("Pikomon API")
+                    .build()
+                    .verify(tokenJWT)
+                    .getSubject();
+        }catch (JWTCreationException e){
+            throw new RuntimeException("Token JWT expirado");
+        }
+
+    }
+
+    private Instant loginTimeExpiration(){
+        return LocalDateTime.now().plusHours(2).toInstant(ZoneOffset.of("-03:00"));
+    }
 }

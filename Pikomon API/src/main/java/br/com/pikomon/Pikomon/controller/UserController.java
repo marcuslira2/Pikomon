@@ -1,8 +1,8 @@
 package br.com.pikomon.Pikomon.controller;
 
-import br.com.pikomon.Pikomon.dto.ChangePWDDTO;
-import br.com.pikomon.Pikomon.dto.CreateUserDTO;
-import br.com.pikomon.Pikomon.dto.UserDTO;
+import br.com.pikomon.Pikomon.dto.user.ChangePWDDTO;
+import br.com.pikomon.Pikomon.dto.user.CreateUserDTO;
+import br.com.pikomon.Pikomon.dto.user.UserDTO;
 import br.com.pikomon.Pikomon.infra.exceptions.ObjectBadRequestException;
 import br.com.pikomon.Pikomon.infra.exceptions.ObjectNotFoundException;
 import br.com.pikomon.Pikomon.service.UserService;
