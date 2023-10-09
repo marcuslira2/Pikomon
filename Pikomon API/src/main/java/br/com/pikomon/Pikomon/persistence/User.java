@@ -20,6 +20,17 @@ public class User implements UserDetails {
 
     private String password;
 
+    @OneToMany
+    private List<Trainer> trainers;
+
+    public List<Trainer> getTrainers() {
+        return trainers;
+    }
+
+    public void setTrainers(List<Trainer> trainers) {
+        this.trainers = trainers;
+    }
+
     public Integer getId() {
         return id;
     }

@@ -1,85 +1,18 @@
-package br.com.pikomon.Pikomon.service;
+package br.com.pikomon.Pikomon.service.pokemon;
 
-import br.com.pikomon.Pikomon.dto.pokemon.PokemonDTO;
-import br.com.pikomon.Pikomon.infra.exceptions.ObjectNotFoundException;
-import br.com.pikomon.Pikomon.persistence.Pokemon;
-import br.com.pikomon.Pikomon.repository.PokemonRepository;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Random;
 
 @Service
-public class PokemonService {
-
-    private final PokemonRepository pokemonRepository;
+public class PokemonAttributesService {
 
     private Random rnd = new Random();
 
-    private static final Logger log = LoggerFactory.getLogger(PokemonService.class);
-
-    public PokemonService(PokemonRepository pokemonRepository) {
-        this.pokemonRepository = pokemonRepository;
-    }
-
-    public List<PokemonDTO> listAll() {
-        return pokemonRepository.findAll().stream()
-                .filter(pokemon -> pokemon.getDeleted() == 0).toList()
-                .stream().map(this::converterToDTO).toList();
-    }
-
-    private PokemonDTO converterToDTO(Pokemon pokemon) {
-        return new PokemonDTO(
-                pokemon.getId(),
-                pokemon.getName(),
-                pokemon.getType1(),
-                Optional.ofNullable(pokemon.getType2())
-        );
-    }
-
-    public ResponseEntity<?> findById(Long id) throws ObjectNotFoundException {
-        Pokemon pokemon = pokemonRepository.findById(id).orElseThrow(ObjectNotFoundException::new);
-        if (pokemon.getDeleted()==1){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Pokemon deleted");
-        }
-        return ResponseEntity.status(HttpStatus.ACCEPTED).body(pokemon);
-    }
-
-    public Pokemon save(Long id, int level, String trainerName) throws ObjectNotFoundException {
-        Pokemon pokemonObj = pokemonRepository.findById(id).orElseThrow(ObjectNotFoundException::new);
-        Pokemon pokemon = new Pokemon();
-        Integer isShiny = rnd.nextInt(512);
-        pokemon.setName(pokemonObj.getName());
-        pokemon.setId(pokemonObj.getId());
-        pokemon.setDisplayName(pokemonObj.getDisplayName());
-        pokemon.setType1(pokemonObj.getType1());
-        if (pokemonObj.getType2()!=null){
-        pokemon.setType2(pokemonObj.getType2());
-        }
-        pokemon.setEffortType(pokemonObj.getEffortType());
-        pokemon.setEffortValue(pokemonObj.getEffortValue());
-        pokemon.setBaseExp(pokemonObj.getBaseExp());
-        pokemon.setActualTrainer(trainerName);
-        pokemon.setOriginalTrainer(trainerName);
-        pokemon.getBase().addAll(pokemonObj.getBase());
-        pokemon.getEv().addAll(generateEv());
-        pokemon.getIv().addAll(generateIv());
-        pokemon.setNature(this.generateNature());
-        pokemon.setLevel(level);
-        pokemon.getStatus().addAll(
-                this.calcAtributes(pokemon.getBase(), pokemon.getEv(), pokemon.getIv(), pokemon.getLevel(), pokemon.getNature()));
-        pokemon.setShiny(isShiny == 1);
-        pokemon.setCreatedDate(new Date());
-        pokemon.setDeleted(0);
-        return pokemonRepository.save(pokemon);
-
-    }
-
-    private List<Integer> calcAtributes(List<Integer> base, List<Integer> ev, List<Integer> iv, Integer level, String nature) {
+    public List<Integer> calcAtributes(List<Integer> base, List<Integer> ev, List<Integer> iv, Integer level, String nature) {
         List<Integer> status = new ArrayList<>(6);
 
         Integer hp = (int) Math.floor(0.01 * (2 * base.get(0) + iv.get(0) + Math.floor(0.25 * ev.get(0))) * level + 10);
@@ -145,7 +78,7 @@ public class PokemonService {
         return natureList.get(selectNature);
     }
 
-    private List<Integer> generateEv() {
+    public List<Integer> generateEv() {
         List<Integer> evList = new ArrayList<>(6);
         evList.add(0, 0);
         evList.add(1, 0);
@@ -156,7 +89,7 @@ public class PokemonService {
         return evList;
     }
 
-    private List<Integer> generateIv() {
+    public List<Integer> generateIv() {
         List<Integer> ivList = new ArrayList<>(6);
 
         ivList.add(0, rnd.nextInt(31));
@@ -166,17 +99,5 @@ public class PokemonService {
         ivList.add(4, rnd.nextInt(31));
         ivList.add(5, rnd.nextInt(31));
         return ivList;
-    }
-
-    public ResponseEntity<?> deleteById(Long id) throws ObjectNotFoundException {
-        Pokemon pokemon = pokemonRepository.findById(id).orElseThrow(ObjectNotFoundException::new);
-        if (pokemon.getDeleted()==1){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Pokemon already gone");
-        }
-        pokemon.setDeleted(1);
-        pokemon.setDeletedDate(new Date());
-        pokemonRepository.save(pokemon);
-        String name = !Objects.equals(pokemon.getDisplayName(), "") ? pokemon.getDisplayName() : pokemon.getName();
-        return ResponseEntity.status(HttpStatus.ACCEPTED).body("Goodbye " + name);
     }
 }

@@ -27,5 +27,5 @@ public class PikomonApplication {
 
 		return builder.build();
 	}
-	
+
 }
