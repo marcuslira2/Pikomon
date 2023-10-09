@@ -29,7 +29,6 @@ public class UserController {
 
     private final AuthenticationManager authenticationManager;
 
-
     private final TokenService tokenService;
 
     public UserController(UserService userService, AuthenticationManager authenticationManager, TokenService tokenService) {
@@ -57,6 +56,7 @@ public class UserController {
 
     @PostMapping
     public ResponseEntity<?> create(@RequestBody @Valid CreateUserDTO dto) throws ObjectBadRequestException {
+
         return userService.save(dto);
     }
 

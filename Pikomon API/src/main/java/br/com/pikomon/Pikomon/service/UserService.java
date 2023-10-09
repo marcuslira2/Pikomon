@@ -9,9 +9,9 @@ import br.com.pikomon.Pikomon.persistence.User;
 import br.com.pikomon.Pikomon.repository.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,10 +21,13 @@ public class UserService {
 
     private final UserRepository userRepository;
 
+    private final PasswordEncoder passwordEncoder;
+
     private static final Logger log = LoggerFactory.getLogger(UserService.class);
 
-    public UserService(UserRepository userRepository) {
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     public List<UserDTO> listAll(){
@@ -46,7 +49,7 @@ public class UserService {
         User user = new User();
         log.info("Saving user: "+ dto.name());
         user.setLogin(dto.login());
-        user.setPassword(dto.password());
+        user.setPassword(passwordEncoder.encode(dto.password()));
         this.userRepository.save(user);
         return ResponseEntity.status(HttpStatus.CREATED).body("User saved.");
     }
