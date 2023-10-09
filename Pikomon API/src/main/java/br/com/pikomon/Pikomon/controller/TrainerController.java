@@ -18,8 +18,12 @@ import java.util.List;
 @RequestMapping("/trainer")
 public class TrainerController {
 
-    @Autowired
-    TrainerService trainerService;
+
+    private final TrainerService trainerService;
+
+    public TrainerController(TrainerService trainerService) {
+        this.trainerService = trainerService;
+    }
 
     @GetMapping
     public ResponseEntity<List<TrainerDTO>> listAll(){

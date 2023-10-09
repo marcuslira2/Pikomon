@@ -16,13 +16,15 @@ import java.util.*;
 @Service
 public class PokemonService {
 
-    @Autowired
-    private PokemonRepository pokemonRepository;
+    private final PokemonRepository pokemonRepository;
 
     private Random rnd = new Random();
 
     private static final Logger log = LoggerFactory.getLogger(PokemonService.class);
 
+    public PokemonService(PokemonRepository pokemonRepository) {
+        this.pokemonRepository = pokemonRepository;
+    }
 
     public List<PokemonDTO> listAll() {
         return pokemonRepository.findAll().stream()
@@ -50,7 +52,7 @@ public class PokemonService {
     public Pokemon save(Long id, int level, String trainerName) throws ObjectNotFoundException {
         Pokemon pokemonObj = pokemonRepository.findById(id).orElseThrow(ObjectNotFoundException::new);
         Pokemon pokemon = new Pokemon();
-        Integer isShiny = rnd.nextInt(500);
+        Integer isShiny = rnd.nextInt(512);
         pokemon.setName(pokemonObj.getName());
         pokemon.setId(pokemonObj.getId());
         pokemon.setDisplayName(pokemonObj.getDisplayName());

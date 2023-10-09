@@ -21,19 +21,22 @@ import java.util.Optional;
 @Service
 public class PokemonAutoCreationScheduler {
 
-    @Autowired
-    private RestTemplate restTemplate;
+    private final RestTemplate restTemplate;
 
-    @Autowired
-    private PokemonRepository pokemonRepository;
+    private final PokemonRepository pokemonRepository;
 
-    @Autowired
-    private PokemonMoveRepository pkMoveRepository;
+    private final PokemonMoveRepository pkMoveRepository;
 
-    @Autowired
-    private MoveRepository moveRepository;
+    private final MoveRepository moveRepository;
 
     private static final Logger log = LoggerFactory.getLogger(PokemonAutoCreationScheduler.class);
+
+    public PokemonAutoCreationScheduler(RestTemplate restTemplate, PokemonRepository pokemonRepository, PokemonMoveRepository pkMoveRepository, MoveRepository moveRepository) {
+        this.restTemplate = restTemplate;
+        this.pokemonRepository = pokemonRepository;
+        this.pkMoveRepository = pkMoveRepository;
+        this.moveRepository = moveRepository;
+    }
 
     @PostConstruct
     public void createPokemon(){

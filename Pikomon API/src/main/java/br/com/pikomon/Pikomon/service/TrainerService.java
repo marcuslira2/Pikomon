@@ -20,13 +20,16 @@ import java.util.List;
 @Service
 public class TrainerService {
 
-    @Autowired
-    TrainerRepository trainerRepository;
+    private final TrainerRepository trainerRepository;
 
-    @Autowired
-    PokemonService pokemonService;
+    private final PokemonService pokemonService;
 
     private static final Logger log = LoggerFactory.getLogger(TrainerService.class);
+
+    public TrainerService(TrainerRepository trainerRepository, PokemonService pokemonService) {
+        this.trainerRepository = trainerRepository;
+        this.pokemonService = pokemonService;
+    }
 
     private TrainerDTO converterToDTO(Trainer trainer) {
         log.info("Converting trainer into DTO");

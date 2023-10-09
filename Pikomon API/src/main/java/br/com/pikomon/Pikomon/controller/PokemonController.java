@@ -17,7 +17,7 @@ import java.util.List;
 @RequestMapping("/pokemon")
 public class PokemonController {
 
-    private PokemonService pokemonService;
+    private final PokemonService pokemonService;
 
     public PokemonController(PokemonService pokemonService) {
         this.pokemonService = pokemonService;
@@ -35,7 +35,6 @@ public class PokemonController {
     }
 
     @PostMapping
-    @Transactional
     public ResponseEntity<?> create(@RequestBody CreatePokemonDTO dto) throws ObjectBadRequestException {
         Pokemon pokemon = pokemonService.save(dto.id(),dto.level(),dto.trainer());
         return ResponseEntity.status(HttpStatus.CREATED).body(pokemon);
@@ -43,7 +42,7 @@ public class PokemonController {
     }
 
     @DeleteMapping(path = "/{id}")
-    @Transactional
+
     public ResponseEntity<?> deleteById(@PathVariable Long id) throws ObjectNotFoundException{
         return pokemonService.deleteById(id);
 

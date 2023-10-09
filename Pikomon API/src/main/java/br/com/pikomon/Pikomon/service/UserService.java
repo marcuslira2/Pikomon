@@ -1,6 +1,6 @@
 package br.com.pikomon.Pikomon.service;
 
-import br.com.pikomon.Pikomon.dto.user.ChangePWDDTO;
+import br.com.pikomon.Pikomon.dto.user.ModifyPasswordDTO;
 import br.com.pikomon.Pikomon.dto.user.CreateUserDTO;
 import br.com.pikomon.Pikomon.dto.user.UserDTO;
 import br.com.pikomon.Pikomon.infra.exceptions.ObjectBadRequestException;
@@ -19,11 +19,13 @@ import java.util.List;
 @Service
 public class UserService {
 
-    @Autowired
-    UserRepository userRepository;
+    private final UserRepository userRepository;
 
     private static final Logger log = LoggerFactory.getLogger(UserService.class);
 
+    public UserService(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
     public List<UserDTO> listAll(){
         log.info("Listing all users");
@@ -62,7 +64,7 @@ public class UserService {
         return ResponseEntity.status(HttpStatus.OK).body("User was deteled.");
     }
 
-    public ResponseEntity<?> changePWD(Integer id, ChangePWDDTO pwddto) throws ObjectNotFoundException {
+    public ResponseEntity<?> changePWD(Integer id, ModifyPasswordDTO pwddto) throws ObjectNotFoundException {
         User user = userRepository.findById(id).orElseThrow(ObjectNotFoundException::new);
         log.info("Updating user...");
         user.setPassword(pwddto.password());

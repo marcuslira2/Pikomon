@@ -15,14 +15,18 @@ import java.util.Optional;
 @Service
 public class MoveAutoCreationScheduler {
 
-    @Autowired
-    private MoveRepository moveRepository;
 
-    @Autowired
-    private RestTemplate restTemplate;
+    private final MoveRepository moveRepository;
+
+    private final RestTemplate restTemplate;
 
 
     private static final Logger log = LoggerFactory.getLogger(MoveAutoCreationScheduler.class);
+
+    public MoveAutoCreationScheduler(MoveRepository moveRepository, RestTemplate restTemplate) {
+        this.moveRepository = moveRepository;
+        this.restTemplate = restTemplate;
+    }
 
     @PostConstruct
     public void create (){
