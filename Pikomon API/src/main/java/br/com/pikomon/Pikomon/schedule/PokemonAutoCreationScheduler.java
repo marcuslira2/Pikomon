@@ -1,7 +1,10 @@
 package br.com.pikomon.Pikomon.schedule;
 
+import br.com.pikomon.Pikomon.modal.Abilities;
 import br.com.pikomon.Pikomon.modal.MoveData;
 import br.com.pikomon.Pikomon.modal.PokemonData;
+import br.com.pikomon.Pikomon.modal.StatData;
+import br.com.pikomon.Pikomon.persistence.Ability;
 import br.com.pikomon.Pikomon.persistence.Pokemon;
 import br.com.pikomon.Pikomon.persistence.PokemonMove;
 import br.com.pikomon.Pikomon.repository.MoveRepository;
@@ -68,6 +71,15 @@ public class PokemonAutoCreationScheduler {
                     if (pokemonData.getTypes().size()>1){
                         pk.setType2(pokemonData.getTypes().get(1).getType().getName());
                     }
+
+                    List<StatData> statData = pokemonData.getStats();
+                    for (StatData statDatum : statData){
+                        if (statDatum.getEffort()!=0){
+                            pk.setEffortValue(statDatum.getEffort());
+                            pk.setEffortType(statDatum.getStat().getName());
+                        }
+                    }
+
                     List<MoveData> moveData = pokemonData.getMoves();
                     List<PokemonMove> moveToAdd = new ArrayList<>();
                     for (MoveData moveDatum : moveData){

@@ -26,10 +26,7 @@ public class Move {
 
     private String damageClass;
 
-
-
     private String description;
-
 
     public Integer getId() {
         return id;

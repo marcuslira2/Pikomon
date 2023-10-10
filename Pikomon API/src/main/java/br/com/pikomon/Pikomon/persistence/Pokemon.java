@@ -60,8 +60,12 @@ public class Pokemon {
     @ManyToMany
     private List<PokemonMove> moves;
 
+    @OneToMany
+    private List<Ability> abilities;
+
     public Pokemon() {
         this.moves = new ArrayList<>();
+        this.abilities = new ArrayList<>();
         this.status = new ArrayList<>(6);
         this.base = new ArrayList<>(6);
         this.ev = new ArrayList<>(6);
@@ -261,16 +265,55 @@ public class Pokemon {
         this.moves = moves;
     }
 
+    public List<Ability> getAbilities() {
+        return abilities;
+    }
+
+    public void setAbilities(List<Ability> abilities) {
+        this.abilities = abilities;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Pokemon pokemon = (Pokemon) o;
-        return Objects.equals(uuid, pokemon.uuid) && Objects.equals(id, pokemon.id) && Objects.equals(originalTrainer, pokemon.originalTrainer) && Objects.equals(actualTrainer, pokemon.actualTrainer) && Objects.equals(level, pokemon.level) && Objects.equals(name, pokemon.name) && Objects.equals(displayName, pokemon.displayName) && Objects.equals(type1, pokemon.type1) && Objects.equals(type2, pokemon.type2) && Objects.equals(nextLevel, pokemon.nextLevel) && Objects.equals(exp, pokemon.exp) && Objects.equals(baseExp, pokemon.baseExp) && Objects.equals(effortType, pokemon.effortType) && Objects.equals(effortValue, pokemon.effortValue) && Objects.equals(nature, pokemon.nature) && Objects.equals(status, pokemon.status) && Objects.equals(base, pokemon.base) && Objects.equals(ev, pokemon.ev) && Objects.equals(iv, pokemon.iv) && Objects.equals(isShiny, pokemon.isShiny) && Objects.equals(deleted, pokemon.deleted) && Objects.equals(deletedDate, pokemon.deletedDate) && Objects.equals(createdDate, pokemon.createdDate) && Objects.equals(moves, pokemon.moves);
+        return Objects.equals(uuid, pokemon.uuid) && Objects.equals(id, pokemon.id) && Objects.equals(originalTrainer, pokemon.originalTrainer) && Objects.equals(actualTrainer, pokemon.actualTrainer) && Objects.equals(level, pokemon.level) && Objects.equals(name, pokemon.name) && Objects.equals(displayName, pokemon.displayName) && Objects.equals(type1, pokemon.type1) && Objects.equals(type2, pokemon.type2) && Objects.equals(nextLevel, pokemon.nextLevel) && Objects.equals(exp, pokemon.exp) && Objects.equals(baseExp, pokemon.baseExp) && Objects.equals(effortType, pokemon.effortType) && Objects.equals(effortValue, pokemon.effortValue) && Objects.equals(nature, pokemon.nature) && Objects.equals(status, pokemon.status) && Objects.equals(base, pokemon.base) && Objects.equals(ev, pokemon.ev) && Objects.equals(iv, pokemon.iv) && Objects.equals(isShiny, pokemon.isShiny) && Objects.equals(deleted, pokemon.deleted) && Objects.equals(deletedDate, pokemon.deletedDate) && Objects.equals(createdDate, pokemon.createdDate) && Objects.equals(moves, pokemon.moves) && Objects.equals(abilities, pokemon.abilities);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(uuid, id, originalTrainer, actualTrainer, level, name, displayName, type1, type2, nextLevel, exp, baseExp, effortType, effortValue, nature, status, base, ev, iv, isShiny, deleted, deletedDate, createdDate, moves);
+        return Objects.hash(uuid, id, originalTrainer, actualTrainer, level, name, displayName, type1, type2, nextLevel, exp, baseExp, effortType, effortValue, nature, status, base, ev, iv, isShiny, deleted, deletedDate, createdDate, moves, abilities);
+    }
+
+    @Override
+    public String toString() {
+        return "Pokemon{" +
+                "uuid=" + uuid +
+                ", id=" + id +
+                ", originalTrainer='" + originalTrainer + '\'' +
+                ", actualTrainer='" + actualTrainer + '\'' +
+                ", level=" + level +
+                ", name='" + name + '\'' +
+                ", displayName='" + displayName + '\'' +
+                ", type1='" + type1 + '\'' +
+                ", type2='" + type2 + '\'' +
+                ", nextLevel=" + nextLevel +
+                ", exp=" + exp +
+                ", baseExp=" + baseExp +
+                ", effortType='" + effortType + '\'' +
+                ", effortValue=" + effortValue +
+                ", nature='" + nature + '\'' +
+                ", status=" + status +
+                ", base=" + base +
+                ", ev=" + ev +
+                ", iv=" + iv +
+                ", isShiny=" + isShiny +
+                ", deleted=" + deleted +
+                ", deletedDate=" + deletedDate +
+                ", createdDate=" + createdDate +
+                ", moves=" + moves +
+                ", abilities=" + abilities +
+                '}';
     }
 }
