@@ -6,7 +6,9 @@ import br.com.pikomon.Pikomon.infra.exceptions.ObjectBadRequestException;
 import br.com.pikomon.Pikomon.infra.exceptions.ObjectNotFoundException;
 import br.com.pikomon.Pikomon.persistence.Pokemon;
 import br.com.pikomon.Pikomon.persistence.Trainer;
+import br.com.pikomon.Pikomon.persistence.User;
 import br.com.pikomon.Pikomon.repository.TrainerRepository;
+import br.com.pikomon.Pikomon.repository.UserRepository;
 import br.com.pikomon.Pikomon.service.pokemon.PokemonService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,6 +18,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class TrainerService {
@@ -24,11 +27,14 @@ public class TrainerService {
 
     private final PokemonService pokemonService;
 
+    private final UserRepository userRepository;
+
     private static final Logger log = LoggerFactory.getLogger(TrainerService.class);
 
-    public TrainerService(TrainerRepository trainerRepository, PokemonService pokemonService) {
+    public TrainerService(TrainerRepository trainerRepository, PokemonService pokemonService, UserRepository userRepository) {
         this.trainerRepository = trainerRepository;
         this.pokemonService = pokemonService;
+        this.userRepository = userRepository;
     }
 
     private TrainerDTO converterToDTO(Trainer trainer) {
@@ -36,23 +42,29 @@ public class TrainerService {
         return new TrainerDTO(
                 trainer.getName(),
                 trainer.getMoney(),
-                trainer.getPokemons()
+                trainer.getPokemons(),
+                trainer.getUserId()
         );
     }
 
     public ResponseEntity<?> save(CreateTrainerDTO dto) throws ObjectBadRequestException {
+        Optional<User> user = userRepository.findById(dto.userID());
         Trainer trainer = new Trainer();
 
+        if (user.isPresent()){
         trainer.setName(dto.name());
         trainer.setMoney(dto.money());
         trainer.setCreateDate(new Date());
         Pokemon pokemon = pokemonService.save(dto.pokemonId(),5,dto.name());
         trainer.add(pokemon);
         trainer.setDeleted(0);
+        trainer.setUserId(user.get().getId());
         this.trainerRepository.save(trainer);
+        user.get().getTrainers().add(trainer);
+        this.userRepository.save(user.get());
         return ResponseEntity.status(HttpStatus.CREATED).body("Trainer "+trainer.getName()+" created.");
-
-
+        }
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Request Error");
     }
 
     public List<TrainerDTO> listAll() {

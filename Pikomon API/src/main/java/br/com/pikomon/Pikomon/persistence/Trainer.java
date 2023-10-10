@@ -3,6 +3,7 @@ package br.com.pikomon.Pikomon.persistence;
 
 import jakarta.persistence.*;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -10,7 +11,7 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "trainer")
-public class Trainer {
+public class Trainer implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -25,9 +26,10 @@ public class Trainer {
 
     private Date createdDate;
 
-
     @OneToMany
     private List<Pokemon> pokemons = new ArrayList<>();
+
+    private Integer userId;
 
     public Integer getId() {
         return id;
@@ -96,27 +98,12 @@ public class Trainer {
         this.createdDate = createDate;
     }
 
-    public Trainer(Integer id, String name, Integer money, Integer deleted, Date deletedDate, Date createdDate, List<Pokemon> pokemons) {
-        this.id = id;
-        this.name = name;
-        this.money = money;
-        this.deleted = deleted;
-        this.deletedDate = deletedDate;
-        this.createdDate = createdDate;
-        this.pokemons = pokemons;
+    public Integer getUserId() {
+        return userId;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Trainer trainer = (Trainer) o;
-        return Objects.equals(id, trainer.id) && Objects.equals(name, trainer.name) && Objects.equals(money, trainer.money) && Objects.equals(deleted, trainer.deleted) && Objects.equals(deletedDate, trainer.deletedDate) && Objects.equals(createdDate, trainer.createdDate) && Objects.equals(pokemons, trainer.pokemons);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, name, money, deleted, deletedDate, createdDate, pokemons);
+    public void setUserId(Integer userId) {
+        this.userId = userId;
     }
 }
 

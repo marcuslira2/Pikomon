@@ -6,6 +6,7 @@ import br.com.pikomon.Pikomon.dto.user.UserDTO;
 import br.com.pikomon.Pikomon.infra.exceptions.ObjectBadRequestException;
 import br.com.pikomon.Pikomon.infra.exceptions.ObjectNotFoundException;
 import br.com.pikomon.Pikomon.persistence.User;
+import br.com.pikomon.Pikomon.repository.TrainerRepository;
 import br.com.pikomon.Pikomon.repository.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,11 +24,14 @@ public class UserService {
 
     private final PasswordEncoder passwordEncoder;
 
+    private final TrainerRepository trainerRepository;
+
     private static final Logger log = LoggerFactory.getLogger(UserService.class);
 
-    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, TrainerRepository trainerRepository) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
+        this.trainerRepository = trainerRepository;
     }
 
     public List<UserDTO> listAll(){
@@ -41,7 +45,8 @@ public class UserService {
         log.info("Converting user into DTO");
         return new UserDTO(
                 user.getId(),
-                user.getLogin()
+                user.getLogin(),
+                user.getTrainers()
         );
     }
 

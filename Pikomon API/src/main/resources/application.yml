@@ -1,0 +1,25 @@
+api:
+    security:
+        token:
+            secret: ${JWT_SECRET:12345678}
+server:
+    error:
+        include-stacktrace: never
+spring:
+    datasource:
+        driver-class-name: org.mariadb.jdbc.Driver
+        initial-size: 5
+        max-active: 10
+        max-idle: 5
+        max-wait: 10000
+        min-idle: 2
+        password: root
+        url: jdbc:mariadb://localhost:3306/banco
+        username: root
+    jpa:
+        hibernate:
+            ddl-auto: update
+        properties:
+            hibernate:
+                format_sql: true
+        show-sql: false

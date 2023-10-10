@@ -1,10 +1,12 @@
 package br.com.pikomon.Pikomon.dto.trainer;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 public record CreateTrainerDTO(
         @NotBlank String name,
-        @NotBlank Integer money,
-        @NotBlank Long pokemonId
+        @NotNull Integer money,
+        @NotNull Long pokemonId,
+        @NotNull Integer userID
 ) {
 }
