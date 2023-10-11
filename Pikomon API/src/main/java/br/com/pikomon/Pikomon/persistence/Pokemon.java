@@ -60,8 +60,8 @@ public class Pokemon {
     @ManyToMany
     private List<PokemonMove> moves;
 
-    @OneToMany
-    private List<Ability> abilities;
+    @ManyToMany
+    private List<PokemonAbility> abilities;
 
     public Pokemon() {
         this.moves = new ArrayList<>();
@@ -265,11 +265,11 @@ public class Pokemon {
         this.moves = moves;
     }
 
-    public List<Ability> getAbilities() {
+    public List<PokemonAbility> getAbilities() {
         return abilities;
     }
 
-    public void setAbilities(List<Ability> abilities) {
+    public void setAbilities(List<PokemonAbility> abilities) {
         this.abilities = abilities;
     }
 

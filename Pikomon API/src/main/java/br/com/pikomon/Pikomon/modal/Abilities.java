@@ -6,13 +6,13 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Abilities {
 
-    private AbilittyData ability;
+    private AbiittiesData ability;
 
-    public AbilittyData getAbility() {
+    public AbiittiesData getAbility() {
         return ability;
     }
 
-    public void setAbility(AbilittyData ability) {
+    public void setAbility(AbiittiesData ability) {
         this.ability = ability;
     }
 }

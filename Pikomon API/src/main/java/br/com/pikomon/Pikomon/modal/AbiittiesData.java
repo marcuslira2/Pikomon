@@ -4,7 +4,7 @@ package br.com.pikomon.Pikomon.modal;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class AbilittyData {
+public class AbiittiesData {
 
     private String name;
     private String url;

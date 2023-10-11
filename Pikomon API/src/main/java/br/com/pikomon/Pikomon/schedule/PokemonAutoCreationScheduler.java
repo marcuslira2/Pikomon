@@ -1,25 +1,21 @@
 package br.com.pikomon.Pikomon.schedule;
 
-import br.com.pikomon.Pikomon.modal.Abilities;
-import br.com.pikomon.Pikomon.modal.MoveData;
-import br.com.pikomon.Pikomon.modal.PokemonData;
-import br.com.pikomon.Pikomon.modal.StatData;
-import br.com.pikomon.Pikomon.persistence.Ability;
+import br.com.pikomon.Pikomon.modal.*;
 import br.com.pikomon.Pikomon.persistence.Pokemon;
+import br.com.pikomon.Pikomon.persistence.PokemonAbility;
 import br.com.pikomon.Pikomon.persistence.PokemonMove;
 import br.com.pikomon.Pikomon.repository.MoveRepository;
+import br.com.pikomon.Pikomon.repository.PokemonAbilityRepository;
 import br.com.pikomon.Pikomon.repository.PokemonMoveRepository;
 import br.com.pikomon.Pikomon.repository.PokemonRepository;
 import jakarta.annotation.PostConstruct;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class PokemonAutoCreationScheduler {
@@ -32,13 +28,16 @@ public class PokemonAutoCreationScheduler {
 
     private final MoveRepository moveRepository;
 
+    private final PokemonAbilityRepository pokemonAbilityRepository;
+
     private static final Logger log = LoggerFactory.getLogger(PokemonAutoCreationScheduler.class);
 
-    public PokemonAutoCreationScheduler(RestTemplate restTemplate, PokemonRepository pokemonRepository, PokemonMoveRepository pkMoveRepository, MoveRepository moveRepository) {
+    public PokemonAutoCreationScheduler(RestTemplate restTemplate, PokemonRepository pokemonRepository, PokemonMoveRepository pkMoveRepository, MoveRepository moveRepository, PokemonAbilityRepository pokemonAbilityRepository) {
         this.restTemplate = restTemplate;
         this.pokemonRepository = pokemonRepository;
         this.pkMoveRepository = pkMoveRepository;
         this.moveRepository = moveRepository;
+        this.pokemonAbilityRepository = pokemonAbilityRepository;
     }
 
     @PostConstruct
@@ -48,30 +47,31 @@ public class PokemonAutoCreationScheduler {
             log.info("Creating pokemons on database");
             for (int i=1;i<10;i++){
 
-                Optional<Pokemon> isPokemonExists = pokemonRepository.findById((long) i);
-                if (isPokemonExists.isEmpty()){
-
+//                Optional<Pokemon> isPokemonExists = pokemonRepository.findById((long) i);
+//                if (isPokemonExists.isEmpty()){
+//
+//                }
                     Pokemon pk = new Pokemon();
                     PokemonData pokemonData = restTemplate.getForObject("https://pokeapi.co/api/v2/pokemon/"+i,PokemonData.class);
                     assert pokemonData != null;
                     String pokeSaved = "Saving pokemon: " + pokemonData.getName();
-
                     log.info(pokeSaved);
 
                     pk.setName(pokemonData.getName());
                     pk.setDisplayName(pokemonData.getName());
                     pk.setId(pokemonData.getId());
                     pk.setBaseExp(pokemonData.getBase_experience());
-                    for (int j =0; j< 6; j++){
-                    pk.getBase().add(pokemonData.getStats().get(j).getBase_stat());
-                    }
                     pk.setType1(pokemonData.getTypes().get(0).getType().getName());
                     pk.setShiny(false);
                     pk.setDeleted(0);
+
                     if (pokemonData.getTypes().size()>1){
                         pk.setType2(pokemonData.getTypes().get(1).getType().getName());
                     }
 
+                    for (int j =0; j< 6; j++){
+                    pk.getBase().add(pokemonData.getStats().get(j).getBase_stat());
+                    }
                     List<StatData> statData = pokemonData.getStats();
                     for (StatData statDatum : statData){
                         if (statDatum.getEffort()!=0){
@@ -79,6 +79,16 @@ public class PokemonAutoCreationScheduler {
                             pk.setEffortType(statDatum.getStat().getName());
                         }
                     }
+                    List<Abilities> abilityData = pokemonData.getAbilities();
+                    List<PokemonAbility> abilityToAdd = new ArrayList<>();
+                    for (Abilities abilitiesDatum : abilityData){
+                        PokemonAbility pokemonAbility = new PokemonAbility();
+                        pokemonAbility.setPokemonName(pokemonData.getName());
+                        pokemonAbility.setAbilityName(abilitiesDatum.getAbility().getName());
+                        pokemonAbilityRepository.save(pokemonAbility);
+                        abilityToAdd.add(pokemonAbility);
+                    }
+                    pk.getAbilities().addAll(abilityToAdd);
 
                     List<MoveData> moveData = pokemonData.getMoves();
                     List<PokemonMove> moveToAdd = new ArrayList<>();
@@ -94,7 +104,6 @@ public class PokemonAutoCreationScheduler {
                     }
                     pk.getMoves().addAll(moveToAdd);
                     pokemonRepository.save(pk);
-                }
 
             }
         }catch (Exception e){

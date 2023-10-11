@@ -3,6 +3,7 @@ package br.com.pikomon.Pikomon.persistence;
 
 import jakarta.persistence.*;
 
+import java.util.List;
 import java.util.Objects;
 
 @Entity

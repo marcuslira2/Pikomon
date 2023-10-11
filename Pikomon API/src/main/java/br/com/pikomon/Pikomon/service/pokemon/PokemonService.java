@@ -77,6 +77,9 @@ public class PokemonService {
         pokemon.setShiny(isShiny == 1);
         pokemon.setCreatedDate(new Date());
         pokemon.setDeleted(0);
+        Integer rndAbility = rnd.nextInt(pokemonObj.getAbilities().size());
+        pokemon.getAbilities().add(pokemonObj.getAbilities().get(rndAbility));
+        pokemon.getMoves().addAll(pokemonObj.getMoves());
         return pokemonRepository.save(pokemon);
     }
 
