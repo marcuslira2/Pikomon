@@ -3,19 +3,17 @@ package br.com.pikomon.Pikomon.service;
 import br.com.pikomon.Pikomon.dto.user.ModifyPasswordDTO;
 import br.com.pikomon.Pikomon.dto.user.CreateUserDTO;
 import br.com.pikomon.Pikomon.dto.user.UserDTO;
-import br.com.pikomon.Pikomon.infra.exceptions.ObjectBadRequestException;
-import br.com.pikomon.Pikomon.infra.exceptions.ObjectNotFoundException;
 import br.com.pikomon.Pikomon.persistence.User;
 import br.com.pikomon.Pikomon.repository.TrainerRepository;
 import br.com.pikomon.Pikomon.repository.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class UserService {
@@ -24,17 +22,19 @@ public class UserService {
 
     private final PasswordEncoder passwordEncoder;
 
-    private final TrainerRepository trainerRepository;
+    private final LogService logService;
+
+    private static final String USER_NOT_FOUND = "User not found";
 
     private static final Logger log = LoggerFactory.getLogger(UserService.class);
 
-    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, TrainerRepository trainerRepository) {
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, LogService logService) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
-        this.trainerRepository = trainerRepository;
+        this.logService = logService;
     }
 
-    public List<UserDTO> listAll(){
+    public List<UserDTO> listAll() {
         log.info("Listing all users");
         return userRepository.findAll().stream()
                 .filter(User::isEnabled).toList()
@@ -50,33 +50,50 @@ public class UserService {
         );
     }
 
-    public ResponseEntity<?> save(CreateUserDTO dto) throws ObjectBadRequestException {
+    public UserDTO save(CreateUserDTO dto) throws Exception {
         User user = new User();
-        log.info("Saving user: "+ dto.name());
+        log.info("Saving user: " + dto.name());
         user.setLogin(dto.login());
         user.setPassword(passwordEncoder.encode(dto.password()));
+        user.setUuid(UUID.randomUUID().toString());
+        user.setCreatedDate(new Date());
         this.userRepository.save(user);
-        return ResponseEntity.status(HttpStatus.CREATED).body("User saved.");
+
+        String logMsg = user.getUsername() + " create account.";
+        this.logService.save(user.getUuid(), null, logMsg);
+
+        return this.converterToDTO(user);
     }
 
-    public ResponseEntity<?> findById(Integer id) throws ObjectNotFoundException {
-        User user = userRepository.findById(id).orElseThrow(ObjectNotFoundException::new);
+    public UserDTO findById(Integer id) throws Exception {
+        User user = userRepository.findById(id).orElseThrow(() -> new Exception(USER_NOT_FOUND));
         log.info("Searching user...");
-        return ResponseEntity.status(HttpStatus.ACCEPTED).body(user);
+        return this.converterToDTO(user);
     }
 
-    public ResponseEntity<?> deleteById(Integer id) throws ObjectNotFoundException {
-        User user = userRepository.findById(id).orElseThrow(ObjectNotFoundException::new);
+    public String deleteById(Integer id) throws Exception {
+        User user = userRepository.findById(id).orElseThrow(() -> new Exception(USER_NOT_FOUND));
         log.info("Deleting user...");
+        user.setDeletedDate(new Date());
+        user.setDeleted(true);
         userRepository.save(user);
-        return ResponseEntity.status(HttpStatus.OK).body("User was deteled.");
+
+        String logMsg = user.getUsername() + " deleted account.";
+        this.logService.save(user.getUuid(), null, logMsg);
+
+        return user.getUsername();
     }
 
-    public ResponseEntity<?> changePWD(Integer id, ModifyPasswordDTO pwddto) throws ObjectNotFoundException {
-        User user = userRepository.findById(id).orElseThrow(ObjectNotFoundException::new);
+    public String changePWD(Integer id, ModifyPasswordDTO pwddto) throws Exception {
+        User user = userRepository.findById(id).orElseThrow(() -> new Exception(USER_NOT_FOUND));
         log.info("Updating user...");
         user.setPassword(pwddto.password());
-        return ResponseEntity.status(HttpStatus.ACCEPTED).body("Password was changed.");
+        userRepository.save(user);
+
+        String logMsg = user.getUsername() + " changed password.";
+        this.logService.save(user.getUuid(), null, logMsg);
+
+        return user.getUsername();
     }
 
 }

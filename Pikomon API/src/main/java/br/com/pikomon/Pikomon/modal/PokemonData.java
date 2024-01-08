@@ -16,16 +16,6 @@ public class PokemonData {
     private List<StatData> stats;
     private List<TypeData> types;
 
-    private List<Abilities> abilities;
-
-    public List<Abilities> getAbilities() {
-        return abilities;
-    }
-
-    public void setAbilities(List<Abilities> abilities) {
-        this.abilities = abilities;
-    }
-
     public Integer getId() {
         return id;
     }

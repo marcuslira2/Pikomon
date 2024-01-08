@@ -16,11 +16,16 @@ public class Trainer implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    @Column(unique = true)
+    private String uuid;
+    private Integer userId;
+
+    @Column(unique = true)
     private String name;
 
     private Integer money;
 
-    private Integer deleted;
+    private Boolean deleted;
 
     private Date deletedDate;
 
@@ -29,7 +34,6 @@ public class Trainer implements Serializable {
     @OneToMany
     private List<Pokemon> pokemons = new ArrayList<>();
 
-    private Integer userId;
 
     public Integer getId() {
         return id;
@@ -70,11 +74,11 @@ public class Trainer implements Serializable {
         this.money = money;
     }
 
-    public Integer getDeleted() {
+    public Boolean getDeleted() {
         return deleted;
     }
 
-    public void setDeleted(Integer deleted) {
+    public void setDeleted(Boolean deleted) {
         this.deleted = deleted;
     }
 
@@ -104,6 +108,14 @@ public class Trainer implements Serializable {
 
     public void setUserId(Integer userId) {
         this.userId = userId;
+    }
+
+    public String getUuid() {
+        return uuid;
+    }
+
+    public void setUuid(String uuid) {
+        this.uuid = uuid;
     }
 }
 

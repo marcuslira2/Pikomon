@@ -2,8 +2,6 @@ package br.com.pikomon.Pikomon.controller;
 
 import br.com.pikomon.Pikomon.dto.pokemon.CreatePokemonDTO;
 import br.com.pikomon.Pikomon.dto.pokemon.PokemonDTO;
-import br.com.pikomon.Pikomon.infra.exceptions.ObjectBadRequestException;
-import br.com.pikomon.Pikomon.infra.exceptions.ObjectNotFoundException;
 import br.com.pikomon.Pikomon.persistence.Pokemon;
 import br.com.pikomon.Pikomon.service.pokemon.PokemonService;
 import org.springframework.http.HttpStatus;
@@ -29,22 +27,24 @@ public class PokemonController {
     }
 
     @GetMapping(path = "/{id}")
-    public ResponseEntity<?> findById(@PathVariable Long id) throws ObjectNotFoundException {
-        return pokemonService.findById(id);
+    public ResponseEntity<PokemonDTO> findById(@PathVariable Long id) throws Exception {
+        PokemonDTO dto = pokemonService.findById(id);
+        return ResponseEntity.status(HttpStatus.OK).body(dto);
     }
 
     @PostMapping
-    public ResponseEntity<?> create(@RequestBody CreatePokemonDTO dto) throws ObjectBadRequestException {
-        Pokemon pokemon = pokemonService.save(dto.id(),dto.level(),dto.trainer());
+    public ResponseEntity<Pokemon> create(@RequestBody CreatePokemonDTO dto) throws Exception {
+        Pokemon pokemon = pokemonService.save(dto.id(),dto.level(),dto.trainerUUID());
         return ResponseEntity.status(HttpStatus.CREATED).body(pokemon);
 
     }
 
     @DeleteMapping(path = "/{id}")
 
-    public ResponseEntity<?> deleteById(@PathVariable Long id) throws ObjectNotFoundException{
-        return pokemonService.deleteById(id);
+    public ResponseEntity<String> deleteById(@PathVariable Long id) throws Exception{
+        String pokemonName = pokemonService.deleteById(id);
 
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body("Good Bye " + pokemonName);
     }
 
 }

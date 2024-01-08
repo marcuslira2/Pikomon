@@ -2,10 +2,8 @@ package br.com.pikomon.Pikomon.schedule;
 
 import br.com.pikomon.Pikomon.modal.*;
 import br.com.pikomon.Pikomon.persistence.Pokemon;
-import br.com.pikomon.Pikomon.persistence.PokemonAbility;
 import br.com.pikomon.Pikomon.persistence.PokemonMove;
 import br.com.pikomon.Pikomon.repository.MoveRepository;
-import br.com.pikomon.Pikomon.repository.PokemonAbilityRepository;
 import br.com.pikomon.Pikomon.repository.PokemonMoveRepository;
 import br.com.pikomon.Pikomon.repository.PokemonRepository;
 import jakarta.annotation.PostConstruct;
@@ -28,16 +26,13 @@ public class PokemonAutoCreationScheduler {
 
     private final MoveRepository moveRepository;
 
-    private final PokemonAbilityRepository pokemonAbilityRepository;
-
     private static final Logger log = LoggerFactory.getLogger(PokemonAutoCreationScheduler.class);
 
-    public PokemonAutoCreationScheduler(RestTemplate restTemplate, PokemonRepository pokemonRepository, PokemonMoveRepository pkMoveRepository, MoveRepository moveRepository, PokemonAbilityRepository pokemonAbilityRepository) {
+    public PokemonAutoCreationScheduler(RestTemplate restTemplate, PokemonRepository pokemonRepository, PokemonMoveRepository pkMoveRepository, MoveRepository moveRepository) {
         this.restTemplate = restTemplate;
         this.pokemonRepository = pokemonRepository;
         this.pkMoveRepository = pkMoveRepository;
         this.moveRepository = moveRepository;
-        this.pokemonAbilityRepository = pokemonAbilityRepository;
     }
 
     @PostConstruct
@@ -59,7 +54,7 @@ public class PokemonAutoCreationScheduler {
 
                     pk.setName(pokemonData.getName());
                     pk.setDisplayName(pokemonData.getName());
-                    pk.setId(pokemonData.getId());
+                    pk.setNumber(pokemonData.getId());
                     pk.setBaseExp(pokemonData.getBase_experience());
                     pk.setType1(pokemonData.getTypes().get(0).getType().getName());
                     pk.setShiny(false);
@@ -79,16 +74,6 @@ public class PokemonAutoCreationScheduler {
                             pk.setEffortType(statDatum.getStat().getName());
                         }
                     }
-                    List<Abilities> abilityData = pokemonData.getAbilities();
-                    List<PokemonAbility> abilityToAdd = new ArrayList<>();
-                    for (Abilities abilitiesDatum : abilityData){
-                        PokemonAbility pokemonAbility = new PokemonAbility();
-                        pokemonAbility.setPokemonName(pokemonData.getName());
-                        pokemonAbility.setAbilityName(abilitiesDatum.getAbility().getName());
-                        pokemonAbilityRepository.save(pokemonAbility);
-                        abilityToAdd.add(pokemonAbility);
-                    }
-                    pk.getAbilities().addAll(abilityToAdd);
 
                     List<MoveData> moveData = pokemonData.getMoves();
                     List<PokemonMove> moveToAdd = new ArrayList<>();

@@ -2,8 +2,6 @@ package br.com.pikomon.Pikomon.service;
 
 import br.com.pikomon.Pikomon.dto.trainer.CreateTrainerDTO;
 import br.com.pikomon.Pikomon.dto.trainer.TrainerDTO;
-import br.com.pikomon.Pikomon.infra.exceptions.ObjectBadRequestException;
-import br.com.pikomon.Pikomon.infra.exceptions.ObjectNotFoundException;
 import br.com.pikomon.Pikomon.persistence.Pokemon;
 import br.com.pikomon.Pikomon.persistence.Trainer;
 import br.com.pikomon.Pikomon.persistence.User;
@@ -12,13 +10,11 @@ import br.com.pikomon.Pikomon.repository.UserRepository;
 import br.com.pikomon.Pikomon.service.pokemon.PokemonService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class TrainerService {
@@ -29,12 +25,19 @@ public class TrainerService {
 
     private final UserRepository userRepository;
 
+    private final LogService logService;
+
     private static final Logger log = LoggerFactory.getLogger(TrainerService.class);
 
-    public TrainerService(TrainerRepository trainerRepository, PokemonService pokemonService, UserRepository userRepository) {
+    private static final String TRAINER_NOT_FOUND = "Trainer not found";
+
+    private static final String USER_NOT_FOUND = "User not found";
+
+    public TrainerService(TrainerRepository trainerRepository, PokemonService pokemonService, UserRepository userRepository, LogService logService) {
         this.trainerRepository = trainerRepository;
         this.pokemonService = pokemonService;
         this.userRepository = userRepository;
+        this.logService = logService;
     }
 
     private TrainerDTO converterToDTO(Trainer trainer) {
@@ -47,45 +50,54 @@ public class TrainerService {
         );
     }
 
-    public ResponseEntity<?> save(CreateTrainerDTO dto) throws ObjectBadRequestException {
-        Optional<User> user = userRepository.findById(dto.userID());
+    public TrainerDTO save(CreateTrainerDTO dto) throws Exception {
+        User user = userRepository.findById(dto.userID()).orElseThrow(() -> new Exception(USER_NOT_FOUND));
         Trainer trainer = new Trainer();
-
-        if (user.isPresent()){
         trainer.setName(dto.name());
         trainer.setMoney(dto.money());
         trainer.setCreateDate(new Date());
-        Pokemon pokemon = pokemonService.save(dto.pokemonId(),5,dto.name());
-        trainer.add(pokemon);
-        trainer.setDeleted(0);
-        trainer.setUserId(user.get().getId());
+        trainer.setDeleted(false);
+        trainer.setUserId(user.getId());
+        trainer.setUuid(UUID.randomUUID().toString());
         this.trainerRepository.save(trainer);
-        user.get().getTrainers().add(trainer);
-        this.userRepository.save(user.get());
-        return ResponseEntity.status(HttpStatus.CREATED).body("Trainer "+trainer.getName()+" created.");
-        }
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Request Error");
+        Pokemon pokemon = pokemonService.save(dto.pokemonId(), 5, dto.name());
+        trainer.add(pokemon);
+        user.getTrainers().add(trainer);
+        this.userRepository.save(user);
+        TrainerDTO trainerDTO = this.converterToDTO(trainer);
+
+        String logMsg = user.getUsername() + " create new trainer: " + trainer.getName();
+        this.logService.save(user.getUuid(), trainer.getUuid(), logMsg);
+
+        return trainerDTO;
+
     }
 
     public List<TrainerDTO> listAll() {
         return trainerRepository.findAll().stream()
-                .filter(trainer -> trainer.getDeleted()==0).toList()
+                .filter(trainer -> trainer.getDeleted() != true).toList()
                 .stream().map(this::converterToDTO).toList();
     }
 
-    public ResponseEntity<?> findById(Integer id) throws ObjectNotFoundException {
-        Trainer trainer = trainerRepository.findByIdAndDeletedFalse(id).orElseThrow(ObjectNotFoundException::new);
+    public TrainerDTO findById(Integer id) throws Exception {
         log.info("Searching trainer...");
-        return ResponseEntity.status(HttpStatus.ACCEPTED).body(trainer);
+        Trainer trainer = trainerRepository.findByIdAndDeletedFalse(id).orElseThrow(() -> new Exception(TRAINER_NOT_FOUND));
+        TrainerDTO trainerDTO = this.converterToDTO(trainer);
+        return trainerDTO;
     }
 
 
-    public ResponseEntity<?> deleteById(Integer id) throws ObjectNotFoundException {
-        Trainer trainer = trainerRepository.findByIdAndDeletedFalse(id).orElseThrow(ObjectNotFoundException::new);
+    public String deleteById(Integer id) throws Exception {
+        Trainer trainer = trainerRepository.findByIdAndDeletedFalse(id).orElseThrow(() -> new Exception(TRAINER_NOT_FOUND));
+        User user = userRepository.findById(trainer.getUserId()).orElseThrow(() -> new Exception(USER_NOT_FOUND));
         log.info("Deleting trainer...");
-        trainer.setDeleted(1);
+        trainer.setDeleted(true);
         trainer.setDeletedDate(new Date());
         trainerRepository.save(trainer);
-        return ResponseEntity.status(HttpStatus.OK).body("Trainer: "+trainer.getName()+" was deleted.");
+
+        String logMsg = user.getUsername() + " deleted trainer: " + trainer.getName();
+        this.logService.save(user.getUuid(), trainer.getUuid(), logMsg);
+
+        return trainer.getName();
     }
 }

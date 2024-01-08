@@ -11,9 +11,13 @@ import java.util.*;
 public class Pokemon {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long uuid;
+    private Long id;
 
-    private Integer id;
+    private String uuid;
+
+    private Integer number;
+
+    private String trainerUUID;
 
     private String originalTrainer;
 
@@ -60,12 +64,8 @@ public class Pokemon {
     @ManyToMany
     private List<PokemonMove> moves;
 
-    @ManyToMany
-    private List<PokemonAbility> abilities;
-
     public Pokemon() {
         this.moves = new ArrayList<>();
-        this.abilities = new ArrayList<>();
         this.status = new ArrayList<>(6);
         this.base = new ArrayList<>(6);
         this.ev = new ArrayList<>(6);
@@ -73,19 +73,19 @@ public class Pokemon {
 
     }
 
-    public Long getUuid() {
+    public String getUuid() {
         return uuid;
     }
 
-    public void setUuid(Long uuid) {
+    public void setUuid(String uuid) {
         this.uuid = uuid;
     }
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -265,12 +265,20 @@ public class Pokemon {
         this.moves = moves;
     }
 
-    public List<PokemonAbility> getAbilities() {
-        return abilities;
+    public Integer getNumber() {
+        return number;
     }
 
-    public void setAbilities(List<PokemonAbility> abilities) {
-        this.abilities = abilities;
+    public void setNumber(Integer number) {
+        this.number = number;
+    }
+
+    public String getTrainerUUID() {
+        return trainerUUID;
+    }
+
+    public void setTrainerUUID(String trainerUUID) {
+        this.trainerUUID = trainerUUID;
     }
 
     @Override
@@ -278,19 +286,21 @@ public class Pokemon {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Pokemon pokemon = (Pokemon) o;
-        return Objects.equals(uuid, pokemon.uuid) && Objects.equals(id, pokemon.id) && Objects.equals(originalTrainer, pokemon.originalTrainer) && Objects.equals(actualTrainer, pokemon.actualTrainer) && Objects.equals(level, pokemon.level) && Objects.equals(name, pokemon.name) && Objects.equals(displayName, pokemon.displayName) && Objects.equals(type1, pokemon.type1) && Objects.equals(type2, pokemon.type2) && Objects.equals(nextLevel, pokemon.nextLevel) && Objects.equals(exp, pokemon.exp) && Objects.equals(baseExp, pokemon.baseExp) && Objects.equals(effortType, pokemon.effortType) && Objects.equals(effortValue, pokemon.effortValue) && Objects.equals(nature, pokemon.nature) && Objects.equals(status, pokemon.status) && Objects.equals(base, pokemon.base) && Objects.equals(ev, pokemon.ev) && Objects.equals(iv, pokemon.iv) && Objects.equals(isShiny, pokemon.isShiny) && Objects.equals(deleted, pokemon.deleted) && Objects.equals(deletedDate, pokemon.deletedDate) && Objects.equals(createdDate, pokemon.createdDate) && Objects.equals(moves, pokemon.moves) && Objects.equals(abilities, pokemon.abilities);
+        return Objects.equals(id, pokemon.id) && Objects.equals(uuid, pokemon.uuid) && Objects.equals(number, pokemon.number) && Objects.equals(trainerUUID, pokemon.trainerUUID) && Objects.equals(originalTrainer, pokemon.originalTrainer) && Objects.equals(actualTrainer, pokemon.actualTrainer) && Objects.equals(level, pokemon.level) && Objects.equals(name, pokemon.name) && Objects.equals(displayName, pokemon.displayName) && Objects.equals(type1, pokemon.type1) && Objects.equals(type2, pokemon.type2) && Objects.equals(nextLevel, pokemon.nextLevel) && Objects.equals(exp, pokemon.exp) && Objects.equals(baseExp, pokemon.baseExp) && Objects.equals(effortType, pokemon.effortType) && Objects.equals(effortValue, pokemon.effortValue) && Objects.equals(nature, pokemon.nature) && Objects.equals(status, pokemon.status) && Objects.equals(base, pokemon.base) && Objects.equals(ev, pokemon.ev) && Objects.equals(iv, pokemon.iv) && Objects.equals(isShiny, pokemon.isShiny) && Objects.equals(deleted, pokemon.deleted) && Objects.equals(deletedDate, pokemon.deletedDate) && Objects.equals(createdDate, pokemon.createdDate) && Objects.equals(moves, pokemon.moves);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(uuid, id, originalTrainer, actualTrainer, level, name, displayName, type1, type2, nextLevel, exp, baseExp, effortType, effortValue, nature, status, base, ev, iv, isShiny, deleted, deletedDate, createdDate, moves, abilities);
+        return Objects.hash(id, uuid, number, trainerUUID, originalTrainer, actualTrainer, level, name, displayName, type1, type2, nextLevel, exp, baseExp, effortType, effortValue, nature, status, base, ev, iv, isShiny, deleted, deletedDate, createdDate, moves);
     }
 
     @Override
     public String toString() {
         return "Pokemon{" +
-                "uuid=" + uuid +
-                ", id=" + id +
+                "id=" + id +
+                ", uuid=" + uuid +
+                ", number=" + number +
+                ", trainerUUID=" + trainerUUID +
                 ", originalTrainer='" + originalTrainer + '\'' +
                 ", actualTrainer='" + actualTrainer + '\'' +
                 ", level=" + level +
@@ -313,7 +323,6 @@ public class Pokemon {
                 ", deletedDate=" + deletedDate +
                 ", createdDate=" + createdDate +
                 ", moves=" + moves +
-                ", abilities=" + abilities +
                 '}';
     }
 }

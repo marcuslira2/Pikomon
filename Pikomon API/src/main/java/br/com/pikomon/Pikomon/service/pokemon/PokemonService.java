@@ -1,13 +1,15 @@
 package br.com.pikomon.Pikomon.service.pokemon;
 
 import br.com.pikomon.Pikomon.dto.pokemon.PokemonDTO;
-import br.com.pikomon.Pikomon.infra.exceptions.ObjectNotFoundException;
 import br.com.pikomon.Pikomon.persistence.Pokemon;
+import br.com.pikomon.Pikomon.persistence.Trainer;
+import br.com.pikomon.Pikomon.persistence.User;
 import br.com.pikomon.Pikomon.repository.PokemonRepository;
+import br.com.pikomon.Pikomon.repository.TrainerRepository;
+import br.com.pikomon.Pikomon.repository.UserRepository;
+import br.com.pikomon.Pikomon.service.LogService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -19,13 +21,25 @@ public class PokemonService {
 
     private final PokemonAttributesService attributesService;
 
+    private final TrainerRepository trainerRepository;
+    private final UserRepository userRepository;
+
+    private final LogService logService;
+
     private Random rnd = new Random();
 
     private static final Logger log = LoggerFactory.getLogger(PokemonService.class);
 
-    public PokemonService(PokemonRepository pokemonRepository, PokemonAttributesService attributesService) {
+    private static final String POKEMON_NOT_FOUND = "Pokemon not found";
+    private static final String TRAINER_NOT_FOUND = "Trainer not found";
+    private static final String USER_NOT_FOUND = "User not found";
+
+    public PokemonService(PokemonRepository pokemonRepository, PokemonAttributesService attributesService, TrainerRepository trainerRepository, UserRepository userRepository, LogService logService) {
         this.pokemonRepository = pokemonRepository;
         this.attributesService = attributesService;
+        this.trainerRepository = trainerRepository;
+        this.userRepository = userRepository;
+        this.logService = logService;
     }
 
     public List<PokemonDTO> listAll() {
@@ -36,37 +50,43 @@ public class PokemonService {
 
     private PokemonDTO converterToDTO(Pokemon pokemon) {
         return new PokemonDTO(
-                pokemon.getId(),
+                pokemon.getNumber(),
                 pokemon.getName(),
                 pokemon.getType1(),
                 Optional.ofNullable(pokemon.getType2())
         );
     }
 
-    public ResponseEntity<?> findById(Long id) throws ObjectNotFoundException {
-        Pokemon pokemon = pokemonRepository.findById(id).orElseThrow(ObjectNotFoundException::new);
-        if (pokemon.getDeleted()==1){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Pokemon deleted");
-        }
-        return ResponseEntity.status(HttpStatus.ACCEPTED).body(pokemon);
+    public PokemonDTO findById(Long id) throws Exception {
+        Pokemon pokemon = pokemonRepository.findById(id).orElseThrow(() -> new Exception(POKEMON_NOT_FOUND));
+
+        return this.converterToDTO(pokemon);
     }
 
-    public Pokemon save(Long id, int level, String trainerName) throws ObjectNotFoundException {
-        Pokemon pokemonObj = pokemonRepository.findById(id).orElseThrow(ObjectNotFoundException::new);
+    public Pokemon save(Long id, int level, String trainerName) throws Exception {
+        Pokemon pokemonObj = pokemonRepository.findById(id).orElseThrow(
+                () -> new Exception(POKEMON_NOT_FOUND));
+        Trainer trainer = trainerRepository.findByName(trainerName).orElseThrow(
+                () -> new Exception(TRAINER_NOT_FOUND));
+        User user = userRepository.findById(trainer.getUserId()).orElseThrow(
+                () -> new Exception(USER_NOT_FOUND));
+
         Pokemon pokemon = new Pokemon();
         Integer isShiny = rnd.nextInt(512);
+        pokemon.setUuid(UUID.randomUUID().toString());
         pokemon.setName(pokemonObj.getName());
-        pokemon.setId(pokemonObj.getId());
+        pokemon.setNumber(pokemonObj.getNumber());
         pokemon.setDisplayName(pokemonObj.getDisplayName());
         pokemon.setType1(pokemonObj.getType1());
-        if (pokemonObj.getType2()!=null){
-        pokemon.setType2(pokemonObj.getType2());
+        if (pokemonObj.getType2() != null) {
+            pokemon.setType2(pokemonObj.getType2());
         }
         pokemon.setEffortType(pokemonObj.getEffortType());
         pokemon.setEffortValue(pokemonObj.getEffortValue());
         pokemon.setBaseExp(pokemonObj.getBaseExp());
-        pokemon.setActualTrainer(trainerName);
-        pokemon.setOriginalTrainer(trainerName);
+        pokemon.setTrainerUUID(trainer.getUuid());
+        pokemon.setActualTrainer(trainer.getName());
+        pokemon.setOriginalTrainer(trainer.getName());
         pokemon.getBase().addAll(pokemonObj.getBase());
         pokemon.getEv().addAll(attributesService.generateEv());
         pokemon.getIv().addAll(attributesService.generateIv());
@@ -77,21 +97,29 @@ public class PokemonService {
         pokemon.setShiny(isShiny == 1);
         pokemon.setCreatedDate(new Date());
         pokemon.setDeleted(0);
-        Integer rndAbility = rnd.nextInt(pokemonObj.getAbilities().size());
-        pokemon.getAbilities().add(pokemonObj.getAbilities().get(rndAbility));
         pokemon.getMoves().addAll(pokemonObj.getMoves());
+
+        String logMsg = trainerName + " registered a new pokemon: " + pokemon.getName();
+        this.logService.save(user.getUuid(), trainer.getUuid(), logMsg);
+
         return pokemonRepository.save(pokemon);
     }
 
-    public ResponseEntity<?> deleteById(Long id) throws ObjectNotFoundException {
-        Pokemon pokemon = pokemonRepository.findById(id).orElseThrow(ObjectNotFoundException::new);
-        if (pokemon.getDeleted()==1){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Pokemon already gone");
-        }
+    public String deleteById(Long id) throws Exception {
+        Pokemon pokemon = pokemonRepository.findById(id).orElseThrow(() -> new Exception(POKEMON_NOT_FOUND));
+        Trainer trainer = trainerRepository.findByName(pokemon.getActualTrainer()).orElseThrow(
+                () -> new Exception(TRAINER_NOT_FOUND));
+        User user = userRepository.findById(trainer.getUserId()).orElseThrow(
+                () -> new Exception(USER_NOT_FOUND));
         pokemon.setDeleted(1);
         pokemon.setDeletedDate(new Date());
         pokemonRepository.save(pokemon);
         String name = !Objects.equals(pokemon.getDisplayName(), "") ? pokemon.getDisplayName() : pokemon.getName();
-        return ResponseEntity.status(HttpStatus.ACCEPTED).body("Goodbye " + name);
+
+        String logMsg = pokemon.getActualTrainer() + " deleted a pokemon: " + name;
+        this.logService.save(user.getUuid(), trainer.getUuid(), logMsg);
+
+        return name;
+
     }
 }

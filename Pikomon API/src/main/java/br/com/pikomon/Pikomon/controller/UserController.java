@@ -1,8 +1,6 @@
 package br.com.pikomon.Pikomon.controller;
 
 import br.com.pikomon.Pikomon.dto.user.*;
-import br.com.pikomon.Pikomon.infra.exceptions.ObjectBadRequestException;
-import br.com.pikomon.Pikomon.infra.exceptions.ObjectNotFoundException;
 import br.com.pikomon.Pikomon.infra.security.TokenService;
 import br.com.pikomon.Pikomon.persistence.User;
 import br.com.pikomon.Pikomon.service.UserService;
@@ -36,8 +34,9 @@ public class UserController {
         this.authenticationManager = authenticationManager;
         this.tokenService = tokenService;
     }
+
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody @Valid LoginDTO dto){
+    public ResponseEntity<?> login(@RequestBody @Valid LoginDTO dto) {
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(dto.login(), dto.pwd());
         Authentication authenticate = authenticationManager.authenticate(authenticationToken);
         String token = tokenService.gerarToken((User) authenticate.getPrincipal());
@@ -45,29 +44,33 @@ public class UserController {
     }
 
     @GetMapping
-    public ResponseEntity<List<UserDTO>> listAll(){
+    public ResponseEntity<List<UserDTO>> listAll() {
         return new ResponseEntity<>(userService.listAll(), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> findById(@PathVariable Integer id) throws ObjectNotFoundException {
-        return userService.findById(id);
+    public ResponseEntity<UserDTO> findById(@PathVariable Integer id) throws Exception {
+        UserDTO userDTO = userService.findById(id);
+        return ResponseEntity.status(HttpStatus.OK).body(userDTO);
     }
 
     @PostMapping
-    public ResponseEntity<?> create(@RequestBody @Valid CreateUserDTO dto) throws ObjectBadRequestException {
-
-        return userService.save(dto);
+    public ResponseEntity<UserDTO> create(@RequestBody @Valid CreateUserDTO dto) throws Exception {
+        UserDTO user = userService.save(dto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(user);
     }
 
     @PutMapping("/{id}")
-    public  ResponseEntity<?> updatePWD(@PathVariable Integer id, @RequestBody @Valid ModifyPasswordDTO pwd) throws ObjectNotFoundException {
-        return userService.changePWD(id,pwd);
+    public ResponseEntity<String> updatePWD(@PathVariable Integer id, @RequestBody @Valid ModifyPasswordDTO pwd) throws Exception {
+
+        String userName = userService.changePWD(id, pwd);
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body("Password changed for user " + userName);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteById(@PathVariable Integer id) throws ObjectNotFoundException {
-        return userService.deleteById(id);
+    public ResponseEntity<String> deleteById(@PathVariable Integer id) throws Exception {
+        String userName = userService.deleteById(id);
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(userName + " deleted.");
 
     }
 }
