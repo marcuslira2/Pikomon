@@ -55,9 +55,14 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<UserDTO> create(@RequestBody @Valid CreateUserDTO dto) throws Exception {
+    public ResponseEntity<?> create(@RequestBody @Valid CreateUserDTO dto) throws Exception {
+        try {
         UserDTO user = userService.save(dto);
         return ResponseEntity.status(HttpStatus.CREATED).body(user);
+
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(e.getMessage());
+        }
     }
 
     @PutMapping("/{id}")

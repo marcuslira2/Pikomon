@@ -12,6 +12,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,6 +45,19 @@ public class PokemonAutoCreationScheduler {
     public void createPokemon(){
 
         try {
+//            log.info("Baixando imagens");
+//            for (int count = 1; count <= 151; count++) {
+//                String url = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-v/black-white/animated/" + count + ".gif";
+//                String path = "C:\\image\\"+count+".gif";
+//                imageDownloader(url, path);
+//                log.info("pokemon baixado sob id: "+count);
+//                url = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-v/black-white/animated/shiny/" + count + ".gif";
+//                path = "C:\\image\\"+count+"-shiny.gif";
+//                imageDownloader(url, path);
+//                log.info("pokemon shiny baixado sob id: "+count);
+//
+//            }
+
             log.info("Creating pokemons on database");
             for (int i=1;i<10;i++){
 
@@ -93,6 +112,29 @@ public class PokemonAutoCreationScheduler {
             }
         }catch (Exception e){
             log.info(e.getMessage());
+        }
+    }
+
+    public void imageDownloader(String urlOrigin,String savePath){
+        try {
+            URL url = new URL(urlOrigin);
+            HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
+            int responseCode = httpURLConnection.getResponseCode();
+
+            if (responseCode == HttpURLConnection.HTTP_OK) {
+                try (InputStream inputStream = httpURLConnection.getInputStream();
+                     FileOutputStream outputStream = new FileOutputStream(savePath)) {
+                    byte[] buffer = new byte[1024];
+                    int bytesRead;
+                    while ((bytesRead = inputStream.read(buffer)) != -1) {
+                        outputStream.write(buffer, 0, bytesRead);
+                    }
+                }
+            } else {
+                System.out.println("Falha ao baixar a imagem. Código de status: " + responseCode);
+            }
+        } catch (IOException e) {
+            System.out.println("Ocorreu um erro: " + e.getMessage());
         }
     }
 

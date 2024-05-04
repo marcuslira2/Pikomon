@@ -4,10 +4,10 @@ import br.com.pikomon.Pikomon.dto.user.ModifyPasswordDTO;
 import br.com.pikomon.Pikomon.dto.user.CreateUserDTO;
 import br.com.pikomon.Pikomon.dto.user.UserDTO;
 import br.com.pikomon.Pikomon.persistence.User;
-import br.com.pikomon.Pikomon.repository.TrainerRepository;
 import br.com.pikomon.Pikomon.repository.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -38,10 +38,10 @@ public class UserService {
         log.info("Listing all users");
         return userRepository.findAll().stream()
                 .filter(User::isEnabled).toList()
-                .stream().map(this::converterToDTO).toList();
+                .stream().map(this::convertToDTO).toList();
     }
 
-    private UserDTO converterToDTO(User user) {
+    private UserDTO convertToDTO(User user) {
         log.info("Converting user into DTO");
         return new UserDTO(
                 user.getId(),
@@ -51,8 +51,13 @@ public class UserService {
     }
 
     public UserDTO save(CreateUserDTO dto) throws Exception {
+        UserDetails byLogin = userRepository.findByLogin(dto.login());
+
+        if (byLogin !=null){
+            throw new Exception("User alredy exists");
+        }
         User user = new User();
-        log.info("Saving user: " + dto.name());
+        log.info("Saving user: " + dto.login());
         user.setLogin(dto.login());
         user.setPassword(passwordEncoder.encode(dto.password()));
         user.setUuid(UUID.randomUUID().toString());
@@ -62,13 +67,13 @@ public class UserService {
         String logMsg = user.getUsername() + " create account.";
         this.logService.save(user.getUuid(), null, logMsg);
 
-        return this.converterToDTO(user);
+        return this.convertToDTO(user);
     }
 
     public UserDTO findById(Integer id) throws Exception {
         User user = userRepository.findById(id).orElseThrow(() -> new Exception(USER_NOT_FOUND));
         log.info("Searching user...");
-        return this.converterToDTO(user);
+        return this.convertToDTO(user);
     }
 
     public String deleteById(Integer id) throws Exception {
