@@ -20,6 +20,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class PokemonAutoCreationScheduler {
@@ -59,12 +60,11 @@ public class PokemonAutoCreationScheduler {
 //            }
 
             log.info("Creating pokemons on database");
-            for (int i=1;i<10;i++){
+            for (int i=1;i<152;i++){
 
-//                Optional<Pokemon> isPokemonExists = pokemonRepository.findById((long) i);
-//                if (isPokemonExists.isEmpty()){
-//
-//                }
+                Optional<Pokemon> isPokemonExists = pokemonRepository.findById((long) i);
+                if (isPokemonExists.isEmpty()){
+
                     Pokemon pk = new Pokemon();
                     PokemonData pokemonData = restTemplate.getForObject("https://pokeapi.co/api/v2/pokemon/"+i,PokemonData.class);
                     assert pokemonData != null;
@@ -108,6 +108,8 @@ public class PokemonAutoCreationScheduler {
                     }
                     pk.getMoves().addAll(moveToAdd);
                     pokemonRepository.save(pk);
+
+                }
 
             }
         }catch (Exception e){

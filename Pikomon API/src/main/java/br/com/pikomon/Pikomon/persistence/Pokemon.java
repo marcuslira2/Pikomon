@@ -61,7 +61,7 @@ public class Pokemon {
 
     private Date createdDate;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     private List<PokemonMove> moves;
 
     public Pokemon() {

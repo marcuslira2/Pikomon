@@ -18,6 +18,7 @@ public class Trainer implements Serializable {
 
     @Column(unique = true)
     private String uuid;
+
     private Integer userId;
 
     @Column(unique = true)
@@ -31,7 +32,7 @@ public class Trainer implements Serializable {
 
     private Date createdDate;
 
-    @OneToMany
+    @OneToMany(fetch = FetchType.EAGER)
     private List<Pokemon> pokemons = new ArrayList<>();
 
 

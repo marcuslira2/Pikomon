@@ -1,6 +1,7 @@
 package br.com.pikomon.Pikomon.service.pokemon;
 
 import br.com.pikomon.Pikomon.dto.pokemon.PokemonDTO;
+import br.com.pikomon.Pikomon.enums.LocationEnum;
 import br.com.pikomon.Pikomon.persistence.Pokemon;
 import br.com.pikomon.Pikomon.persistence.Trainer;
 import br.com.pikomon.Pikomon.persistence.User;
@@ -64,43 +65,21 @@ public class PokemonService {
     }
 
     public Pokemon save(Long id, int level, String trainerName) throws Exception {
-        Pokemon pokemonObj = pokemonRepository.findById(id).orElseThrow(
-                () -> new Exception(POKEMON_NOT_FOUND));
+
         Trainer trainer = trainerRepository.findByName(trainerName).orElseThrow(
                 () -> new Exception(TRAINER_NOT_FOUND));
         User user = userRepository.findById(trainer.getUserId()).orElseThrow(
                 () -> new Exception(USER_NOT_FOUND));
 
-        Pokemon pokemon = new Pokemon();
-        Integer isShiny = rnd.nextInt(512);
-        pokemon.setUuid(UUID.randomUUID().toString());
-        pokemon.setName(pokemonObj.getName());
-        pokemon.setNumber(pokemonObj.getNumber());
-        pokemon.setDisplayName(pokemonObj.getDisplayName());
-        pokemon.setType1(pokemonObj.getType1());
-        if (pokemonObj.getType2() != null) {
-            pokemon.setType2(pokemonObj.getType2());
-        }
-        pokemon.setEffortType(pokemonObj.getEffortType());
-        pokemon.setEffortValue(pokemonObj.getEffortValue());
-        pokemon.setBaseExp(pokemonObj.getBaseExp());
+        Pokemon pokemon = createPokemon(id, level);
         pokemon.setTrainerUUID(trainer.getUuid());
         pokemon.setActualTrainer(trainer.getName());
         pokemon.setOriginalTrainer(trainer.getName());
-        pokemon.getBase().addAll(pokemonObj.getBase());
-        pokemon.getEv().addAll(attributesService.generateEv());
-        pokemon.getIv().addAll(attributesService.generateIv());
-        pokemon.setNature(attributesService.generateNature());
-        pokemon.setLevel(level);
-        pokemon.getStatus().addAll(
-                attributesService.calcAtributes(pokemon.getBase(), pokemon.getEv(), pokemon.getIv(), pokemon.getLevel(), pokemon.getNature()));
-        pokemon.setShiny(isShiny == 1);
-        pokemon.setCreatedDate(new Date());
-        pokemon.setDeleted(0);
-        pokemon.getMoves().addAll(pokemonObj.getMoves());
 
-        String logMsg = trainerName + " registered a new pokemon: " + pokemon.getName();
-        this.logService.save(user.getUuid(), trainer.getUuid(), logMsg);
+        if (trainerName !=null){
+            String logMsg = trainerName + " registered a new pokemon: " + pokemon.getName();
+            this.logService.save(user.getUuid(), trainer.getUuid(), logMsg);
+        }
 
         return pokemonRepository.save(pokemon);
     }
@@ -120,6 +99,45 @@ public class PokemonService {
         this.logService.save(user.getUuid(), trainer.getUuid(), logMsg);
 
         return name;
-
     }
+
+    private Pokemon createPokemon(Long id, int level) throws Exception {
+        Pokemon pokemonObj = pokemonRepository.findById(id).orElseThrow(
+                () -> new Exception(POKEMON_NOT_FOUND));
+        Pokemon pokemon = new Pokemon();
+        Integer isShiny = rnd.nextInt(512);
+
+        pokemon.setUuid(UUID.randomUUID().toString());
+        pokemon.setName(pokemonObj.getName());
+        pokemon.setNumber(pokemonObj.getNumber());
+        pokemon.setDisplayName(pokemonObj.getDisplayName());
+        pokemon.setType1(pokemonObj.getType1());
+        pokemon.setEffortType(pokemonObj.getEffortType());
+        pokemon.setEffortValue(pokemonObj.getEffortValue());
+        pokemon.setBaseExp(pokemonObj.getBaseExp());
+        pokemon.getBase().addAll(pokemonObj.getBase());
+        pokemon.getEv().addAll(attributesService.generateEv());
+        pokemon.getIv().addAll(attributesService.generateIv());
+        pokemon.setNature(attributesService.generateNature());
+        pokemon.setLevel(level);
+        pokemon.getStatus().addAll(
+                attributesService.calcAtributes(pokemon.getBase(), pokemon.getEv(), pokemon.getIv(), pokemon.getLevel(), pokemon.getNature()));
+        if (pokemonObj.getType2() != null) {
+            pokemon.setType2(pokemonObj.getType2());
+        }
+        pokemon.setShiny(isShiny == 1);
+        pokemon.setCreatedDate(new Date());
+        pokemon.setDeleted(0);
+        pokemon.getMoves().addAll(pokemonObj.getMoves());
+
+        return pokemon;
+    }
+
+    public void createWildPokemon(LocationEnum location) throws Exception {
+        int pokemonId = rnd.nextInt(location.getPokemonIdList().length);
+        int pokemonLevel = rnd.nextInt(location.getPokemonLevels().length);
+        pokemonRepository.save(createPokemon((long) location.getPokemonIdList()[pokemonId], location.getPokemonLevels()[pokemonLevel]));
+    }
+
+
 }
