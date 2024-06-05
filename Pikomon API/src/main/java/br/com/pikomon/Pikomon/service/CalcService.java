@@ -9,8 +9,8 @@ import org.springframework.stereotype.Service;
 @Service
 public class CalcService {
 
-    public Double calcDamage(Pokemon ally, Pokemon wild, Move move) {
-        Double damage = 0.0;
+    public Integer calcDamage(Pokemon ally, Pokemon wild, Move move) {
+        Integer damage = 0;
 
         Double modify = resistenceModify(move, wild);
         Integer power = move.getPower();
@@ -22,10 +22,11 @@ public class CalcService {
         }
         //valores de referencia dos arrays [0]hp,[1]atk,[2]def,[3]sp.atk,[4]sp.def,[5]speed;
         if (category.equals(CategoryEnum.PHYSICAL)) {
-            damage = Math.floor(((((2 * ally.getLevel() / 5 + 2) * ally.getStatus().get(1) * move.getPower() / wild.getStatus().get(2)) / 50) + 2) * stab * modify * crit * (80 / 100));
+            damage = (int) Math.floor((((double) ((2 * ally.getLevel() / 5 + 2) * ally.getStatus().get(1) * move.getPower() / wild.getStatus().get(2)) / 50) + 2) * stab * modify * crit * (80f / 100));
         } else if (category.equals(CategoryEnum.SPECIAL)) {
-            damage = Math.floor(((((2 * ally.getLevel() / 5 + 2) * ally.getStatus().get(3) * move.getPower() / wild.getStatus().get(4)) / 50) + 2) * stab * modify * crit * (80 / 100));
+            damage = (int) Math.floor((((double) ((2 * ally.getLevel() / 5 + 2) * ally.getStatus().get(3) * move.getPower() / wild.getStatus().get(4)) / 50) + 2) * stab * modify * crit * (80f / 100));
         }
+
 
 
         return damage;

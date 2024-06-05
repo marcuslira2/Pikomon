@@ -80,7 +80,7 @@ public class BattleService {
         // quanto o log da batalha
         // Calculo de dano feito levando em conta apenas o primeiro tipo, corrigir isso futuramente
 
-        Double damage = calcService.calcDamage(pokemon, wildPokemon, moveUsed);
+        Integer damage = calcService.calcDamage(pokemon, wildPokemon, moveUsed);
 
 
         return null;
