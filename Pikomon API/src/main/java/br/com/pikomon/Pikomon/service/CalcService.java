@@ -9,23 +9,24 @@ import org.springframework.stereotype.Service;
 @Service
 public class CalcService {
 
-    public Integer calcDamage(Pokemon ally, Pokemon wild, Move move){
-        Integer damage = 0;
+    public Double calcDamage(Pokemon ally, Pokemon wild, Move move) {
+        Double damage = 0.0;
 
         Double modify = resistenceModify(move, wild);
         Integer power = move.getPower();
         CategoryEnum category = move.getCategory();
         Double stab = 1.0; //valor padrão, se o golpe for do mesmo tipo, o stab vai pra 1.5;
         Double crit = 1.0; // valor padrão, quando adicionar o critico, ele vai pra 1.5;
-        if (move.getType().equals(ally.getType1()) || move.getType().equals(ally.getType2())){
+        if (move.getType().equals(ally.getType1()) || move.getType().equals(ally.getType2())) {
             stab = 1.5;
         }
         //valores de referencia dos arrays [0]hp,[1]atk,[2]def,[3]sp.atk,[4]sp.def,[5]speed;
-        if (category.equals(CategoryEnum.PHYSICAL)){
-            damage = (int) Math.floor(((((2*ally.getLevel()/5+2)*ally.getStatus().get(1)*move.getPower()/wild.getStatus().get(2))/50)+2)*stab* modify *crit*(80/100));
+        if (category.equals(CategoryEnum.PHYSICAL)) {
+            damage = Math.floor(((((2 * ally.getLevel() / 5 + 2) * ally.getStatus().get(1) * move.getPower() / wild.getStatus().get(2)) / 50) + 2) * stab * modify * crit * (80 / 100));
         } else if (category.equals(CategoryEnum.SPECIAL)) {
-            damage = (int) Math.floor(((((2*ally.getLevel()/5+2)*ally.getStatus().get(3)*move.getPower()/wild.getStatus().get(4))/50)+2)*stab* modify *crit*(80/100));
+            damage = Math.floor(((((2 * ally.getLevel() / 5 + 2) * ally.getStatus().get(3) * move.getPower() / wild.getStatus().get(4)) / 50) + 2) * stab * modify * crit * (80 / 100));
         }
+
 
         return damage;
     }
