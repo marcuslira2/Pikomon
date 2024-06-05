@@ -45,7 +45,10 @@ public class BattleService {
 
     public Battle close(CloseBattleDTO dto){
         Battle battle = battleRepository.findById(dto.id()).orElseThrow(()-> new RuntimeException("Battle not found"));
-
+        boolean abacate = true;
+        while (abacate){
+            System.out.println("aushaush");
+        }
         if (battle.getStatus().equals(BattleStatusEnum.FINISHED)){
             throw new RuntimeException("This battle alraedy finished!");
         }else {
