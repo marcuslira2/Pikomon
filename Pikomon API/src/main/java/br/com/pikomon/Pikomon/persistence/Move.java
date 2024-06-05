@@ -1,5 +1,7 @@
 package br.com.pikomon.Pikomon.persistence;
 
+import br.com.pikomon.Pikomon.enums.CategoryEnum;
+import br.com.pikomon.Pikomon.enums.TypeEnum;
 import jakarta.persistence.*;
 
 
@@ -22,9 +24,9 @@ public class Move {
 
     private Integer priority;
 
-    private String type;
+    private TypeEnum type;
 
-    private String damageClass;
+    private CategoryEnum category;
 
     private String description;
 
@@ -76,20 +78,20 @@ public class Move {
         this.priority = priority;
     }
 
-    public String getType() {
+    public TypeEnum getType() {
         return type;
     }
 
-    public void setType(String type) {
+    public void setType(TypeEnum type) {
         this.type = type;
     }
 
-    public String getDamageClass() {
-        return damageClass;
+    public CategoryEnum getCategory() {
+        return category;
     }
 
-    public void setDamageClass(String damageClass) {
-        this.damageClass = damageClass;
+    public void setCategory(CategoryEnum category) {
+        this.category = category;
     }
 
     public String getDescription() {
@@ -118,7 +120,7 @@ public class Move {
                 ", pp=" + pp +
                 ", priority=" + priority +
                 ", type='" + type + '\'' +
-                ", damage_class='" + damageClass + '\'' +
+                ", damage_class='" + category + '\'' +
                 ", description='" + description + '\'' +
                 '}';
     }

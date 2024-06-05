@@ -1,5 +1,6 @@
 package br.com.pikomon.Pikomon.persistence;
 
+import br.com.pikomon.Pikomon.enums.TypeEnum;
 import jakarta.persistence.*;
 
 
@@ -29,9 +30,9 @@ public class Pokemon {
 
     private String displayName;
 
-    private String type1;
+    private TypeEnum type1;
 
-    private String type2;
+    private TypeEnum type2;
 
     private Integer nextLevel;
 
@@ -45,13 +46,13 @@ public class Pokemon {
 
     private String nature;
 
-    private List<Integer> status;
+    private List<Integer> status;//hp,atk,def,sp.atk,sp.def,speed;
 
-    private List<Integer> base;
+    private List<Integer> base;//hp,atk,def,sp.atk,sp.def,speed;
 
-    private List<Integer> ev;
+    private List<Integer> ev;//hp,atk,def,sp.atk,sp.def,speed;
 
-    private List<Integer> iv;
+    private List<Integer> iv;//hp,atk,def,sp.atk,sp.def,speed;
 
     private Boolean isShiny;
 
@@ -129,19 +130,19 @@ public class Pokemon {
         this.displayName = displayName;
     }
 
-    public String getType1() {
+    public TypeEnum getType1() {
         return type1;
     }
 
-    public void setType1(String type1) {
+    public void setType1(TypeEnum type1) {
         this.type1 = type1;
     }
 
-    public String getType2() {
+    public TypeEnum getType2() {
         return type2;
     }
 
-    public void setType2(String type2) {
+    public void setType2(TypeEnum type2) {
         this.type2 = type2;
     }
 

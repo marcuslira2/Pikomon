@@ -1,5 +1,7 @@
 package br.com.pikomon.Pikomon.schedule;
 
+import br.com.pikomon.Pikomon.enums.CategoryEnum;
+import br.com.pikomon.Pikomon.enums.TypeEnum;
 import br.com.pikomon.Pikomon.modal.MoveRequestData;
 import br.com.pikomon.Pikomon.persistence.Move;
 import br.com.pikomon.Pikomon.repository.MoveRepository;
@@ -44,9 +46,9 @@ public class MoveAutoCreationScheduler {
                     move.setPower(movesResquest.getPower());
                     move.setPp(movesResquest.getPp());
                     move.setAccuracy(movesResquest.getAccuracy());
-                    move.setDamageClass(movesResquest.getDamage_class().getName());
+                    move.setCategory(CategoryEnum.valueOf(movesResquest.getDamage_class().getName().toUpperCase()));
                     move.setPriority(movesResquest.getPriority());
-                    move.setType(movesResquest.getType().getName());
+                    move.setType(TypeEnum.valueOf(movesResquest.getType().getName().toUpperCase()));
                     String moveSaved = "Saving move: " + move.getName();
                     log.info(moveSaved);
                     moveRepository.save(move);

@@ -1,5 +1,6 @@
 package br.com.pikomon.Pikomon.schedule;
 
+import br.com.pikomon.Pikomon.enums.TypeEnum;
 import br.com.pikomon.Pikomon.modal.*;
 import br.com.pikomon.Pikomon.persistence.Pokemon;
 import br.com.pikomon.Pikomon.persistence.PokemonMove;
@@ -75,14 +76,14 @@ public class PokemonAutoCreationScheduler {
                     pk.setDisplayName(pokemonData.getName());
                     pk.setNumber(pokemonData.getId());
                     pk.setBaseExp(pokemonData.getBase_experience());
-                    pk.setType1(pokemonData.getTypes().get(0).getType().getName());
+                    pk.setType1(TypeEnum.valueOf(pokemonData.getTypes().get(0).getType().getName().toUpperCase()));
                     pk.setShiny(false);
                     pk.setDeleted(0);
 
                     if (pokemonData.getTypes().size()>1){
-                        pk.setType2(pokemonData.getTypes().get(1).getType().getName());
+                        pk.setType2(TypeEnum.valueOf(pokemonData.getTypes().get(1).getType().getName().toUpperCase()));
                     }
-
+                    //hp,atk,def,sp.atk,sp.def,speed;
                     for (int j =0; j< 6; j++){
                     pk.getBase().add(pokemonData.getStats().get(j).getBase_stat());
                     }

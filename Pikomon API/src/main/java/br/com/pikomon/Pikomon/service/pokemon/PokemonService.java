@@ -58,10 +58,15 @@ public class PokemonService {
         );
     }
 
-    public PokemonDTO findById(Long id) throws Exception {
+    public PokemonDTO findDTOById(Long id) throws Exception {
         Pokemon pokemon = pokemonRepository.findById(id).orElseThrow(() -> new Exception(POKEMON_NOT_FOUND));
 
         return this.converterToDTO(pokemon);
+    }
+
+    public Pokemon findById(Long id) throws Exception {
+        Pokemon pokemon = pokemonRepository.findById(id).orElseThrow(() -> new Exception(POKEMON_NOT_FOUND));
+        return pokemon;
     }
 
     public Pokemon save(Long id, int level, String trainerName) throws Exception {

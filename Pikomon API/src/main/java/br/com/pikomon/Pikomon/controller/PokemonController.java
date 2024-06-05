@@ -28,7 +28,7 @@ public class PokemonController {
 
     @GetMapping(path = "/{id}")
     public ResponseEntity<PokemonDTO> findById(@PathVariable Long id) throws Exception {
-        PokemonDTO dto = pokemonService.findById(id);
+        PokemonDTO dto = pokemonService.findDTOById(id);
         return ResponseEntity.status(HttpStatus.OK).body(dto);
     }
 

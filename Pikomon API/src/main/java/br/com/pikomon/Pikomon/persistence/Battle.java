@@ -13,6 +13,7 @@ public class Battle {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    private String uuid;
     private Integer user_id;
     private Integer trainer_id;
     private Enum<OpponentTypeEnum> opponent;
@@ -77,5 +78,13 @@ public class Battle {
 
     public void setOpponent(Enum<OpponentTypeEnum> opponent) {
         this.opponent = opponent;
+    }
+
+    public String getUuid() {
+        return uuid;
+    }
+
+    public void setUuid(String uuid) {
+        this.uuid = uuid;
     }
 }

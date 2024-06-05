@@ -1,11 +1,13 @@
 package br.com.pikomon.Pikomon.dto.pokemon;
 
+import br.com.pikomon.Pikomon.enums.TypeEnum;
+
 import java.util.Optional;
 
 public record PokemonDTO(
         Integer number,
         String name,
-        String type1,
-        Optional<String> type2
+        TypeEnum type1,
+        Optional<TypeEnum> type2
         ) {
 }

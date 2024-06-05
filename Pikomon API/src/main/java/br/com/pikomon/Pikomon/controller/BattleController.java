@@ -25,5 +25,4 @@ public class BattleController {
         return ResponseEntity.status(HttpStatus.CREATED).body(battle);
     }
 
-
 }
