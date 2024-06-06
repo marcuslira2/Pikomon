@@ -45,14 +45,14 @@ public class Pokemon {
     private Integer effortValue;
 
     private String nature;
-
-    private List<Integer> status;//hp,atk,def,sp.atk,sp.def,speed;
-
-    private List<Integer> base;//hp,atk,def,sp.atk,sp.def,speed;
-
-    private List<Integer> ev;//hp,atk,def,sp.atk,sp.def,speed;
-
-    private List<Integer> iv;//hp,atk,def,sp.atk,sp.def,speed;
+    @ManyToOne(cascade=CascadeType.PERSIST)
+    private Status status;
+    @ManyToOne(cascade=CascadeType.PERSIST)
+    private Status base;
+    @ManyToOne(cascade=CascadeType.PERSIST)
+    private Status ev;
+    @ManyToOne(cascade=CascadeType.PERSIST)
+    private Status iv;
 
     private Boolean isShiny;
 
@@ -67,11 +67,6 @@ public class Pokemon {
 
     public Pokemon() {
         this.moves = new ArrayList<>();
-        this.status = new ArrayList<>(6);
-        this.base = new ArrayList<>(6);
-        this.ev = new ArrayList<>(6);
-        this.iv = new ArrayList<>(6);
-
     }
 
     public String getUuid() {
@@ -194,35 +189,35 @@ public class Pokemon {
         this.nature = nature;
     }
 
-    public List<Integer> getStatus() {
+    public Status getStatus() {
         return status;
     }
 
-    public void setStatus(List<Integer> status) {
+    public void setStatus(Status status) {
         this.status = status;
     }
 
-    public List<Integer> getBase() {
+    public Status getBase() {
         return base;
     }
 
-    public void setBase(List<Integer> base) {
+    public void setBase(Status base) {
         this.base = base;
     }
 
-    public List<Integer> getEv() {
+    public Status getEv() {
         return ev;
     }
 
-    public void setEv(List<Integer> ev) {
+    public void setEv(Status ev) {
         this.ev = ev;
     }
 
-    public List<Integer> getIv() {
+    public Status getIv() {
         return iv;
     }
 
-    public void setIv(List<Integer> iv) {
+    public void setIv(Status iv) {
         this.iv = iv;
     }
 

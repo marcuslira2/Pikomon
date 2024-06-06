@@ -5,7 +5,7 @@ public enum CategoryEnum {
 
     PHYSICAL("Physical"),
     SPECIAL("Special"),
-    EFFECT("Effect");
+    STATUS("Status");
 
     private final String category;
 

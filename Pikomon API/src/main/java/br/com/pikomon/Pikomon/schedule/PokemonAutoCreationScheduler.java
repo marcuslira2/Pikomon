@@ -4,6 +4,7 @@ import br.com.pikomon.Pikomon.enums.TypeEnum;
 import br.com.pikomon.Pikomon.modal.*;
 import br.com.pikomon.Pikomon.persistence.Pokemon;
 import br.com.pikomon.Pikomon.persistence.PokemonMove;
+import br.com.pikomon.Pikomon.persistence.Status;
 import br.com.pikomon.Pikomon.repository.MoveRepository;
 import br.com.pikomon.Pikomon.repository.PokemonMoveRepository;
 import br.com.pikomon.Pikomon.repository.PokemonRepository;
@@ -84,9 +85,15 @@ public class PokemonAutoCreationScheduler {
                         pk.setType2(TypeEnum.valueOf(pokemonData.getTypes().get(1).getType().getName().toUpperCase()));
                     }
                     //hp,atk,def,sp.atk,sp.def,speed;
-                    for (int j =0; j< 6; j++){
-                    pk.getBase().add(pokemonData.getStats().get(j).getBase_stat());
-                    }
+                    Status status = new Status();
+                    pk.setBase(status);
+                    pk.getBase().setHp(pokemonData.getStats().get(0).getBase_stat());
+                    pk.getBase().setAtak(pokemonData.getStats().get(1).getBase_stat());
+                    pk.getBase().setDef(pokemonData.getStats().get(2).getBase_stat());
+                    pk.getBase().setSp_atk(pokemonData.getStats().get(3).getBase_stat());
+                    pk.getBase().setSp_def(pokemonData.getStats().get(4).getBase_stat());
+                    pk.getBase().setSpeed(pokemonData.getStats().get(5).getBase_stat());
+
                     List<StatData> statData = pokemonData.getStats();
                     for (StatData statDatum : statData){
                         if (statDatum.getEffort()!=0){

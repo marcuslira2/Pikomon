@@ -8,6 +8,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface BattleRepository extends JpaRepository<Battle,Long> {
 
-    @Query("SELECT b FROM Battle b WHERE b.id = :id")
+    @Query("SELECT b FROM Battle b WHERE b.uuid = :uuid")
     Battle findByuuid(String uuid);
 }

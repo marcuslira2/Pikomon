@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Random;
+import java.util.UUID;
 
 @Service
 public class BattleService {
@@ -51,6 +52,7 @@ public class BattleService {
         battle.setTrainer_id(dto.trainer_id());
         battle.setUser_id(dto.user_id());
         battle.setStatus(BattleStatusEnum.START);
+        battle.setUuid(UUID.randomUUID().toString());
         Battle save = battleRepository.save(battle);
         return save;
     }
@@ -80,7 +82,15 @@ public class BattleService {
         // quanto o log da batalha
         // Calculo de dano feito levando em conta apenas o primeiro tipo, corrigir isso futuramente
 
-        Integer damage = calcService.calcDamage(pokemon, wildPokemon, moveUsed);
+        Integer damageAlly = calcService.calcDamage(pokemon, wildPokemon, moveUsed);
+        Integer damageWild = calcService.calcDamage(wildPokemon, pokemon, moveUsed);
+
+        Integer newHpWild = wildPokemon.getStatus().getHp() - damageAlly;
+        Integer newHpAlly = pokemon.getStatus().getHp() - damageWild;
+
+
+        wildPokemon.getStatus().setHp(newHpWild);
+        pokemon.getStatus().setHp(newHpAlly);
 
 
         return null;

@@ -22,12 +22,10 @@ public class CalcService {
         }
         //valores de referencia dos arrays [0]hp,[1]atk,[2]def,[3]sp.atk,[4]sp.def,[5]speed;
         if (category.equals(CategoryEnum.PHYSICAL)) {
-            damage = (int) Math.floor((((((double)2 * ally.getLevel() / 5 + 2) * ally.getStatus().get(1) * move.getPower() / wild.getStatus().get(2)) / 50) + 2) * stab * modify * crit * (80f / 100));
+            damage = (int) Math.floor((((((double)2 * ally.getLevel() / 5 + 2) * ally.getStatus().getAtak() * move.getPower() / wild.getStatus().getDef()) / 50) + 2) * stab * modify * crit * (80f / 100));
         } else if (category.equals(CategoryEnum.SPECIAL)) {
-            damage = (int) Math.floor((((((double)2 * ally.getLevel() / 5 + 2) * ally.getStatus().get(3) * move.getPower() / wild.getStatus().get(4)) / 50) + 2) * stab * modify * crit * (80f / 100));
+            damage = (int) Math.floor((((((double)2 * ally.getLevel() / 5 + 2) * ally.getStatus().getSp_atk()* move.getPower() / wild.getStatus().getSp_def()) / 50) + 2) * stab * modify * crit * (80f / 100));
         }
-
-
 
         return damage;
     }

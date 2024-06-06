@@ -120,13 +120,57 @@ public class PokemonService {
         pokemon.setEffortType(pokemonObj.getEffortType());
         pokemon.setEffortValue(pokemonObj.getEffortValue());
         pokemon.setBaseExp(pokemonObj.getBaseExp());
-        pokemon.getBase().addAll(pokemonObj.getBase());
-        pokemon.getEv().addAll(attributesService.generateEv());
-        pokemon.getIv().addAll(attributesService.generateIv());
+        pokemon.getBase().setHp(pokemonObj.getBase().getHp());
+        pokemon.getBase().setAtak(pokemonObj.getBase().getAtak());
+        pokemon.getBase().setDef(pokemonObj.getBase().getDef());
+        pokemon.getBase().setSp_atk(pokemonObj.getBase().getSp_atk());
+        pokemon.getBase().setSp_def(pokemonObj.getBase().getSp_def());
+        pokemon.getBase().setSpeed(pokemonObj.getBase().getSpeed());
+        pokemon.getEv().setHp(0);
+        pokemon.getEv().setAtak(0);
+        pokemon.getEv().setDef(0);
+        pokemon.getEv().setSp_atk(0);
+        pokemon.getEv().setSp_def(0);
+        pokemon.getEv().setSpeed(0);
+        pokemon.getIv().setHp(attributesService.generateIv().get(0));
+        pokemon.getIv().setAtak(attributesService.generateIv().get(1));
+        pokemon.getIv().setDef(attributesService.generateIv().get(2));
+        pokemon.getIv().setSp_atk(attributesService.generateIv().get(3));
+        pokemon.getIv().setSp_def(attributesService.generateIv().get(4));
+        pokemon.getIv().setSpeed(attributesService.generateIv().get(5));
         pokemon.setNature(attributesService.generateNature());
         pokemon.setLevel(level);
-        pokemon.getStatus().addAll(
-                attributesService.calcAtributes(pokemon.getBase(), pokemon.getEv(), pokemon.getIv(), pokemon.getLevel(), pokemon.getNature()));
+
+        List<Integer> base = new ArrayList<>(6);
+        List<Integer> ev = new ArrayList<>(6);
+        List<Integer> iv = new ArrayList<>(6);
+        base.add(pokemon.getBase().getHp());
+        base.add(pokemon.getBase().getAtak());
+        base.add(pokemon.getBase().getDef());
+        base.add(pokemon.getBase().getSp_atk());
+        base.add(pokemon.getBase().getSp_def());
+        base.add(pokemon.getBase().getSpeed());
+        ev.add(0);
+        ev.add(0);
+        ev.add(0);
+        ev.add(0);
+        ev.add(0);
+        ev.add(0);
+        iv.add(pokemon.getIv().getHp());
+        iv.add(pokemon.getIv().getAtak());
+        iv.add(pokemon.getIv().getDef());
+        iv.add(pokemon.getIv().getSp_atk());
+        iv.add(pokemon.getIv().getSp_def());
+        iv.add(pokemon.getIv().getSpeed());
+
+        List<Integer> atributes = attributesService.calcAtributes(base, ev, iv, pokemon.getLevel(), pokemon.getNature());
+        pokemon.getStatus().setHp(atributes.get(0));
+        pokemon.getStatus().setAtak(atributes.get(1));
+        pokemon.getStatus().setDef(atributes.get(2));
+        pokemon.getStatus().setSp_atk(atributes.get(3));
+        pokemon.getStatus().setSp_def(atributes.get(4));
+        pokemon.getStatus().setSpeed(atributes.get(5));
+
         if (pokemonObj.getType2() != null) {
             pokemon.setType2(pokemonObj.getType2());
         }

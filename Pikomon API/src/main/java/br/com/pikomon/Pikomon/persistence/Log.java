@@ -20,6 +20,8 @@ public class Log {
 
     private Date createDate;
 
+    private String battleuuid;
+
     public Long getId() {
         return id;
     }
@@ -58,5 +60,13 @@ public class Log {
 
     public void setCreateDate(Date createDate) {
         this.createDate = createDate;
+    }
+
+    public String getBattleuuid() {
+        return battleuuid;
+    }
+
+    public void setBattleuuid(String battleuuid) {
+        this.battleuuid = battleuuid;
     }
 }
