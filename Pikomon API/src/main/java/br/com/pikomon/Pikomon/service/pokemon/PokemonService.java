@@ -12,6 +12,7 @@ import br.com.pikomon.Pikomon.repository.UserRepository;
 import br.com.pikomon.Pikomon.service.LogService;
 import org.springframework.stereotype.Service;
 
+import java.security.SecureRandom;
 import java.util.*;
 
 @Service
@@ -26,7 +27,7 @@ public class PokemonService {
 
     private final LogService logService;
 
-    private final Random rnd = new Random();
+    private final Random rnd = new SecureRandom();
 
     private static final String POKEMON_NOT_FOUND = "Pokemon not found";
     private static final String TRAINER_NOT_FOUND = "Trainer not found";

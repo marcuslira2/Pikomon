@@ -15,6 +15,7 @@ import br.com.pikomon.Pikomon.service.pokemon.PokemonService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.security.SecureRandom;
 import java.util.Random;
 import java.util.UUID;
 
@@ -40,7 +41,7 @@ public class BattleService {
     @Autowired
     private CalcService calcService;
 
-    private final Random rnd = new Random();
+    private final Random rnd = new SecureRandom();
 
 
     public Battle create(CreateBattleDTO dto) throws Exception {
