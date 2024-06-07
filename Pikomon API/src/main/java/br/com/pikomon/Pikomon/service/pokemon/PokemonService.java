@@ -3,14 +3,13 @@ package br.com.pikomon.Pikomon.service.pokemon;
 import br.com.pikomon.Pikomon.dto.pokemon.PokemonDTO;
 import br.com.pikomon.Pikomon.enums.LocationEnum;
 import br.com.pikomon.Pikomon.persistence.Pokemon;
+import br.com.pikomon.Pikomon.persistence.Status;
 import br.com.pikomon.Pikomon.persistence.Trainer;
 import br.com.pikomon.Pikomon.persistence.User;
 import br.com.pikomon.Pikomon.repository.PokemonRepository;
 import br.com.pikomon.Pikomon.repository.TrainerRepository;
 import br.com.pikomon.Pikomon.repository.UserRepository;
 import br.com.pikomon.Pikomon.service.LogService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -27,9 +26,7 @@ public class PokemonService {
 
     private final LogService logService;
 
-    private Random rnd = new Random();
-
-    private static final Logger log = LoggerFactory.getLogger(PokemonService.class);
+    private final Random rnd = new Random();
 
     private static final String POKEMON_NOT_FOUND = "Pokemon not found";
     private static final String TRAINER_NOT_FOUND = "Trainer not found";
@@ -65,8 +62,7 @@ public class PokemonService {
     }
 
     public Pokemon findById(Long id) throws Exception {
-        Pokemon pokemon = pokemonRepository.findById(id).orElseThrow(() -> new Exception(POKEMON_NOT_FOUND));
-        return pokemon;
+        return pokemonRepository.findById(id).orElseThrow(() -> new Exception(POKEMON_NOT_FOUND));
     }
 
     public Pokemon save(Long id, int level, String trainerName) throws Exception {
@@ -110,7 +106,13 @@ public class PokemonService {
         Pokemon pokemonObj = pokemonRepository.findById(id).orElseThrow(
                 () -> new Exception(POKEMON_NOT_FOUND));
         Pokemon pokemon = new Pokemon();
-        Integer isShiny = rnd.nextInt(512);
+        int isShiny = rnd.nextInt(512);
+
+        Status status = new Status();
+        pokemon.setBase(status);
+        pokemon.setEv(status);
+        pokemon.setIv(status);
+        pokemon.setStatus(status);
 
         pokemon.setUuid(UUID.randomUUID().toString());
         pokemon.setName(pokemonObj.getName());
@@ -186,6 +188,43 @@ public class PokemonService {
         int pokemonId = rnd.nextInt(location.getPokemonIdList().length);
         int pokemonLevel = rnd.nextInt(location.getPokemonLevels().length);
         pokemonRepository.save(createPokemon((long) location.getPokemonIdList()[pokemonId], location.getPokemonLevels()[pokemonLevel]));
+    }
+
+    public Pokemon updatePokemon(Pokemon pk){
+        Pokemon pokemon = pokemonRepository.findById(pk.getId()).orElseThrow(() -> new RuntimeException(POKEMON_NOT_FOUND));
+        pokemon = pk;
+        return pokemonRepository.save(pokemon);
+    }
+
+    public void restPokemon (Pokemon pk){
+        Pokemon pokemon = pokemonRepository.findById(pk.getId()).orElseThrow(() -> new RuntimeException(POKEMON_NOT_FOUND));
+
+        List<Integer> base = new ArrayList<>(6);
+        List<Integer> ev = new ArrayList<>(6);
+        List<Integer> iv = new ArrayList<>(6);
+        base.add(pokemon.getBase().getHp());
+        base.add(pokemon.getBase().getAtak());
+        base.add(pokemon.getBase().getDef());
+        base.add(pokemon.getBase().getSp_atk());
+        base.add(pokemon.getBase().getSp_def());
+        base.add(pokemon.getBase().getSpeed());
+        ev.add(0);
+        ev.add(0);
+        ev.add(0);
+        ev.add(0);
+        ev.add(0);
+        ev.add(0);
+        iv.add(pokemon.getIv().getHp());
+        iv.add(pokemon.getIv().getAtak());
+        iv.add(pokemon.getIv().getDef());
+        iv.add(pokemon.getIv().getSp_atk());
+        iv.add(pokemon.getIv().getSp_def());
+        iv.add(pokemon.getIv().getSpeed());
+        List<Integer> atributes = attributesService.calcAtributes(base, ev, iv, pokemon.getLevel(), pokemon.getNature());
+
+        pokemon.getStatus().setHp(atributes.get(0));
+
+        updatePokemon(pokemon);
     }
 
 

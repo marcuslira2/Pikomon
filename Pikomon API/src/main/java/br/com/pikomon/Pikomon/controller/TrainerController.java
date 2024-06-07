@@ -6,7 +6,6 @@ import br.com.pikomon.Pikomon.service.TrainerService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -29,7 +28,7 @@ public class TrainerController {
 
     @GetMapping(path = "/{id}")
     public ResponseEntity<TrainerDTO> findById(@PathVariable Integer id) throws Exception {
-        TrainerDTO trainerDTO = trainerService.findById(id);
+        TrainerDTO trainerDTO = trainerService.findDTOById(id);
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(trainerDTO);
     }
 

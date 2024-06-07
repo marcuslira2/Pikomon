@@ -84,7 +84,6 @@ public class PokemonAutoCreationScheduler {
                     if (pokemonData.getTypes().size()>1){
                         pk.setType2(TypeEnum.valueOf(pokemonData.getTypes().get(1).getType().getName().toUpperCase()));
                     }
-                    //hp,atk,def,sp.atk,sp.def,speed;
                     Status status = new Status();
                     pk.setBase(status);
                     pk.getBase().setHp(pokemonData.getStats().get(0).getBase_stat());

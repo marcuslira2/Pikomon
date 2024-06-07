@@ -3,11 +3,8 @@ package br.com.pikomon.Pikomon.service;
 import br.com.pikomon.Pikomon.dto.log.LogDTO;
 import br.com.pikomon.Pikomon.persistence.Log;
 import br.com.pikomon.Pikomon.repository.LogRepository;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.Date;
 
 @Service
@@ -15,14 +12,14 @@ public class LogService {
 
     private final LogRepository logRepository;
 
-    private final String LOOGER_NOT_FOUND = "Log not found";
+    private final String LOGGER_NOT_FOUND = "Log not found";
 
     public LogService(LogRepository logRepository) {
         this.logRepository = logRepository;
     }
 
     public LogDTO convertToDTO(Log log) throws Exception{
-        Log logger = logRepository.findById(log.getId()).orElseThrow(()-> new Exception(LOOGER_NOT_FOUND));
+        Log logger = logRepository.findById(log.getId()).orElseThrow(()-> new Exception(LOGGER_NOT_FOUND));
         return new LogDTO(
                 logger.getUserUuid(),
                 logger.getTrainerUuid(),
@@ -39,5 +36,15 @@ public class LogService {
         log.setCreateDate(new Date());
         logRepository.save(log);
         return this.convertToDTO(log);
+    }
+
+    public Log saveBattle(String trainerUUID, String description, String battleUUId){
+        Log log = new Log();
+
+        log.setTrainerUuid(trainerUUID);
+        log.setDescription(description);
+        log.setBattleuuid(battleUUId);
+        log.setCreateDate(new Date());
+        return logRepository.save(log);
     }
 }

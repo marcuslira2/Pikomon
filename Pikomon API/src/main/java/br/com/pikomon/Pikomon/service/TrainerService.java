@@ -61,7 +61,8 @@ public class TrainerService {
         trainer.setUuid(UUID.randomUUID().toString());
         this.trainerRepository.save(trainer);
         Pokemon pokemon = pokemonService.save(dto.pokemonId(), 5, dto.name());
-        trainer.add(pokemon);
+        trainer.getPokemons().add(pokemon);
+        this.trainerRepository.save(trainer);
         user.getTrainers().add(trainer);
         this.userRepository.save(user);
         TrainerDTO trainerDTO = this.converterToDTO(trainer);
@@ -79,12 +80,16 @@ public class TrainerService {
                 .stream().map(this::converterToDTO).toList();
     }
 
-    public TrainerDTO findById(Integer id) throws Exception {
+    public TrainerDTO findDTOById(Integer id) throws Exception {
         log.info("Searching trainer...");
         Trainer trainer = trainerRepository.findByIdAndDeletedFalse(id).orElseThrow(() -> new Exception(TRAINER_NOT_FOUND));
         TrainerDTO trainerDTO = this.converterToDTO(trainer);
         return trainerDTO;
     }
+    public Trainer findById(Integer id) throws Exception {
+        return trainerRepository.findByIdAndDeletedFalse(id).orElseThrow(() -> new Exception(TRAINER_NOT_FOUND));
+    }
+
 
 
     public String deleteById(Integer id) throws Exception {
