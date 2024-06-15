@@ -124,8 +124,6 @@ public class PokemonService {
         pokemon.setEffortType(pokemonObj.getEffortType());
         pokemon.setEffortValue(pokemonObj.getEffortValue());
         pokemon.setBaseExp(pokemonObj.getBaseExp());
-
-        String pokemonHp = pokemon.getBase().getHp().toString();
         pokemon.getBase().setHp(pokemonObj.getBase().getHp());
         pokemon.getBase().setAtak(pokemonObj.getBase().getAtak());
         pokemon.getBase().setDef(pokemonObj.getBase().getDef());
@@ -170,14 +168,14 @@ public class PokemonService {
         return pokemonRepository.save(createPokemon((long) location.getPokemonIdList()[pokemonId], location.getPokemonLevels()[pokemonLevel]));
     }
 
-    public Pokemon updatePokemon(Pokemon pk){
-        return pokemonRepository.save(pk);
+    public void updatePokemon(Pokemon pk){
+        pokemonRepository.save(pk);
     }
 
 
-    public Pokemon restPokemon(Pokemon pokemon){
+    public void restPokemon(Pokemon pokemon){
         pokemon.getStatus().setHp(pokemon.getOriginStatus().getHp());
-        return pokemonRepository.save(pokemon);
+        pokemonRepository.save(pokemon);
     }
 
 

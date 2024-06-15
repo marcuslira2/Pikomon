@@ -25,16 +25,6 @@ public class Status {
         this.speed = 0;
     }
 
-    public Status(Long id, Integer hp, Integer atak, Integer def, Integer sp_atk, Integer sp_def, Integer speed) {
-        this.id = id;
-        this.hp = hp;
-        this.atak = atak;
-        this.def = def;
-        this.sp_atk = sp_atk;
-        this.sp_def = sp_def;
-        this.speed = speed;
-    }
-
     public Long getId() {
         return id;
     }
