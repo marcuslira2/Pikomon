@@ -13,15 +13,31 @@ public class PokemonAttributesService {
 
     private Random rnd = new Random();
 
+    private final String ADAMANT = "Adamant";
+    private final String NAUGHTY = "Naughty";
+    private final String LONELY = "Lonely";
+    private final String BRAVE = "Brave";
+    private final String BOLD = "Bold";
+    private final String IMPISH = "Impish";
+    private final String LAX = "Lax";
+    private final String RELAXED = "Relaxed";
+    private final String MODEST = "Modest";
+    private final String MILD = "Mild";
+    private final String RASH = "Rash";
+    private final String QUIET = "Quiet";
+    private final String CALM = "Calm";
+    private final String GENTLE = "Gentle";
+    private final String CAREFUL = "Careful";
+    private final String SASSY = "Sassy";
+    private final String TIMID = "Timid";
+    private final String HASTY = "Hasty";
+    private final String JOLLY = "Jolly";
+    private final String NAIVE = "Naive";
+
+
     public List<Integer> calcAtributes(Pokemon pokemon) {
         List<Integer> status = new ArrayList<>(6);
 
-//        Integer hp = (int) Math.floor(0.01 * (2 * pokemon.getBase().getHp() + pokemon.getIv().getHp() + Math.floor(0.25 * pokemon.getEv().getHp())) * pokemon.getLevel() + 10);
-//        Integer atk = (int) Math.floor(0.01 * (2 * pokemon.getBase().getAtak()  + pokemon.getIv().getAtak() + Math.floor(0.25 * pokemon.getEv().getAtak()) * pokemon.getLevel()) + 5);
-//        Integer def = (int) Math.floor(0.01 * (2 * pokemon.getBase().getDef()  + pokemon.getIv().getDef() + Math.floor(0.25 * pokemon.getEv().getDef()) * pokemon.getLevel()) + 5);
-//        Integer spAtk = (int) Math.floor(0.01 * (2 * pokemon.getBase().getSp_atk()  + pokemon.getIv().getSp_atk() + Math.floor(0.25 * pokemon.getEv().getSp_atk()) * pokemon.getLevel()) + 5);
-//        Integer spDef = (int) Math.floor(0.01 * (2 * pokemon.getBase().getSp_def()  + pokemon.getIv().getSp_def() + Math.floor(0.25 * pokemon.getEv().getSp_def()) * pokemon.getLevel()) + 5);
-//        Integer speed = (int) Math.floor(0.01 * (2 * pokemon.getBase().getSpeed()  + pokemon.getIv().getSpeed() + Math.floor(0.25 * pokemon.getEv().getSpeed()) * pokemon.getLevel()) + 5);
         Integer hp = (((2*pokemon.getBase().getHp()+pokemon.getIv().getHp()+(pokemon.getEv().getHp()/4))*pokemon.getLevel()/100+10));
         Integer atk = (((2 * pokemon.getBase().getAtak()+pokemon.getIv().getAtak() + (pokemon.getEv().getAtak()/4)) * pokemon.getLevel()/100 + 5));
         Integer def = (((2 * pokemon.getBase().getDef()+pokemon.getIv().getDef() + (pokemon.getEv().getDef()/4)) * pokemon.getLevel()/100 + 5));
@@ -32,35 +48,35 @@ public class PokemonAttributesService {
         String nature = pokemon.getNature();
 
         //BUFF
-        if (nature.equals("Lonely") || nature.equals("Adamant") || nature.equals("Naughty") || nature.equals("Brave")) {
+        if (nature.equals(LONELY) || nature.equals(ADAMANT) || nature.equals(NAUGHTY) || nature.equals(BRAVE)) {
             atk = (int) (atk * 1.1f);
         }
-        if (nature.equals("Bold") || nature.equals("Impish") || nature.equals("Lax") || nature.equals("Relaxed")) {
+        if (nature.equals(BOLD) || nature.equals(IMPISH) || nature.equals(LAX) || nature.equals(RELAXED)) {
             def = (int) (def * 1.1f);
         }
-        if (nature.equals("Modest") || nature.equals("Mild") || nature.equals("Rash") || nature.equals("Quiet")) {
+        if (nature.equals(MODEST) || nature.equals(MILD) || nature.equals(RASH) || nature.equals(QUIET)) {
             spAtk = (int) (spAtk * 1.1f);
         }
-        if (nature.equals("Calm") || nature.equals("Gentle") || nature.equals("Careful") || nature.equals("Sassy")) {
+        if (nature.equals(CALM) || nature.equals(GENTLE) || nature.equals(CAREFUL) || nature.equals(SASSY)) {
             spDef = (int) (spDef * 1.1f);
         }
-        if (nature.equals("Timid") || nature.equals("Hasty") || nature.equals("Jolly") || nature.equals("Naive")) {
+        if (nature.equals(TIMID) || nature.equals(HASTY) || nature.equals(JOLLY) || nature.equals(NAIVE)) {
             speed = (int) (speed * 1.1f);
         }
         //DEBUFF
-        if (nature.equals("Bold") || nature.equals("Modest") || nature.equals("Calm") || nature.equals("Timid")) {
+        if (nature.equals(BOLD) || nature.equals(MODEST) || nature.equals(CALM) || nature.equals(TIMID)) {
             atk = (int) (atk * 0.9f);
         }
-        if (nature.equals("Lonely") || nature.equals("Mild") || nature.equals("Gentle") || nature.equals("Hasty")) {
+        if (nature.equals(LONELY) || nature.equals(MILD) || nature.equals(GENTLE) || nature.equals(HASTY)) {
             def = (int) (def * 0.9f);
         }
-        if (nature.equals("Adamant") || nature.equals("Impish") || nature.equals("Careful") || nature.equals("Jolly")) {
+        if (nature.equals(ADAMANT) || nature.equals(IMPISH) || nature.equals(CAREFUL) || nature.equals(JOLLY)) {
             spAtk = (int) (spAtk * 0.9f);
         }
-        if (nature.equals("Naughty") || nature.equals("Lax") || nature.equals("Rash") || nature.equals("Naive")) {
+        if (nature.equals(NAUGHTY) || nature.equals(LAX) || nature.equals(RASH) || nature.equals(NAIVE)) {
             spDef = (int) (spDef * 0.9f);
         }
-        if (nature.equals("Brave") || nature.equals("Relaxed") || nature.equals("Quiet") || nature.equals("Sassy")) {
+        if (nature.equals(BRAVE) || nature.equals(RELAXED) || nature.equals(QUIET) || nature.equals(SASSY)) {
             speed = (int) (speed * 0.9f);
         }
 
@@ -77,11 +93,11 @@ public class PokemonAttributesService {
     public String generateNature() {
         ArrayList<String> natureList = new ArrayList<>();
         Collections.addAll(natureList,
-                "Hardy", "Lonely", "Adamant", "Naughty", "Brave",
-                "Bold", "Docile", "Impish", "Lax", "Relaxed",
-                "Modest", "Mild", "Bashful", "Rash", "Quiet",
-                "Calm", "Gentle", "Careful", "Quirky", "Sassy",
-                "Timid", "Hasty", "Jolly", "Naive", "Serious");
+                "Hardy", LONELY, ADAMANT, NAUGHTY, BRAVE,
+                            BOLD, "Docile", IMPISH, LAX, RELAXED,
+                            MODEST, MILD, "Bashful", RASH, QUIET,
+                            CALM, GENTLE, CAREFUL, "Quirky", SASSY,
+                            TIMID, HASTY, JOLLY, NAIVE, "Serious");
 
         Integer selectNature = this.rnd.nextInt(natureList.size());
         return natureList.get(selectNature);
