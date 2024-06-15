@@ -187,7 +187,7 @@ public class CalcService {
     }
 
     public Pokemon calcExp(Pokemon pokemon,Pokemon pk) {
-        int calc =(int) Math.floor((pk.getBaseExp() * pk.getLevel())/7); // calc medium fast type
+        int calc =(int) Math.floor((pk.getBaseExp() * (double)(pk.getLevel())/7)); // calc medium fast type
         pokemon.setExp(pokemon.getExp()+calc);
         if (pokemon.getExp()>=pokemon.getNextLevel()){
             pokemon.setLevel(pokemon.getLevel()+1);
