@@ -185,4 +185,19 @@ public class CalcService {
 
         return modify;
     }
+
+    public Pokemon calcExp(Pokemon pokemon,Pokemon pk) {
+        int calc =(int) Math.floor((pk.getBaseExp() * pk.getLevel())/7); // calc medium fast type
+        pokemon.setExp(pokemon.getExp()+calc);
+        if (pokemon.getExp()>=pokemon.getNextLevel()){
+            pokemon.setLevel(pokemon.getLevel()+1);
+            calcNextLeveExp(pokemon);
+        }
+        return pokemon;
+    }
+
+    public Pokemon calcNextLeveExp(Pokemon pokemon){
+        pokemon.setNextLevel(pokemon.getLevel()* pokemon.getLevel()* pokemon.getLevel());
+        return pokemon;
+    }
 }

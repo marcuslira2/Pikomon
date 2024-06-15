@@ -16,6 +16,7 @@ public class Battle {
     private String uuid;
     private Integer user_id;
     private Integer trainer_id;
+    private Long enemy_id;
     private Enum<OpponentTypeEnum> opponent;
     private Enum<LocationEnum> location;
     private Enum<BattleStatusEnum> status;
@@ -86,5 +87,13 @@ public class Battle {
 
     public void setUuid(String uuid) {
         this.uuid = uuid;
+    }
+
+    public Long getEnemy_id() {
+        return enemy_id;
+    }
+
+    public void setEnemy_id(Long enemy_id) {
+        this.enemy_id = enemy_id;
     }
 }

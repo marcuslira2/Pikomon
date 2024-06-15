@@ -16,6 +16,25 @@ public class Status {
     private Integer sp_def;
     private Integer speed;
 
+    public Status() {
+        this.hp = 0;
+        this.atak = 0;
+        this.def = 0;
+        this.sp_atk = 0;
+        this.sp_def = 0;
+        this.speed = 0;
+    }
+
+    public Status(Long id, Integer hp, Integer atak, Integer def, Integer sp_atk, Integer sp_def, Integer speed) {
+        this.id = id;
+        this.hp = hp;
+        this.atak = atak;
+        this.def = def;
+        this.sp_atk = sp_atk;
+        this.sp_def = sp_def;
+        this.speed = speed;
+    }
+
     public Long getId() {
         return id;
     }

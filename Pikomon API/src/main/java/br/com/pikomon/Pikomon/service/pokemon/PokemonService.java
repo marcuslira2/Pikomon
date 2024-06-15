@@ -109,11 +109,12 @@ public class PokemonService {
         Pokemon pokemon = new Pokemon();
         int isShiny = rnd.nextInt(512);
 
-        Status status = new Status();
-        pokemon.setBase(status);
-        pokemon.setEv(status);
-        pokemon.setIv(status);
-        pokemon.setStatus(status);
+
+        pokemon.setBase(new Status());
+        pokemon.setEv(new Status());
+        pokemon.setIv(new Status());
+        pokemon.setStatus(new Status());
+        pokemon.setOriginStatus(new Status());
 
         pokemon.setUuid(UUID.randomUUID().toString());
         pokemon.setName(pokemonObj.getName());
@@ -123,6 +124,8 @@ public class PokemonService {
         pokemon.setEffortType(pokemonObj.getEffortType());
         pokemon.setEffortValue(pokemonObj.getEffortValue());
         pokemon.setBaseExp(pokemonObj.getBaseExp());
+
+        String pokemonHp = pokemon.getBase().getHp().toString();
         pokemon.getBase().setHp(pokemonObj.getBase().getHp());
         pokemon.getBase().setAtak(pokemonObj.getBase().getAtak());
         pokemon.getBase().setDef(pokemonObj.getBase().getDef());
@@ -143,36 +146,12 @@ public class PokemonService {
         pokemon.getIv().setSpeed(attributesService.generateIv().get(5));
         pokemon.setNature(attributesService.generateNature());
         pokemon.setLevel(level);
+        pokemon.setNextLevel(level);
+        pokemon.setExp(64);
 
-        List<Integer> base = new ArrayList<>(6);
-        List<Integer> ev = new ArrayList<>(6);
-        List<Integer> iv = new ArrayList<>(6);
-        base.add(pokemon.getBase().getHp());
-        base.add(pokemon.getBase().getAtak());
-        base.add(pokemon.getBase().getDef());
-        base.add(pokemon.getBase().getSp_atk());
-        base.add(pokemon.getBase().getSp_def());
-        base.add(pokemon.getBase().getSpeed());
-        ev.add(0);
-        ev.add(0);
-        ev.add(0);
-        ev.add(0);
-        ev.add(0);
-        ev.add(0);
-        iv.add(pokemon.getIv().getHp());
-        iv.add(pokemon.getIv().getAtak());
-        iv.add(pokemon.getIv().getDef());
-        iv.add(pokemon.getIv().getSp_atk());
-        iv.add(pokemon.getIv().getSp_def());
-        iv.add(pokemon.getIv().getSpeed());
-
-        List<Integer> atributes = attributesService.calcAtributes(base, ev, iv, pokemon.getLevel(), pokemon.getNature());
-        pokemon.getStatus().setHp(atributes.get(0));
-        pokemon.getStatus().setAtak(atributes.get(1));
-        pokemon.getStatus().setDef(atributes.get(2));
-        pokemon.getStatus().setSp_atk(atributes.get(3));
-        pokemon.getStatus().setSp_def(atributes.get(4));
-        pokemon.getStatus().setSpeed(atributes.get(5));
+        List<Integer> atributes = attributesService.calcAtributes(pokemon);
+        pokemon.settingStatus(atributes);
+        pokemon.settingOriginStatus(atributes);
 
         if (pokemonObj.getType2() != null) {
             pokemon.setType2(pokemonObj.getType2());
@@ -185,48 +164,22 @@ public class PokemonService {
         return pokemon;
     }
 
-    public void createWildPokemon(LocationEnum location) throws Exception {
+    public Pokemon createWildPokemon(LocationEnum location) throws Exception {
         int pokemonId = rnd.nextInt(location.getPokemonIdList().length);
         int pokemonLevel = rnd.nextInt(location.getPokemonLevels().length);
-        pokemonRepository.save(createPokemon((long) location.getPokemonIdList()[pokemonId], location.getPokemonLevels()[pokemonLevel]));
+        return pokemonRepository.save(createPokemon((long) location.getPokemonIdList()[pokemonId], location.getPokemonLevels()[pokemonLevel]));
     }
 
     public Pokemon updatePokemon(Pokemon pk){
-        Pokemon pokemon = pokemonRepository.findById(pk.getId()).orElseThrow(() -> new RuntimeException(POKEMON_NOT_FOUND));
-        pokemon = pk;
+        return pokemonRepository.save(pk);
+    }
+
+
+    public Pokemon restPokemon(Pokemon pokemon){
+        pokemon.getStatus().setHp(pokemon.getOriginStatus().getHp());
         return pokemonRepository.save(pokemon);
     }
 
-    public void restPokemon (Pokemon pk){
-        Pokemon pokemon = pokemonRepository.findById(pk.getId()).orElseThrow(() -> new RuntimeException(POKEMON_NOT_FOUND));
-
-        List<Integer> base = new ArrayList<>(6);
-        List<Integer> ev = new ArrayList<>(6);
-        List<Integer> iv = new ArrayList<>(6);
-        base.add(pokemon.getBase().getHp());
-        base.add(pokemon.getBase().getAtak());
-        base.add(pokemon.getBase().getDef());
-        base.add(pokemon.getBase().getSp_atk());
-        base.add(pokemon.getBase().getSp_def());
-        base.add(pokemon.getBase().getSpeed());
-        ev.add(0);
-        ev.add(0);
-        ev.add(0);
-        ev.add(0);
-        ev.add(0);
-        ev.add(0);
-        iv.add(pokemon.getIv().getHp());
-        iv.add(pokemon.getIv().getAtak());
-        iv.add(pokemon.getIv().getDef());
-        iv.add(pokemon.getIv().getSp_atk());
-        iv.add(pokemon.getIv().getSp_def());
-        iv.add(pokemon.getIv().getSpeed());
-        List<Integer> atributes = attributesService.calcAtributes(base, ev, iv, pokemon.getLevel(), pokemon.getNature());
-
-        pokemon.getStatus().setHp(atributes.get(0));
-
-        updatePokemon(pokemon);
-    }
 
 
 }
