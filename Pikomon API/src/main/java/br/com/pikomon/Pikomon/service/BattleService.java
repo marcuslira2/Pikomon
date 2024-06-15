@@ -2,10 +2,7 @@ package br.com.pikomon.Pikomon.service;
 
 import br.com.pikomon.Pikomon.dto.battle.BattleActionDTO;
 import br.com.pikomon.Pikomon.dto.battle.BattleActionValidateDTO;
-import br.com.pikomon.Pikomon.dto.battle.CloseBattleDTO;
 import br.com.pikomon.Pikomon.dto.battle.CreateBattleDTO;
-import br.com.pikomon.Pikomon.dto.trainer.TrainerDTO;
-import br.com.pikomon.Pikomon.enums.BattleResultEnum;
 import br.com.pikomon.Pikomon.enums.BattleStatusEnum;
 import br.com.pikomon.Pikomon.enums.LocationEnum;
 import br.com.pikomon.Pikomon.enums.OpponentTypeEnum;
@@ -26,27 +23,37 @@ public class BattleService {
 
 
     @Autowired
-    private BattleRepository battleRepository;
+    private final BattleRepository battleRepository;
 
     @Autowired
-    private PokemonService pokemonService;
+    private final PokemonService pokemonService;
 
     @Autowired
-    private TrainerService trainerService;
+    private final TrainerService trainerService;
 
     @Autowired
-    private LogService logService;
+    private final LogService logService;
 
     @Autowired
-    private MoveService moveService;
+    private final MoveService moveService;
 
     @Autowired
-    private CalcService calcService;
+    private final CalcService calcService;
 
     @Autowired
-    private PokemonAttributesService attributesService;
+    private final PokemonAttributesService attributesService;
 
     private final Random rnd = new SecureRandom();
+
+    public BattleService(BattleRepository battleRepository, PokemonService pokemonService, TrainerService trainerService, LogService logService, MoveService moveService, CalcService calcService, PokemonAttributesService attributesService) {
+        this.battleRepository = battleRepository;
+        this.pokemonService = pokemonService;
+        this.trainerService = trainerService;
+        this.logService = logService;
+        this.moveService = moveService;
+        this.calcService = calcService;
+        this.attributesService = attributesService;
+    }
 
 
     public Battle create(CreateBattleDTO dto) throws Exception {
@@ -61,25 +68,11 @@ public class BattleService {
         battle.setStatus(BattleStatusEnum.START);
         battle.setUuid(UUID.randomUUID().toString());
         battle.setEnemy_id(enemy.getId());
-        Battle save = battleRepository.save(battle);
-        return save;
+        return battleRepository.save(battle);
     }
 
     public Battle findById(Long id){
         return battleRepository.findById(id).orElseThrow(()-> new RuntimeException("Battle not found."));
-    }
-
-
-    public Battle close(CloseBattleDTO dto){
-        Battle battle = battleRepository.findById(dto.id()).orElseThrow(()-> new RuntimeException("Battle not found"));
-
-        if (battle.getStatus().equals(BattleStatusEnum.FINISHED)){
-            throw new RuntimeException("This battle alraedy finished!");
-        }else {
-            battle.setStatus(BattleStatusEnum.FINISHED);
-            battle.setResult(BattleResultEnum.valueOf(dto.result()));
-            return battle;
-        }
     }
 
     public String makeAMove (BattleActionDTO dto) throws Exception {
@@ -106,7 +99,7 @@ public class BattleService {
             pokemon.getStatus().setHp(0);
         }
 
-        String log = "";
+        String log;
 
         if (pokemon.getStatus().getHp()>0 && wildPokemon.getStatus().getHp() > 0){
             log = pokemon.getName()+" used "+pokemon.getMoves().get(0).getMoveName()+".\n" +
@@ -169,14 +162,13 @@ public class BattleService {
         }
         Pokemon allyPokemon = trainer.getPokemons().get(0);
         Move move = moveService.findMoveByName(allyPokemon.getMoves().get(dto.moveIndex()).getMoveName());
-        BattleActionValidateDTO battleAction = new BattleActionValidateDTO(
+
+        return new BattleActionValidateDTO(
                 trainer,
                 wildPokemon,
                 move,
                 battle
         );
-
-        return battleAction;
     }
 
 
