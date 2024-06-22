@@ -10,7 +10,7 @@ public class Status {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private Integer hp;
-    private Integer atak;
+    private Integer attack;
     private Integer def;
     private Integer sp_atk;
     private Integer sp_def;
@@ -18,7 +18,7 @@ public class Status {
 
     public Status() {
         this.hp = 0;
-        this.atak = 0;
+        this.attack = 0;
         this.def = 0;
         this.sp_atk = 0;
         this.sp_def = 0;
@@ -41,12 +41,12 @@ public class Status {
         this.hp = hp;
     }
 
-    public Integer getAtak() {
-        return atak;
+    public Integer getAttack() {
+        return attack;
     }
 
-    public void setAtak(Integer atak) {
-        this.atak = atak;
+    public void setAttack(Integer attack) {
+        this.attack = attack;
     }
 
     public Integer getDef() {

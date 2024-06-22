@@ -125,19 +125,19 @@ public class PokemonService {
         pokemon.setEffortValue(pokemonObj.getEffortValue());
         pokemon.setBaseExp(pokemonObj.getBaseExp());
         pokemon.getBase().setHp(pokemonObj.getBase().getHp());
-        pokemon.getBase().setAtak(pokemonObj.getBase().getAtak());
+        pokemon.getBase().setAttack(pokemonObj.getBase().getAttack());
         pokemon.getBase().setDef(pokemonObj.getBase().getDef());
         pokemon.getBase().setSp_atk(pokemonObj.getBase().getSp_atk());
         pokemon.getBase().setSp_def(pokemonObj.getBase().getSp_def());
         pokemon.getBase().setSpeed(pokemonObj.getBase().getSpeed());
         pokemon.getEv().setHp(0);
-        pokemon.getEv().setAtak(0);
+        pokemon.getEv().setAttack(0);
         pokemon.getEv().setDef(0);
         pokemon.getEv().setSp_atk(0);
         pokemon.getEv().setSp_def(0);
         pokemon.getEv().setSpeed(0);
         pokemon.getIv().setHp(attributesService.generateIv().get(0));
-        pokemon.getIv().setAtak(attributesService.generateIv().get(1));
+        pokemon.getIv().setAttack(attributesService.generateIv().get(1));
         pokemon.getIv().setDef(attributesService.generateIv().get(2));
         pokemon.getIv().setSp_atk(attributesService.generateIv().get(3));
         pokemon.getIv().setSp_def(attributesService.generateIv().get(4));
@@ -147,9 +147,9 @@ public class PokemonService {
         pokemon.setNextLevel(level);
         pokemon.setExp(64);
 
-        List<Integer> atributes = attributesService.calcAtributes(pokemon);
-        pokemon.settingStatus(atributes);
-        pokemon.settingOriginStatus(atributes);
+        List<Integer> attributes = attributesService.calcAttributes(pokemon);
+        pokemon.settingStatus(attributes);
+        pokemon.settingOriginStatus(attributes);
 
         if (pokemonObj.getType2() != null) {
             pokemon.setType2(pokemonObj.getType2());

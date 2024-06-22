@@ -335,7 +335,7 @@ public class Pokemon {
 
     public void settingStatus(List<Integer> list){
         this.getStatus().setHp(list.get(0));
-        this.getStatus().setAtak(list.get(1));
+        this.getStatus().setAttack(list.get(1));
         this.getStatus().setDef(list.get(2));
         this.getStatus().setSp_atk(list.get(3));
         this.getStatus().setSp_def(list.get(4));
@@ -343,7 +343,7 @@ public class Pokemon {
     }
     public void settingOriginStatus(List<Integer> list){
         this.getOriginStatus().setHp(list.get(0));
-        this.getOriginStatus().setAtak(list.get(1));
+        this.getOriginStatus().setAttack(list.get(1));
         this.getOriginStatus().setDef(list.get(2));
         this.getOriginStatus().setSp_atk(list.get(3));
         this.getOriginStatus().setSp_def(list.get(4));

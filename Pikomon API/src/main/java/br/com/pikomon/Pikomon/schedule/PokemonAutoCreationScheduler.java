@@ -5,7 +5,6 @@ import br.com.pikomon.Pikomon.modal.*;
 import br.com.pikomon.Pikomon.persistence.Pokemon;
 import br.com.pikomon.Pikomon.persistence.PokemonMove;
 import br.com.pikomon.Pikomon.persistence.Status;
-import br.com.pikomon.Pikomon.repository.MoveRepository;
 import br.com.pikomon.Pikomon.repository.PokemonMoveRepository;
 import br.com.pikomon.Pikomon.repository.PokemonRepository;
 import jakarta.annotation.PostConstruct;
@@ -18,7 +17,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -33,15 +31,12 @@ public class PokemonAutoCreationScheduler {
 
     private final PokemonMoveRepository pkMoveRepository;
 
-    private final MoveRepository moveRepository;
-
     private static final Logger log = LoggerFactory.getLogger(PokemonAutoCreationScheduler.class);
 
-    public PokemonAutoCreationScheduler(RestTemplate restTemplate, PokemonRepository pokemonRepository, PokemonMoveRepository pkMoveRepository, MoveRepository moveRepository) {
+    public PokemonAutoCreationScheduler(RestTemplate restTemplate, PokemonRepository pokemonRepository, PokemonMoveRepository pkMoveRepository) {
         this.restTemplate = restTemplate;
         this.pokemonRepository = pokemonRepository;
         this.pkMoveRepository = pkMoveRepository;
-        this.moveRepository = moveRepository;
     }
 
     @PostConstruct
@@ -84,10 +79,9 @@ public class PokemonAutoCreationScheduler {
                     if (pokemonData.getTypes().size()>1){
                         pk.setType2(TypeEnum.valueOf(pokemonData.getTypes().get(1).getType().getName().toUpperCase()));
                     }
-                    Status status = new Status();
-                    pk.setBase(status);
+                    pk.setBase(new Status());
                     pk.getBase().setHp(pokemonData.getStats().get(0).getBase_stat());
-                    pk.getBase().setAtak(pokemonData.getStats().get(1).getBase_stat());
+                    pk.getBase().setAttack(pokemonData.getStats().get(1).getBase_stat());
                     pk.getBase().setDef(pokemonData.getStats().get(2).getBase_stat());
                     pk.getBase().setSp_atk(pokemonData.getStats().get(3).getBase_stat());
                     pk.getBase().setSp_def(pokemonData.getStats().get(4).getBase_stat());

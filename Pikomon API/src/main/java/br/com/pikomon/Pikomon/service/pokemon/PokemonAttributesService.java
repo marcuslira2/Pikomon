@@ -35,11 +35,11 @@ public class PokemonAttributesService {
     private final String NAIVE = "Naive";
 
 
-    public List<Integer> calcAtributes(Pokemon pokemon) {
+    public List<Integer> calcAttributes(Pokemon pokemon) {
         List<Integer> status = new ArrayList<>(6);
 
         Integer hp = (((2*pokemon.getBase().getHp()+pokemon.getIv().getHp()+(pokemon.getEv().getHp()/4))*pokemon.getLevel()/100+10));
-        int atk = (((2 * pokemon.getBase().getAtak()+pokemon.getIv().getAtak() + (pokemon.getEv().getAtak()/4)) * pokemon.getLevel()/100 + 5));
+        int atk = (((2 * pokemon.getBase().getAttack()+pokemon.getIv().getAttack() + (pokemon.getEv().getAttack()/4)) * pokemon.getLevel()/100 + 5));
         int def = (((2 * pokemon.getBase().getDef()+pokemon.getIv().getDef() + (pokemon.getEv().getDef()/4)) * pokemon.getLevel()/100 + 5));
         int spAtk = (((2 * pokemon.getBase().getSp_atk()+pokemon.getIv().getSp_atk() + (pokemon.getEv().getSp_atk()/4)) * pokemon.getLevel()/100 + 5));
         int spDef = (((2 * pokemon.getBase().getSp_def()+pokemon.getIv().getSp_def() + (pokemon.getEv().getSp_def()/4)) * pokemon.getLevel()/100 + 5));
@@ -63,7 +63,7 @@ public class PokemonAttributesService {
         if (nature.equals(TIMID) || nature.equals(HASTY) || nature.equals(JOLLY) || nature.equals(NAIVE)) {
             speed = (int) (speed * 1.1f);
         }
-        //DEBUFF
+
         if (nature.equals(BOLD) || nature.equals(MODEST) || nature.equals(CALM) || nature.equals(TIMID)) {
             atk = (int) (atk * 0.9f);
         }

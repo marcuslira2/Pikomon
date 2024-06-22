@@ -112,30 +112,29 @@ public class BattleService {
 
             battle.setStatus(BattleStatusEnum.FINISHED);
             Integer nextLevel = pokemon.getNextLevel();
-            List<Integer> oldAtributes = attributesService.calcAtributes(pokemon);
+            List<Integer> oldAttributes = attributesService.calcAttributes(pokemon);
             pokemon = calcService.calcExp(pokemon, wildPokemon);
             log = "Battle has finished! you win";
+            List<Integer> attributes = attributesService.calcAttributes(pokemon);
+            pokemon.settingStatus(attributes);
+            pokemon.settingOriginStatus(attributes);
             if (pokemon.getExp()>nextLevel){
-                List<Integer> atributes = attributesService.calcAtributes(pokemon);
-                pokemon.settingStatus(atributes);
-                pokemon.settingOriginStatus(atributes);
                 log +="\n "+pokemon.getName()+" grew to LV."+pokemon.getLevel()+"!";
-                log+= "\n MAX. HP: + "+(atributes.get(0)-oldAtributes.get(0));
-                log+= "\n ATTACK: + "+(atributes.get(1)-oldAtributes.get(1));
-                log+= "\n DEFENSE: + "+(atributes.get(2)-oldAtributes.get(2));
-                log+= "\n SP. ATAK: + "+(atributes.get(3)-oldAtributes.get(3));
-                log+= "\n SP. DEF: + "+(atributes.get(4)-oldAtributes.get(4));
-                log+= "\n SPEED: + "+(atributes.get(5)-oldAtributes.get(5));
+                log+= "\n MAX. HP: + "+(attributes.get(0)-oldAttributes.get(0));
+                log+= "\n ATTACK: + "+(attributes.get(1)-oldAttributes.get(1));
+                log+= "\n DEFENSE: + "+(attributes.get(2)-oldAttributes.get(2));
+                log+= "\n SP. ATTACK: + "+(attributes.get(3)-oldAttributes.get(3));
+                log+= "\n SP. DEF: + "+(attributes.get(4)-oldAttributes.get(4));
+                log+= "\n SPEED: + "+(attributes.get(5)-oldAttributes.get(5));
                 log+= "\n\n NEW STATUS: ";
-                log+= "\n MAX. HP: "+atributes.get(0);
-                log+= "\n ATTACK: "+atributes.get(1);
-                log+= "\n DEFENSE: "+atributes.get(2);
-                log+= "\n SP. ATAK: "+atributes.get(3);
-                log+= "\n SP. DEF: "+atributes.get(4);
-                log+= "\n SPEED: "+atributes.get(5);
+                log+= "\n MAX. HP: "+attributes.get(0);
+                log+= "\n ATTACK: "+attributes.get(1);
+                log+= "\n DEFENSE: "+attributes.get(2);
+                log+= "\n SP. ATTACK: "+attributes.get(3);
+                log+= "\n SP. DEF: "+attributes.get(4);
+                log+= "\n SPEED: "+attributes.get(5);
                 pokemonService.updatePokemon(pokemon);
             }
-            pokemonService.restPokemon(pokemon);
 
             battleRepository.save(battle);
         }else{
