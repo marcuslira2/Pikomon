@@ -14,9 +14,9 @@ public class Battle {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String uuid;
-    private Integer user_id;
-    private Integer trainer_id;
-    private Long enemy_id;
+    private Integer userId;
+    private Integer trainerId;
+    private Long enemyId;
     private Enum<OpponentTypeEnum> opponent;
     private Enum<LocationEnum> location;
     private Enum<BattleStatusEnum> status;
@@ -49,20 +49,20 @@ public class Battle {
         this.status = status;
     }
 
-    public Integer getUser_id() {
-        return user_id;
+    public Integer getUserId() {
+        return userId;
     }
 
-    public void setUser_id(Integer user_id) {
-        this.user_id = user_id;
+    public void setUserId(Integer userId) {
+        this.userId = userId;
     }
 
-    public Integer getTrainer_id() {
-        return trainer_id;
+    public Integer getTrainerId() {
+        return trainerId;
     }
 
-    public void setTrainer_id(Integer trainer_id) {
-        this.trainer_id = trainer_id;
+    public void setTrainerId(Integer trainerId) {
+        this.trainerId = trainerId;
     }
 
     public Enum<LocationEnum> getLocation() {
@@ -89,11 +89,11 @@ public class Battle {
         this.uuid = uuid;
     }
 
-    public Long getEnemy_id() {
-        return enemy_id;
+    public Long getEnemyId() {
+        return enemyId;
     }
 
-    public void setEnemy_id(Long enemy_id) {
-        this.enemy_id = enemy_id;
+    public void setEnemyId(Long enemyId) {
+        this.enemyId = enemyId;
     }
 }

@@ -61,11 +61,11 @@ public class BattleService {
         battle.setLocation(LocationEnum.valueOf(dto.location()));
         Pokemon enemy = pokemonService.createWildPokemon(LocationEnum.valueOf(dto.location()));
 
-        battle.setTrainer_id(dto.trainer_id());
-        battle.setUser_id(dto.user_id());
+        battle.setTrainerId(dto.trainer_id());
+        battle.setUserId(dto.user_id());
         battle.setStatus(BattleStatusEnum.START);
         battle.setUuid(UUID.randomUUID().toString());
-        battle.setEnemy_id(enemy.getId());
+        battle.setEnemyId(enemy.getId());
         return battleRepository.save(battle);
     }
 
