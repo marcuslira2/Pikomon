@@ -35,11 +35,11 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<tokenDto> login(@RequestBody @Valid LoginDto dto) {
+    public ResponseEntity<TokenDto> login(@RequestBody @Valid LoginDto dto) {
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(dto.login(), dto.pwd());
         Authentication authenticate = authenticationManager.authenticate(authenticationToken);
         String token = tokenService.gerarToken((User) authenticate.getPrincipal());
-        return ResponseEntity.status(HttpStatus.OK).body(new tokenDto(token));
+        return ResponseEntity.status(HttpStatus.OK).body(new TokenDto(token));
     }
 
     @GetMapping
