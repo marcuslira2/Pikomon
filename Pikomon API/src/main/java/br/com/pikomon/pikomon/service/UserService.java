@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.UUID;
 
 @Service
@@ -54,10 +55,10 @@ public class UserService {
         UserDetails byLogin = userRepository.findByLogin(dto.login());
 
         if (byLogin !=null){
-            throw new Exception("User alredy exists");
+            throw new IllegalArgumentException("User alredy exists");
         }
         User user = new User();
-        log.info("Saving user: " + dto.login());
+        log.info("Saving user: {}", dto.login());
         user.setLogin(dto.login());
         user.setPassword(passwordEncoder.encode(dto.password()));
         user.setUuid(UUID.randomUUID().toString());
@@ -71,13 +72,13 @@ public class UserService {
     }
 
     public UserDTO findById(Integer id) throws Exception {
-        User user = userRepository.findById(id).orElseThrow(() -> new Exception(USER_NOT_FOUND));
+        User user = userRepository.findById(id).orElseThrow(() -> new NoSuchElementException(USER_NOT_FOUND));
         log.info("Searching user...");
         return this.convertToDTO(user);
     }
 
     public String deleteById(Integer id) throws Exception {
-        User user = userRepository.findById(id).orElseThrow(() -> new Exception(USER_NOT_FOUND));
+        User user = userRepository.findById(id).orElseThrow(() -> new NoSuchElementException(USER_NOT_FOUND));
         log.info("Deleting user...");
         user.setDeletedDate(new Date());
         user.setDeleted(true);
@@ -90,7 +91,7 @@ public class UserService {
     }
 
     public String changePWD(Integer id, ModifyPasswordDTO pwddto) throws Exception {
-        User user = userRepository.findById(id).orElseThrow(() -> new Exception(USER_NOT_FOUND));
+        User user = userRepository.findById(id).orElseThrow(() -> new NoSuchElementException(USER_NOT_FOUND));
         log.info("Updating user...");
         user.setPassword(pwddto.password());
         userRepository.save(user);

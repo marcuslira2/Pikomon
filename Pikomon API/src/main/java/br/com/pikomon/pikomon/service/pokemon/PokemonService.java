@@ -57,21 +57,21 @@ public class PokemonService {
     }
 
     public PokemonDTO findDTOById(Long id) throws Exception {
-        Pokemon pokemon = pokemonRepository.findById(id).orElseThrow(() -> new Exception(POKEMON_NOT_FOUND));
+        Pokemon pokemon = pokemonRepository.findById(id).orElseThrow(() -> new NoSuchElementException(POKEMON_NOT_FOUND));
 
         return this.converterToDTO(pokemon);
     }
 
     public Pokemon findById(Long id) throws Exception {
-        return pokemonRepository.findById(id).orElseThrow(() -> new Exception(POKEMON_NOT_FOUND));
+        return pokemonRepository.findById(id).orElseThrow(() -> new NoSuchElementException(POKEMON_NOT_FOUND));
     }
 
     public Pokemon save(Long id, int level, String trainerName) throws Exception {
 
         Trainer trainer = trainerRepository.findByName(trainerName).orElseThrow(
-                () -> new Exception(TRAINER_NOT_FOUND));
+                () -> new NoSuchElementException(TRAINER_NOT_FOUND));
         User user = userRepository.findById(trainer.getUserId()).orElseThrow(
-                () -> new Exception(USER_NOT_FOUND));
+                () -> new NoSuchElementException(USER_NOT_FOUND));
 
         Pokemon pokemon = createPokemon(id, level);
         pokemon.setTrainerUUID(trainer.getUuid());
@@ -87,11 +87,11 @@ public class PokemonService {
     }
 
     public String deleteById(Long id) throws Exception {
-        Pokemon pokemon = pokemonRepository.findById(id).orElseThrow(() -> new Exception(POKEMON_NOT_FOUND));
+        Pokemon pokemon = pokemonRepository.findById(id).orElseThrow(() -> new NoSuchElementException(POKEMON_NOT_FOUND));
         Trainer trainer = trainerRepository.findByName(pokemon.getActualTrainer()).orElseThrow(
-                () -> new Exception(TRAINER_NOT_FOUND));
+                () -> new NoSuchElementException(TRAINER_NOT_FOUND));
         User user = userRepository.findById(trainer.getUserId()).orElseThrow(
-                () -> new Exception(USER_NOT_FOUND));
+                () -> new NoSuchElementException(USER_NOT_FOUND));
         pokemon.setDeleted(1);
         pokemon.setDeletedDate(new Date());
         pokemonRepository.save(pokemon);
@@ -105,7 +105,7 @@ public class PokemonService {
 
     private Pokemon createPokemon(Long id, int level) throws Exception {
         Pokemon pokemonObj = pokemonRepository.findById(id).orElseThrow(
-                () -> new Exception(POKEMON_NOT_FOUND));
+                () -> new NoSuchElementException(POKEMON_NOT_FOUND));
         Pokemon pokemon = new Pokemon();
         int isShiny = rnd.nextInt(512);
 

@@ -153,7 +153,7 @@ public class BattleService {
         Pokemon wildPokemon = pokemonService.findById(dto.wildPokemonId());
         Battle battle = battleRepository.findByuuid(dto.battleUUID());
         if (battle.getStatus().equals(BattleStatusEnum.FINISHED)) {
-            throw new Exception("The battle was finished");
+            throw new IllegalArgumentException("The battle was finished");
         }
         Pokemon allyPokemon = trainer.getPokemons().get(0);
         Move move = moveService.findMoveByName(allyPokemon.getMoves().get(dto.moveIndex()).getMoveName());

@@ -6,6 +6,7 @@ import br.com.pikomon.pikomon.repository.LogRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.NoSuchElementException;
 
 @Service
 public class LogService {
@@ -19,7 +20,7 @@ public class LogService {
     }
 
     public LogDTO convertToDTO(Log log) throws Exception{
-        Log logger = logRepository.findById(log.getId()).orElseThrow(()-> new Exception(LOGGER_NOT_FOUND));
+        Log logger = logRepository.findById(log.getId()).orElseThrow(()-> new NoSuchElementException(LOGGER_NOT_FOUND));
         return new LogDTO(
                 logger.getUserUuid(),
                 logger.getTrainerUuid(),

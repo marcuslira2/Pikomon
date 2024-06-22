@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.UUID;
 
 @Service
@@ -51,7 +52,7 @@ public class TrainerService {
     }
 
     public TrainerDTO save(CreateTrainerDTO dto) throws Exception {
-        User user = userRepository.findById(dto.userID()).orElseThrow(() -> new Exception(USER_NOT_FOUND));
+        User user = userRepository.findById(dto.userID()).orElseThrow(() -> new NoSuchElementException(USER_NOT_FOUND));
         Trainer trainer = new Trainer();
         trainer.setName(dto.name());
         trainer.setMoney(dto.money());
@@ -76,25 +77,24 @@ public class TrainerService {
 
     public List<TrainerDTO> listAll() {
         return trainerRepository.findAll().stream()
-                .filter(trainer -> trainer.getDeleted() != true).toList()
+                .filter(trainer -> !trainer.getDeleted()).toList()
                 .stream().map(this::converterToDTO).toList();
     }
 
-    public TrainerDTO findDTOById(Integer id) throws Exception {
+    public TrainerDTO findDTOById(Integer id) {
         log.info("Searching trainer...");
-        Trainer trainer = trainerRepository.findByIdAndDeletedFalse(id).orElseThrow(() -> new Exception(TRAINER_NOT_FOUND));
-        TrainerDTO trainerDTO = this.converterToDTO(trainer);
-        return trainerDTO;
+        Trainer trainer = trainerRepository.findByIdAndDeletedFalse(id).orElseThrow(() -> new NoSuchElementException(TRAINER_NOT_FOUND));
+        return this.converterToDTO(trainer);
     }
     public Trainer findById(Integer id) throws Exception {
-        return trainerRepository.findByIdAndDeletedFalse(id).orElseThrow(() -> new Exception(TRAINER_NOT_FOUND));
+        return trainerRepository.findByIdAndDeletedFalse(id).orElseThrow(() -> new NoSuchElementException(TRAINER_NOT_FOUND));
     }
 
 
 
     public String deleteById(Integer id) throws Exception {
-        Trainer trainer = trainerRepository.findByIdAndDeletedFalse(id).orElseThrow(() -> new Exception(TRAINER_NOT_FOUND));
-        User user = userRepository.findById(trainer.getUserId()).orElseThrow(() -> new Exception(USER_NOT_FOUND));
+        Trainer trainer = trainerRepository.findByIdAndDeletedFalse(id).orElseThrow(() -> new NoSuchElementException(TRAINER_NOT_FOUND));
+        User user = userRepository.findById(trainer.getUserId()).orElseThrow(() -> new NoSuchElementException(USER_NOT_FOUND));
         log.info("Deleting trainer...");
         trainer.setDeleted(true);
         trainer.setDeletedDate(new Date());
