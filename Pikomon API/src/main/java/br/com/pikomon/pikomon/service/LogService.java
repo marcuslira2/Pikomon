@@ -19,7 +19,7 @@ public class LogService {
         this.logRepository = logRepository;
     }
 
-    public LogDTO convertToDTO(Log log) throws Exception{
+    public LogDTO convertToDTO(Log log) {
         Log logger = logRepository.findById(log.getId()).orElseThrow(()-> new NoSuchElementException(LOGGER_NOT_FOUND));
         return new LogDTO(
                 logger.getUserUuid(),

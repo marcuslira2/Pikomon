@@ -4,6 +4,7 @@ import br.com.pikomon.pikomon.persistence.User;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
+import com.auth0.jwt.exceptions.JWTVerificationException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -16,7 +17,12 @@ import java.time.ZoneOffset;
 public class TokenService {
 
     @Value("${api.security.token.secret}")
-    private String secret;
+    private final String secret;
+
+    public TokenService(String secret) {
+        this.secret = secret;
+    }
+
     public String gerarToken(User user){
         try {
             Algorithm algorithm = Algorithm.HMAC256(secret);
@@ -26,7 +32,7 @@ public class TokenService {
                     .withExpiresAt(loginTimeExpiration())
                     .sign(algorithm);
         } catch (JWTCreationException exception){
-            throw new RuntimeException("Error: ",exception);
+            throw new JWTCreationException("Error: ",exception);
         }
     }
 
@@ -39,7 +45,7 @@ public class TokenService {
                     .verify(tokenJWT)
                     .getSubject();
         }catch (JWTCreationException e){
-            throw new RuntimeException("Token JWT expirado");
+            throw new JWTVerificationException("Token JWT expirado");
         }
 
     }

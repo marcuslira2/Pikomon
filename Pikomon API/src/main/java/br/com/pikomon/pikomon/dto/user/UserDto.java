@@ -6,5 +6,5 @@ import jakarta.validation.constraints.NotNull;
 
 import java.util.List;
 
-public record UserDTO(@NotNull Integer id,@NotBlank String login, List<Trainer> trainers) {
+public record UserDto(@NotNull Integer id, @NotBlank String login, List<Trainer> trainers) {
 }

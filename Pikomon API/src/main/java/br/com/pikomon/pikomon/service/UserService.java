@@ -1,8 +1,8 @@
 package br.com.pikomon.pikomon.service;
 
-import br.com.pikomon.pikomon.dto.user.ModifyPasswordDTO;
-import br.com.pikomon.pikomon.dto.user.CreateUserDTO;
-import br.com.pikomon.pikomon.dto.user.UserDTO;
+import br.com.pikomon.pikomon.dto.user.ModifyPasswordDto;
+import br.com.pikomon.pikomon.dto.user.CreateUserDto;
+import br.com.pikomon.pikomon.dto.user.UserDto;
 import br.com.pikomon.pikomon.persistence.User;
 import br.com.pikomon.pikomon.repository.UserRepository;
 import org.slf4j.Logger;
@@ -35,23 +35,23 @@ public class UserService {
         this.logService = logService;
     }
 
-    public List<UserDTO> listAll() {
+    public List<UserDto> listAll() {
         log.info("Listing all users");
         return userRepository.findAll().stream()
                 .filter(User::isEnabled).toList()
                 .stream().map(this::convertToDTO).toList();
     }
 
-    private UserDTO convertToDTO(User user) {
+    private UserDto convertToDTO(User user) {
         log.info("Converting user into DTO");
-        return new UserDTO(
+        return new UserDto(
                 user.getId(),
                 user.getLogin(),
                 user.getTrainers()
         );
     }
 
-    public UserDTO save(CreateUserDTO dto) throws Exception {
+    public UserDto save(CreateUserDto dto) throws Exception {
         UserDetails byLogin = userRepository.findByLogin(dto.login());
 
         if (byLogin !=null){
@@ -71,7 +71,7 @@ public class UserService {
         return this.convertToDTO(user);
     }
 
-    public UserDTO findById(Integer id) throws Exception {
+    public UserDto findById(Integer id) throws Exception {
         User user = userRepository.findById(id).orElseThrow(() -> new NoSuchElementException(USER_NOT_FOUND));
         log.info("Searching user...");
         return this.convertToDTO(user);
@@ -90,7 +90,7 @@ public class UserService {
         return user.getUsername();
     }
 
-    public String changePWD(Integer id, ModifyPasswordDTO pwddto) throws Exception {
+    public String changePWD(Integer id, ModifyPasswordDto pwddto) throws Exception {
         User user = userRepository.findById(id).orElseThrow(() -> new NoSuchElementException(USER_NOT_FOUND));
         log.info("Updating user...");
         user.setPassword(pwddto.password());

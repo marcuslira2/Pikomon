@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @RestController
 @RequestMapping("/trainer")
@@ -27,7 +28,7 @@ public class TrainerController {
     }
 
     @GetMapping(path = "/{id}")
-    public ResponseEntity<TrainerDTO> findById(@PathVariable Integer id) throws Exception {
+    public ResponseEntity<TrainerDTO> findById(@PathVariable Integer id) throws NoSuchElementException {
         TrainerDTO trainerDTO = trainerService.findDTOById(id);
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(trainerDTO);
     }

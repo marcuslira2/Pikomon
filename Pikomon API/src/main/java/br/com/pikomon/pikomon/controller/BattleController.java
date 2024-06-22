@@ -26,7 +26,7 @@ public class BattleController {
     }
 
     @GetMapping(path = "/{id}")
-    public ResponseEntity<Battle> findBattle(@PathVariable Long id) throws Exception {
+    public ResponseEntity<Battle> findBattle(@PathVariable Long id) {
         Battle battle = battleService.findById(id);
         return ResponseEntity.status(HttpStatus.FOUND).body(battle);
     }
