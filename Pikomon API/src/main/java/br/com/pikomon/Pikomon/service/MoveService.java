@@ -8,8 +8,13 @@ import org.springframework.stereotype.Service;
 @Service
 public class MoveService {
 
-    @Autowired
-    private MoveRepository moveRepository;
+
+    private final MoveRepository moveRepository;
+
+    public MoveService(MoveRepository moveRepository) {
+        this.moveRepository = moveRepository;
+    }
+
 
     public Move findMoveById(Integer id){
         Move move = moveRepository.findById(id).orElseThrow(() -> new RuntimeException("Move note found"));

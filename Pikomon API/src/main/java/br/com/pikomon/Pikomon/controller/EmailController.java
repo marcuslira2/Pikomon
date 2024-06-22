@@ -2,21 +2,23 @@ package br.com.pikomon.Pikomon.controller;
 
 
 import br.com.pikomon.Pikomon.service.EmailSender;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/email")
 public class EmailController {
 
-    @Autowired
-    private EmailSender emailSender;
+
+    private final EmailSender emailSender;
 
     @Value("${pikomon.email.sender}")
     private String emailToSender;
+
+    public EmailController(EmailSender emailSender) {
+        this.emailSender = emailSender;
+    }
 
     @PostMapping("/send-email")
     public String sendMail() {

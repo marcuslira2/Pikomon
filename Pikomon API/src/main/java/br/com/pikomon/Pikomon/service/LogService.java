@@ -38,13 +38,13 @@ public class LogService {
         return this.convertToDTO(log);
     }
 
-    public Log saveBattle(String trainerUUID, String description, String battleUUId){
+    public void saveBattle(String trainerUUID, String description, String battleUUId){
         Log log = new Log();
 
         log.setTrainerUuid(trainerUUID);
         log.setDescription(description);
         log.setBattleuuid(battleUUId);
         log.setCreateDate(new Date());
-        return logRepository.save(log);
+        logRepository.save(log);
     }
 }

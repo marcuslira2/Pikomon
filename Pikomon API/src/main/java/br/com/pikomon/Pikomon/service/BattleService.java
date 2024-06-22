@@ -10,7 +10,6 @@ import br.com.pikomon.Pikomon.persistence.*;
 import br.com.pikomon.Pikomon.repository.BattleRepository;
 import br.com.pikomon.Pikomon.service.pokemon.PokemonAttributesService;
 import br.com.pikomon.Pikomon.service.pokemon.PokemonService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.security.SecureRandom;
@@ -22,25 +21,24 @@ import java.util.UUID;
 public class BattleService {
 
 
-    @Autowired
     private final BattleRepository battleRepository;
 
-    @Autowired
+
     private final PokemonService pokemonService;
 
-    @Autowired
+
     private final TrainerService trainerService;
 
-    @Autowired
+
     private final LogService logService;
 
-    @Autowired
+
     private final MoveService moveService;
 
-    @Autowired
+
     private final CalcService calcService;
 
-    @Autowired
+
     private final PokemonAttributesService attributesService;
 
     private final Random rnd = new SecureRandom();
@@ -71,11 +69,11 @@ public class BattleService {
         return battleRepository.save(battle);
     }
 
-    public Battle findById(Long id){
-        return battleRepository.findById(id).orElseThrow(()-> new RuntimeException("Battle not found."));
+    public Battle findById(Long id) {
+        return battleRepository.findById(id).orElseThrow(() -> new RuntimeException("Battle not found."));
     }
 
-    public String makeAMove (BattleActionDTO dto) throws Exception {
+    public String makeAMove(BattleActionDTO dto) throws Exception {
         BattleActionValidateDTO validateBattle = validate(dto);
         Battle battle = battleRepository.findByuuid(dto.battleUUID());
         Pokemon pokemon = validateBattle.trainer().getPokemons().get(0);
@@ -91,24 +89,24 @@ public class BattleService {
 
 
         wildPokemon.getStatus().setHp(newHpWild);
-        if (wildPokemon.getStatus().getHp()< 0){
+        if (wildPokemon.getStatus().getHp() < 0) {
             wildPokemon.getStatus().setHp(0);
         }
         pokemon.getStatus().setHp(newHpAlly);
-        if (pokemon.getStatus().getHp()<0){
+        if (pokemon.getStatus().getHp() < 0) {
             pokemon.getStatus().setHp(0);
         }
 
         String log;
 
-        if (pokemon.getStatus().getHp()>0 && wildPokemon.getStatus().getHp() > 0){
-            log = pokemon.getName()+" used "+pokemon.getMoves().get(0).getMoveName()+".\n" +
-                    "Deal "+damageAlly+" on "+wildPokemon.getName()+". remains hp: "+wildPokemon.getStatus().getHp()+"\n" +
-                    "Enemy " + wildPokemon.getName()+" used "+ wildMoveUsed.getName()+"\n" +
-                    "Deal "+damageWild+" on "+ pokemon.getName()+". remains hp: "+pokemon.getStatus().getHp();
+        if (pokemon.getStatus().getHp() > 0 && wildPokemon.getStatus().getHp() > 0) {
+            log = pokemon.getName() + " used " + pokemon.getMoves().get(0).getMoveName() + ".\n" +
+                    "Deal " + damageAlly + " on " + wildPokemon.getName() + ". remains hp: " + wildPokemon.getStatus().getHp() + "\n" +
+                    "Enemy " + wildPokemon.getName() + " used " + wildMoveUsed.getName() + "\n" +
+                    "Deal " + damageWild + " on " + pokemon.getName() + ". remains hp: " + pokemon.getStatus().getHp();
             pokemonService.updatePokemon(pokemon);
             pokemonService.updatePokemon(wildPokemon);
-        }else if (pokemon.getStatus().getHp() > 0 || wildPokemon.getStatus().getHp() ==0){
+        } else if (pokemon.getStatus().getHp() > 0 || wildPokemon.getStatus().getHp() == 0) {
 
             battle.setStatus(BattleStatusEnum.FINISHED);
             Integer nextLevel = pokemon.getNextLevel();
@@ -118,26 +116,26 @@ public class BattleService {
             List<Integer> attributes = attributesService.calcAttributes(pokemon);
             pokemon.settingStatus(attributes);
             pokemon.settingOriginStatus(attributes);
-            if (pokemon.getExp()>nextLevel){
-                log +="\n "+pokemon.getName()+" grew to LV."+pokemon.getLevel()+"!";
-                log+= "\n MAX. HP: + "+(attributes.get(0)-oldAttributes.get(0));
-                log+= "\n ATTACK: + "+(attributes.get(1)-oldAttributes.get(1));
-                log+= "\n DEFENSE: + "+(attributes.get(2)-oldAttributes.get(2));
-                log+= "\n SP. ATTACK: + "+(attributes.get(3)-oldAttributes.get(3));
-                log+= "\n SP. DEF: + "+(attributes.get(4)-oldAttributes.get(4));
-                log+= "\n SPEED: + "+(attributes.get(5)-oldAttributes.get(5));
-                log+= "\n\n NEW STATUS: ";
-                log+= "\n MAX. HP: "+attributes.get(0);
-                log+= "\n ATTACK: "+attributes.get(1);
-                log+= "\n DEFENSE: "+attributes.get(2);
-                log+= "\n SP. ATTACK: "+attributes.get(3);
-                log+= "\n SP. DEF: "+attributes.get(4);
-                log+= "\n SPEED: "+attributes.get(5);
+            if (pokemon.getExp() > nextLevel) {
+                log += "\n " + pokemon.getName() + " grew to LV." + pokemon.getLevel() + "!";
+                log += "\n MAX. HP: + " + (attributes.get(0) - oldAttributes.get(0));
+                log += "\n ATTACK: + " + (attributes.get(1) - oldAttributes.get(1));
+                log += "\n DEFENSE: + " + (attributes.get(2) - oldAttributes.get(2));
+                log += "\n SP. ATTACK: + " + (attributes.get(3) - oldAttributes.get(3));
+                log += "\n SP. DEF: + " + (attributes.get(4) - oldAttributes.get(4));
+                log += "\n SPEED: + " + (attributes.get(5) - oldAttributes.get(5));
+                log += "\n\n NEW STATUS: ";
+                log += "\n MAX. HP: " + attributes.get(0);
+                log += "\n ATTACK: " + attributes.get(1);
+                log += "\n DEFENSE: " + attributes.get(2);
+                log += "\n SP. ATTACK: " + attributes.get(3);
+                log += "\n SP. DEF: " + attributes.get(4);
+                log += "\n SPEED: " + attributes.get(5);
                 pokemonService.updatePokemon(pokemon);
             }
 
             battleRepository.save(battle);
-        }else{
+        } else {
             log = "You loose";
             battle.setStatus(BattleStatusEnum.FINISHED);
             battleRepository.save(battle);
@@ -145,18 +143,16 @@ public class BattleService {
         }
 
 
-        logService.saveBattle(validateBattle.trainer().getUuid(),log,validateBattle.battle().getUuid());
+        logService.saveBattle(validateBattle.trainer().getUuid(), log, validateBattle.battle().getUuid());
         return log;
     }
-
-
 
 
     private BattleActionValidateDTO validate(BattleActionDTO dto) throws Exception {
         Trainer trainer = trainerService.findById(dto.trainerId());
         Pokemon wildPokemon = pokemonService.findById(dto.wildPokemonId());
         Battle battle = battleRepository.findByuuid(dto.battleUUID());
-        if (battle.getStatus().equals(BattleStatusEnum.FINISHED)){
+        if (battle.getStatus().equals(BattleStatusEnum.FINISHED)) {
             throw new Exception("The battle was finished");
         }
         Pokemon allyPokemon = trainer.getPokemons().get(0);
