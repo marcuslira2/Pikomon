@@ -54,19 +54,13 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity create(@RequestBody @Valid CreateUserDto dto) throws Exception {
-        try {
+    public ResponseEntity<UserDto> create(@RequestBody @Valid CreateUserDto dto) throws Exception {
         UserDto user = userService.save(dto);
         return ResponseEntity.status(HttpStatus.CREATED).body(user);
-
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(e.getMessage());
-        }
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<String> updatePWD(@PathVariable Integer id, @RequestBody @Valid ModifyPasswordDto pwd) throws Exception {
-
         String userName = userService.changePWD(id, pwd);
         return ResponseEntity.status(HttpStatus.ACCEPTED).body("Password changed for user " + userName);
     }
