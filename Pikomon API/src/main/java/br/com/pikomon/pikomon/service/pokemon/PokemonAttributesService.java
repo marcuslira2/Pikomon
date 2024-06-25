@@ -39,12 +39,12 @@ public class PokemonAttributesService {
 
     public Pokemon calcBattleStatus(Pokemon pokemon) {
 
-        int hp = (((2*pokemon.getHp().getBaseStatus()+pokemon.getHp().getIv()+(pokemon.getHp().getEv()/4))*pokemon.getLevel()/100+10));
-        int atk = (((2 * pokemon.getAttack().getBaseStatus()+pokemon.getAttack().getIv()+ (pokemon.getAttack().getEv()/4)) * pokemon.getLevel()/100 + 5));
-        int def = (((2 * pokemon.getDefense().getBaseStatus()+pokemon.getDefense().getIv() + (pokemon.getDefense().getEv()/4)) * pokemon.getLevel()/100 + 5));
-        int spAtk = (((2 * pokemon.getSpAttack().getBaseStatus()+pokemon.getSpAttack().getIv() + (pokemon.getSpAttack().getEv()/4)) * pokemon.getLevel()/100 + 5));
-        int spDef = (((2 * pokemon.getSpDefense().getBaseStatus()+pokemon.getSpDefense().getIv() + (pokemon.getSpDefense().getEv()/4)) * pokemon.getLevel()/100 + 5));
-        int speed = (((2 * pokemon.getSpeed().getBaseStatus()+pokemon.getSpeed().getIv() + (pokemon.getSpeed().getEv()/4)) * pokemon.getLevel()/100 + 5));
+        int hp = ((2*pokemon.getHp().getBaseStatus()+pokemon.getHp().getIv()+(pokemon.getHp().getEv()/4))*pokemon.getLevel()/100+10);
+        int atk = ((2 * pokemon.getAttack().getBaseStatus()+pokemon.getAttack().getIv()+ (pokemon.getAttack().getEv()/4)) * pokemon.getLevel()/100 + 5);
+        int def = ((2 * pokemon.getDefense().getBaseStatus()+pokemon.getDefense().getIv() + (pokemon.getDefense().getEv()/4)) * pokemon.getLevel()/100 + 5);
+        int spAtk = ((2 * pokemon.getSpAttack().getBaseStatus()+pokemon.getSpAttack().getIv() + (pokemon.getSpAttack().getEv()/4)) * pokemon.getLevel()/100 + 5);
+        int spDef = ((2 * pokemon.getSpDefense().getBaseStatus()+pokemon.getSpDefense().getIv() + (pokemon.getSpDefense().getEv()/4)) * pokemon.getLevel()/100 + 5);
+        int speed = ((2 * pokemon.getSpeed().getBaseStatus()+pokemon.getSpeed().getIv() + (pokemon.getSpeed().getEv()/4)) * pokemon.getLevel()/100 + 5);
 
         String nature = pokemon.getNature();
 

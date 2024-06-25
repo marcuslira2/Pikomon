@@ -56,13 +56,13 @@ public class PokemonService {
         );
     }
 
-    public PokemonDTO findDTOById(Long id) throws Exception {
+    public PokemonDTO findDTOById(Long id) {
         Pokemon pokemon = pokemonRepository.findById(id).orElseThrow(() -> new NoSuchElementException(POKEMON_NOT_FOUND));
 
         return this.converterToDTO(pokemon);
     }
 
-    public Pokemon findById(Long id) throws Exception {
+    public Pokemon findById(Long id) {
         return pokemonRepository.findById(id).orElseThrow(() -> new NoSuchElementException(POKEMON_NOT_FOUND));
     }
 
@@ -86,7 +86,7 @@ public class PokemonService {
         return pokemonRepository.save(pokemon);
     }
 
-    public String deleteById(Long id) throws Exception {
+    public String deleteById(Long id) {
         Pokemon pokemon = pokemonRepository.findById(id).orElseThrow(() -> new NoSuchElementException(POKEMON_NOT_FOUND));
         Trainer trainer = trainerRepository.findByName(pokemon.getActualTrainer()).orElseThrow(
                 () -> new NoSuchElementException(TRAINER_NOT_FOUND));
@@ -103,7 +103,7 @@ public class PokemonService {
         return name;
     }
 
-    private Pokemon createPokemon(Long id, int level) throws Exception {
+    private Pokemon createPokemon(Long id, int level) {
         Pokemon pokemonObj = pokemonRepository.findById(id).orElseThrow(
                 () -> new NoSuchElementException(POKEMON_NOT_FOUND));
         Pokemon pokemon = new Pokemon();
@@ -175,7 +175,7 @@ public class PokemonService {
         return pokemon;
     }
 
-    public Pokemon createWildPokemon(LocationEnum location) throws Exception {
+    public Pokemon createWildPokemon(LocationEnum location) {
         int pokemonId = rnd.nextInt(location.getPokemonIdList().length);
         int pokemonLevel = rnd.nextInt(location.getPokemonLevels().length);
         return pokemonRepository.save(createPokemon((long) location.getPokemonIdList()[pokemonId], location.getPokemonLevels()[pokemonLevel]));
