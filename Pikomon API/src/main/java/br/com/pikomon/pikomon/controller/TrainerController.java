@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.concurrent.ExecutionException;
 
 @RestController
 @RequestMapping("/trainer")
@@ -34,7 +35,7 @@ public class TrainerController {
     }
 
     @PostMapping
-    public ResponseEntity<TrainerDTO> create(@RequestBody @Valid CreateTrainerDTO trainerDTO) throws Exception {
+    public ResponseEntity<TrainerDTO> create(@RequestBody @Valid CreateTrainerDTO trainerDTO) throws ExecutionException {
         TrainerDTO dto = trainerService.save(trainerDTO);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(dto);
@@ -42,7 +43,7 @@ public class TrainerController {
     }
 
     @DeleteMapping(path = "/{id}")
-    public ResponseEntity<String> delete(@PathVariable Integer id) throws Exception {
+    public ResponseEntity<String> delete(@PathVariable Integer id)  {
         String trainerName = trainerService.deleteById(id);
         return ResponseEntity.status(HttpStatus.ACCEPTED).body("Bye "+trainerName);
     }
