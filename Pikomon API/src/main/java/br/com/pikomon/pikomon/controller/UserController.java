@@ -49,7 +49,7 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<UserDto> findById(@PathVariable Integer id) throws Exception {
+    public ResponseEntity<UserDto> findById(@PathVariable Integer id) {
         UserDto userDTO = userService.findById(id);
         return ResponseEntity.status(HttpStatus.OK).body(userDTO);
     }
