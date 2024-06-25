@@ -12,8 +12,8 @@ public class Status {
     private String name;
     private Integer baseStatus;
     private Integer effort;
-    private Integer Iv;
-    private Integer Ev;
+    private Integer iv;
+    private Integer ev;
     private Integer battleStatus;
 
     public Long getId() {
@@ -49,19 +49,19 @@ public class Status {
     }
 
     public Integer getIv() {
-        return Iv;
+        return iv;
     }
 
     public void setIv(Integer iv) {
-        Iv = iv;
+        this.iv = iv;
     }
 
     public Integer getEv() {
-        return Ev;
+        return ev;
     }
 
     public void setEv(Integer ev) {
-        this.Ev = ev;
+        this.ev = ev;
     }
 
     public Integer getBattleStatus() {
