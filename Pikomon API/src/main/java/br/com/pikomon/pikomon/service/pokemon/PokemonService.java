@@ -109,47 +109,60 @@ public class PokemonService {
         Pokemon pokemon = new Pokemon();
         int isShiny = rnd.nextInt(512);
 
-
-        pokemon.setBase(new Status());
-        pokemon.setEv(new Status());
-        pokemon.setIv(new Status());
-        pokemon.setStatus(new Status());
-        pokemon.setOriginStatus(new Status());
-
         pokemon.setUuid(UUID.randomUUID().toString());
         pokemon.setName(pokemonObj.getName());
         pokemon.setNumber(pokemonObj.getNumber());
         pokemon.setDisplayName(pokemonObj.getDisplayName());
         pokemon.setType1(pokemonObj.getType1());
-        pokemon.setEffortType(pokemonObj.getEffortType());
-        pokemon.setEffortValue(pokemonObj.getEffortValue());
         pokemon.setBaseExp(pokemonObj.getBaseExp());
-        pokemon.getBase().setHp(pokemonObj.getBase().getHp());
-        pokemon.getBase().setAttack(pokemonObj.getBase().getAttack());
-        pokemon.getBase().setDef(pokemonObj.getBase().getDef());
-        pokemon.getBase().setSp_atk(pokemonObj.getBase().getSp_atk());
-        pokemon.getBase().setSp_def(pokemonObj.getBase().getSp_def());
-        pokemon.getBase().setSpeed(pokemonObj.getBase().getSpeed());
-        pokemon.getEv().setHp(0);
-        pokemon.getEv().setAttack(0);
-        pokemon.getEv().setDef(0);
-        pokemon.getEv().setSp_atk(0);
-        pokemon.getEv().setSp_def(0);
-        pokemon.getEv().setSpeed(0);
-        pokemon.getIv().setHp(attributesService.generateIv().get(0));
-        pokemon.getIv().setAttack(attributesService.generateIv().get(1));
-        pokemon.getIv().setDef(attributesService.generateIv().get(2));
-        pokemon.getIv().setSp_atk(attributesService.generateIv().get(3));
-        pokemon.getIv().setSp_def(attributesService.generateIv().get(4));
-        pokemon.getIv().setSpeed(attributesService.generateIv().get(5));
+        Status hp = new Status();
+        hp.setName(pokemonObj.getHp().getName());
+        hp.setEffort(pokemonObj.getHp().getEffort());
+        hp.setBaseStatus(pokemonObj.getHp().getBaseStatus());
+        hp.setEV(0);
+        pokemon.setHp(hp);
+        Status attack = new Status();
+        attack.setName(pokemonObj.getAttack().getName());
+        attack.setEffort(pokemonObj.getAttack().getEffort());
+        attack.setBaseStatus(pokemonObj.getAttack().getBaseStatus());
+        attack.setEV(0);
+        pokemon.setAttack(attack);
+        Status defense = new Status();
+        defense.setName(pokemonObj.getDefense().getName());
+        defense.setEffort(pokemonObj.getDefense().getEffort());
+        defense.setBaseStatus(pokemonObj.getDefense().getBaseStatus());
+        defense.setEV(0);
+        pokemon.setDefense(defense);
+        Status spAttack = new Status();
+        spAttack.setName(pokemonObj.getSpAttack().getName());
+        spAttack.setEffort(pokemonObj.getSpAttack().getEffort());
+        spAttack.setBaseStatus(pokemonObj.getAttack().getBaseStatus());
+        spAttack.setEV(0);
+        pokemon.setSpAttack(spAttack);
+        Status spDefense = new Status();
+        spDefense.setName(pokemonObj.getSpDefense().getName());
+        spDefense.setEffort(pokemonObj.getSpDefense().getEffort());
+        spDefense.setBaseStatus(pokemonObj.getSpDefense().getBaseStatus());
+        spDefense.setEV(0);
+        pokemon.setSpDefense(spDefense);
+        Status speed = new Status();
+        speed.setName(pokemonObj.getSpeed().getName());
+        speed.setEffort(pokemonObj.getSpeed().getEffort());
+        speed.setBaseStatus(pokemonObj.getSpeed().getBaseStatus());
+        speed.setEV(0);
+        pokemon.setSpeed(speed);
+        pokemon.getHp().setIv(attributesService.generateIv().get(0));
+        pokemon.getAttack().setIv(attributesService.generateIv().get(1));
+        pokemon.getDefense().setIv(attributesService.generateIv().get(2));
+        pokemon.getSpAttack().setIv(attributesService.generateIv().get(3));
+        pokemon.getSpDefense().setIv(attributesService.generateIv().get(4));
+        pokemon.getSpeed().setIv(attributesService.generateIv().get(5));
         pokemon.setNature(attributesService.generateNature());
         pokemon.setLevel(level);
         pokemon.setNextLevel(level);
         pokemon.setExp(64);
 
-        List<Integer> attributes = attributesService.calcAttributes(pokemon);
-        pokemon.settingStatus(attributes);
-        pokemon.settingOriginStatus(attributes);
+        pokemon = attributesService.calcBattleStatus(pokemon);
 
         if (pokemonObj.getType2() != null) {
             pokemon.setType2(pokemonObj.getType2());
@@ -170,12 +183,6 @@ public class PokemonService {
 
     public void updatePokemon(Pokemon pk){
         pokemonRepository.save(pk);
-    }
-
-
-    public void restPokemon(Pokemon pokemon){
-        pokemon.getStatus().setHp(pokemon.getOriginStatus().getHp());
-        pokemonRepository.save(pokemon);
     }
 
 

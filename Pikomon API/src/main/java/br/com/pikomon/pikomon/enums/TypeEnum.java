@@ -1,5 +1,7 @@
 package br.com.pikomon.pikomon.enums;
 
+import java.util.ArrayList;
+
 public enum TypeEnum {
 
     FIRE("Fire"),

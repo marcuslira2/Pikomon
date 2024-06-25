@@ -79,21 +79,42 @@ public class PokemonAutoCreationScheduler {
                     if (pokemonData.getTypes().size()>1){
                         pk.setType2(TypeEnum.valueOf(pokemonData.getTypes().get(1).getType().getName().toUpperCase()));
                     }
-                    pk.setBase(new Status());
-                    pk.getBase().setHp(pokemonData.getStats().get(0).getBase_stat());
-                    pk.getBase().setAttack(pokemonData.getStats().get(1).getBase_stat());
-                    pk.getBase().setDef(pokemonData.getStats().get(2).getBase_stat());
-                    pk.getBase().setSp_atk(pokemonData.getStats().get(3).getBase_stat());
-                    pk.getBase().setSp_def(pokemonData.getStats().get(4).getBase_stat());
-                    pk.getBase().setSpeed(pokemonData.getStats().get(5).getBase_stat());
-
-                    List<StatData> statData = pokemonData.getStats();
-                    for (StatData statDatum : statData){
-                        if (statDatum.getEffort()!=0){
-                            pk.setEffortValue(statDatum.getEffort());
-                            pk.setEffortType(statDatum.getStat().getName());
-                        }
-                    }
+                    Status hp = new Status();
+                    hp.setName(pokemonData.getStats().get(0).getStat().getName());
+                    hp.setBaseStatus(pokemonData.getStats().get(0).getBase_stat());
+                    hp.setEffort(pokemonData.getStats().get(0).getEffort());
+                    hp.setEV(0);
+                    pk.setHp(hp);
+                    Status attack =new Status();
+                    attack.setName(pokemonData.getStats().get(1).getStat().getName());
+                    attack.setBaseStatus(pokemonData.getStats().get(1).getBase_stat());
+                    attack.setEffort(pokemonData.getStats().get(1).getEffort());
+                    attack.setEV(0);
+                    pk.setAttack(attack);
+                    Status defense = new Status();
+                    defense.setName(pokemonData.getStats().get(2).getStat().getName());
+                    defense.setBaseStatus(pokemonData.getStats().get(2).getBase_stat());
+                    defense.setEffort(pokemonData.getStats().get(2).getEffort());
+                    defense.setEV(0);
+                    pk.setDefense(defense);
+                    Status spAttack = new Status();
+                    spAttack.setName(pokemonData.getStats().get(3).getStat().getName());
+                    spAttack.setBaseStatus(pokemonData.getStats().get(3).getBase_stat());
+                    spAttack.setEffort(pokemonData.getStats().get(3).getEffort());
+                    spAttack.setEV(0);
+                    pk.setSpAttack(spAttack);
+                    Status spDefense = new Status();
+                    spDefense.setName(pokemonData.getStats().get(4).getStat().getName());
+                    spDefense.setBaseStatus(pokemonData.getStats().get(4).getBase_stat());
+                    spDefense.setEffort(pokemonData.getStats().get(4).getEffort());
+                    spDefense.setEV(0);
+                    pk.setSpDefense(spDefense);
+                    Status speed = new Status();
+                    speed.setName(pokemonData.getStats().get(5).getStat().getName());
+                    speed.setBaseStatus(pokemonData.getStats().get(5).getBase_stat());
+                    speed.setEffort(pokemonData.getStats().get(5).getEffort());
+                    speed.setEV(0);
+                    pk.setSpeed(speed);
 
                     List<MoveData> moveData = pokemonData.getMoves();
                     List<PokemonMove> moveToAdd = new ArrayList<>();

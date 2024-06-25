@@ -9,21 +9,12 @@ public class Status {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    private Integer hp;
-    private Integer attack;
-    private Integer def;
-    private Integer sp_atk;
-    private Integer sp_def;
-    private Integer speed;
-
-    public Status() {
-        this.hp = 0;
-        this.attack = 0;
-        this.def = 0;
-        this.sp_atk = 0;
-        this.sp_def = 0;
-        this.speed = 0;
-    }
+    private String name;
+    private Integer baseStatus;
+    private Integer effort;
+    private Integer Iv;
+    private Integer EV;
+    private Integer BattleStatus;
 
     public Long getId() {
         return id;
@@ -33,51 +24,51 @@ public class Status {
         this.id = id;
     }
 
-    public Integer getHp() {
-        return hp;
+    public String getName() {
+        return name;
     }
 
-    public void setHp(Integer hp) {
-        this.hp = hp;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public Integer getAttack() {
-        return attack;
+    public Integer getBaseStatus() {
+        return baseStatus;
     }
 
-    public void setAttack(Integer attack) {
-        this.attack = attack;
+    public void setBaseStatus(Integer baseStatus) {
+        this.baseStatus = baseStatus;
     }
 
-    public Integer getDef() {
-        return def;
+    public Integer getEffort() {
+        return effort;
     }
 
-    public void setDef(Integer def) {
-        this.def = def;
+    public void setEffort(Integer effort) {
+        this.effort = effort;
     }
 
-    public Integer getSp_atk() {
-        return sp_atk;
+    public Integer getIv() {
+        return Iv;
     }
 
-    public void setSp_atk(Integer sp_atk) {
-        this.sp_atk = sp_atk;
+    public void setIv(Integer iv) {
+        Iv = iv;
     }
 
-    public Integer getSp_def() {
-        return sp_def;
+    public Integer getEV() {
+        return EV;
     }
 
-    public void setSp_def(Integer sp_def) {
-        this.sp_def = sp_def;
+    public void setEV(Integer EV) {
+        this.EV = EV;
     }
 
-    public Integer getSpeed() {
-        return speed;
+    public Integer getBattleStatus() {
+        return BattleStatus;
     }
 
-    public void setSpeed(Integer speed) {
-        this.speed = speed;
+    public void setBattleStatus(Integer battleStatus) {
+        BattleStatus = battleStatus;
     }
 }

@@ -35,15 +35,15 @@ public class PokemonAttributesService {
     private final String NAIVE = "Naive";
 
 
-    public List<Integer> calcAttributes(Pokemon pokemon) {
+    public Pokemon calcBattleStatus(Pokemon pokemon) {
         List<Integer> status = new ArrayList<>(6);
 
-        Integer hp = (((2*pokemon.getBase().getHp()+pokemon.getIv().getHp()+(pokemon.getEv().getHp()/4))*pokemon.getLevel()/100+10));
-        int atk = (((2 * pokemon.getBase().getAttack()+pokemon.getIv().getAttack() + (pokemon.getEv().getAttack()/4)) * pokemon.getLevel()/100 + 5));
-        int def = (((2 * pokemon.getBase().getDef()+pokemon.getIv().getDef() + (pokemon.getEv().getDef()/4)) * pokemon.getLevel()/100 + 5));
-        int spAtk = (((2 * pokemon.getBase().getSp_atk()+pokemon.getIv().getSp_atk() + (pokemon.getEv().getSp_atk()/4)) * pokemon.getLevel()/100 + 5));
-        int spDef = (((2 * pokemon.getBase().getSp_def()+pokemon.getIv().getSp_def() + (pokemon.getEv().getSp_def()/4)) * pokemon.getLevel()/100 + 5));
-        int speed = (((2 * pokemon.getBase().getSpeed()+pokemon.getIv().getSpeed() + (pokemon.getEv().getSpeed()/4)) * pokemon.getLevel()/100 + 5));
+        int hp = (((2*pokemon.getHp().getBaseStatus()+pokemon.getHp().getIv()+(pokemon.getHp().getEV()/4))*pokemon.getLevel()/100+10));
+        int atk = (((2 * pokemon.getAttack().getBaseStatus()+pokemon.getAttack().getIv()+ (pokemon.getAttack().getEV()/4)) * pokemon.getLevel()/100 + 5));
+        int def = (((2 * pokemon.getDefense().getBaseStatus()+pokemon.getDefense().getIv() + (pokemon.getDefense().getEV()/4)) * pokemon.getLevel()/100 + 5));
+        int spAtk = (((2 * pokemon.getSpAttack().getBaseStatus()+pokemon.getSpAttack().getIv() + (pokemon.getSpAttack().getEV()/4)) * pokemon.getLevel()/100 + 5));
+        int spDef = (((2 * pokemon.getSpDefense().getBaseStatus()+pokemon.getSpDefense().getIv() + (pokemon.getSpDefense().getEV()/4)) * pokemon.getLevel()/100 + 5));
+        int speed = (((2 * pokemon.getSpeed().getBaseStatus()+pokemon.getSpeed().getIv() + (pokemon.getSpeed().getEV()/4)) * pokemon.getLevel()/100 + 5));
 
         String nature = pokemon.getNature();
 
@@ -81,13 +81,14 @@ public class PokemonAttributesService {
         }
 
         status.add(0, hp);
-        status.add(1, atk);
-        status.add(2, def);
-        status.add(3, spAtk);
-        status.add(4, spDef);
-        status.add(5, speed);
+        pokemon.getHp().setBattleStatus(hp);
+        pokemon.getAttack().setBattleStatus(atk);
+        pokemon.getDefense().setBattleStatus(def);
+        pokemon.getSpAttack().setBattleStatus(spAtk);
+        pokemon.getSpDefense().setBattleStatus(spDef);
+        pokemon.getSpeed().setBattleStatus(speed);
 
-        return status;
+        return pokemon;
     }
 
     public String generateNature() {

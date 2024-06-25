@@ -84,62 +84,53 @@ public class BattleService {
         Integer damageAlly = calcService.calcDamage(pokemon, wildPokemon, moveUsed);
         Integer damageWild = calcService.calcDamage(wildPokemon, pokemon, wildMoveUsed);
 
-        Integer newHpWild = wildPokemon.getStatus().getHp() - damageAlly;
-        Integer newHpAlly = pokemon.getStatus().getHp() - damageWild;
+        Integer newHpWild = wildPokemon.getHp().getBattleStatus() - damageAlly;
+        Integer newHpAlly = pokemon.getHp().getBattleStatus() - damageWild;
 
 
-        wildPokemon.getStatus().setHp(newHpWild);
-        if (wildPokemon.getStatus().getHp() < 0) {
-            wildPokemon.getStatus().setHp(0);
+        wildPokemon.getHp().setBattleStatus(newHpWild);
+        if (wildPokemon.getHp().getBattleStatus() < 0) {
+            wildPokemon.getHp().setBaseStatus(0);
         }
-        pokemon.getStatus().setHp(newHpAlly);
-        if (pokemon.getStatus().getHp() < 0) {
-            pokemon.getStatus().setHp(0);
+        pokemon.getHp().setBattleStatus(newHpAlly);
+        if (pokemon.getHp().getBattleStatus() < 0) {
+            pokemon.getHp().setBattleStatus(0);
         }
 
         String log;
 
-        if (pokemon.getStatus().getHp() > 0 && wildPokemon.getStatus().getHp() > 0) {
+        if (pokemon.getHp().getBattleStatus() > 0 && wildPokemon.getHp().getBattleStatus() > 0) {
             log = pokemon.getName() + " used " + pokemon.getMoves().get(0).getMoveName() + ".\n" +
-                    "Deal " + damageAlly + " on " + wildPokemon.getName() + ". remains hp: " + wildPokemon.getStatus().getHp() + "\n" +
+                    "Deal " + damageAlly + " on " + wildPokemon.getName() + ". remains hp: " + wildPokemon.getHp().getBattleStatus() + "\n" +
                     "Enemy " + wildPokemon.getName() + " used " + wildMoveUsed.getName() + "\n" +
-                    "Deal " + damageWild + " on " + pokemon.getName() + ". remains hp: " + pokemon.getStatus().getHp();
+                    "Deal " + damageWild + " on " + pokemon.getName() + ". remains hp: " + pokemon.getHp().getBattleStatus();
             pokemonService.updatePokemon(pokemon);
             pokemonService.updatePokemon(wildPokemon);
-        } else if (pokemon.getStatus().getHp() > 0 || wildPokemon.getStatus().getHp() == 0) {
+        } else if (pokemon.getHp().getBattleStatus() > 0 || wildPokemon.getHp().getBattleStatus() == 0) {
 
             battle.setStatus(BattleStatusEnum.FINISHED);
             Integer nextLevel = pokemon.getNextLevel();
-            List<Integer> oldAttributes = attributesService.calcAttributes(pokemon);
             pokemon = calcService.calcExp(pokemon, wildPokemon);
             log = "Battle has finished! you win";
-            List<Integer> attributes = attributesService.calcAttributes(pokemon);
-            pokemon.settingStatus(attributes);
-            pokemon.settingOriginStatus(attributes);
+            pokemon = attributesService.calcBattleStatus(pokemon);
             if (pokemon.getExp() > nextLevel) {
                 log += "\n " + pokemon.getName() + " grew to LV." + pokemon.getLevel() + "!";
-                log += "\n MAX. HP: + " + (attributes.get(0) - oldAttributes.get(0));
-                log += "\n ATTACK: + " + (attributes.get(1) - oldAttributes.get(1));
-                log += "\n DEFENSE: + " + (attributes.get(2) - oldAttributes.get(2));
-                log += "\n SP. ATTACK: + " + (attributes.get(3) - oldAttributes.get(3));
-                log += "\n SP. DEF: + " + (attributes.get(4) - oldAttributes.get(4));
-                log += "\n SPEED: + " + (attributes.get(5) - oldAttributes.get(5));
                 log += "\n\n NEW STATUS: ";
-                log += "\n MAX. HP: " + attributes.get(0);
-                log += "\n ATTACK: " + attributes.get(1);
-                log += "\n DEFENSE: " + attributes.get(2);
-                log += "\n SP. ATTACK: " + attributes.get(3);
-                log += "\n SP. DEF: " + attributes.get(4);
-                log += "\n SPEED: " + attributes.get(5);
-                pokemonService.updatePokemon(pokemon);
+                log += "\n MAX. HP: " + pokemon.getHp().getBattleStatus();
+                log += "\n ATTACK: " + pokemon.getAttack().getBattleStatus();
+                log += "\n DEFENSE: " + pokemon.getDefense().getBattleStatus();
+                log += "\n SP. ATTACK: " + pokemon.getSpAttack().getBattleStatus();
+                log += "\n SP. DEF: " + pokemon.getSpDefense().getBattleStatus();
+                log += "\n SPEED: " + pokemon.getSpeed().getBattleStatus();
             }
-
+            pokemonService.updatePokemon(pokemon);
             battleRepository.save(battle);
         } else {
             log = "You loose";
             battle.setStatus(BattleStatusEnum.FINISHED);
+            pokemon = attributesService.calcBattleStatus(pokemon);
+            pokemonService.updatePokemon(pokemon);
             battleRepository.save(battle);
-            pokemonService.restPokemon(pokemon);
         }
 
 

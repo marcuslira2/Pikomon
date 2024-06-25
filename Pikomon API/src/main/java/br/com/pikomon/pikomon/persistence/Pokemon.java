@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 
 
 import java.util.*;
+import java.util.stream.Stream;
 
 
 @Entity
@@ -40,21 +41,19 @@ public class Pokemon {
 
     private Integer baseExp;
 
-    private String effortType;
-
-    private Integer effortValue;
-
     private String nature;
     @ManyToOne(cascade=CascadeType.ALL)
-    private Status status;
+    private Status hp;
     @ManyToOne(cascade = CascadeType.ALL)
-    private Status originStatus;
+    private Status attack;
     @ManyToOne(cascade=CascadeType.ALL)
-    private Status base;
+    private Status defense;
     @ManyToOne(cascade=CascadeType.ALL)
-    private Status ev;
+    private Status spAttack;
     @ManyToOne(cascade=CascadeType.ALL)
-    private Status iv;
+    private Status spDefense;
+    @ManyToOne(cascade=CascadeType.ALL)
+    private Status speed;
 
     private Boolean isShiny;
 
@@ -71,6 +70,14 @@ public class Pokemon {
         this.moves = new ArrayList<>();
     }
 
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     public String getUuid() {
         return uuid;
     }
@@ -79,12 +86,20 @@ public class Pokemon {
         this.uuid = uuid;
     }
 
-    public Long getId() {
-        return id;
+    public Integer getNumber() {
+        return number;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setNumber(Integer number) {
+        this.number = number;
+    }
+
+    public String getTrainerUUID() {
+        return trainerUUID;
+    }
+
+    public void setTrainerUUID(String trainerUUID) {
+        this.trainerUUID = trainerUUID;
     }
 
     public String getOriginalTrainer() {
@@ -167,22 +182,6 @@ public class Pokemon {
         this.baseExp = baseExp;
     }
 
-    public String getEffortType() {
-        return effortType;
-    }
-
-    public void setEffortType(String effortType) {
-        this.effortType = effortType;
-    }
-
-    public Integer getEffortValue() {
-        return effortValue;
-    }
-
-    public void setEffortValue(Integer effortValue) {
-        this.effortValue = effortValue;
-    }
-
     public String getNature() {
         return nature;
     }
@@ -191,36 +190,52 @@ public class Pokemon {
         this.nature = nature;
     }
 
-    public Status getStatus() {
-        return status;
+    public Status getHp() {
+        return hp;
     }
 
-    public void setStatus(Status status) {
-        this.status = status;
+    public void setHp(Status hp) {
+        this.hp = hp;
     }
 
-    public Status getBase() {
-        return base;
+    public Status getAttack() {
+        return attack;
     }
 
-    public void setBase(Status base) {
-        this.base = base;
+    public void setAttack(Status attack) {
+        this.attack = attack;
     }
 
-    public Status getEv() {
-        return ev;
+    public Status getDefense() {
+        return defense;
     }
 
-    public void setEv(Status ev) {
-        this.ev = ev;
+    public void setDefense(Status defense) {
+        this.defense = defense;
     }
 
-    public Status getIv() {
-        return iv;
+    public Status getSpAttack() {
+        return spAttack;
     }
 
-    public void setIv(Status iv) {
-        this.iv = iv;
+    public void setSpAttack(Status spAttack) {
+        this.spAttack = spAttack;
+    }
+
+    public Status getSpDefense() {
+        return spDefense;
+    }
+
+    public void setSpDefense(Status spDefense) {
+        this.spDefense = spDefense;
+    }
+
+    public Status getSpeed() {
+        return speed;
+    }
+
+    public void setSpeed(Status speed) {
+        this.speed = speed;
     }
 
     public Boolean getShiny() {
@@ -263,90 +278,48 @@ public class Pokemon {
         this.moves = moves;
     }
 
-    public Integer getNumber() {
-        return number;
-    }
-
-    public void setNumber(Integer number) {
-        this.number = number;
-    }
-
-    public String getTrainerUUID() {
-        return trainerUUID;
-    }
-
-    public void setTrainerUUID(String trainerUUID) {
-        this.trainerUUID = trainerUUID;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Pokemon pokemon = (Pokemon) o;
-        return Objects.equals(id, pokemon.id) && Objects.equals(uuid, pokemon.uuid) && Objects.equals(number, pokemon.number) && Objects.equals(trainerUUID, pokemon.trainerUUID) && Objects.equals(originalTrainer, pokemon.originalTrainer) && Objects.equals(actualTrainer, pokemon.actualTrainer) && Objects.equals(level, pokemon.level) && Objects.equals(name, pokemon.name) && Objects.equals(displayName, pokemon.displayName) && Objects.equals(type1, pokemon.type1) && Objects.equals(type2, pokemon.type2) && Objects.equals(nextLevel, pokemon.nextLevel) && Objects.equals(exp, pokemon.exp) && Objects.equals(baseExp, pokemon.baseExp) && Objects.equals(effortType, pokemon.effortType) && Objects.equals(effortValue, pokemon.effortValue) && Objects.equals(nature, pokemon.nature) && Objects.equals(status, pokemon.status) && Objects.equals(base, pokemon.base) && Objects.equals(ev, pokemon.ev) && Objects.equals(iv, pokemon.iv) && Objects.equals(isShiny, pokemon.isShiny) && Objects.equals(deleted, pokemon.deleted) && Objects.equals(deletedDate, pokemon.deletedDate) && Objects.equals(createdDate, pokemon.createdDate) && Objects.equals(moves, pokemon.moves);
+        return Objects.equals(id, pokemon.id) && Objects.equals(uuid, pokemon.uuid) && Objects.equals(number, pokemon.number) && Objects.equals(trainerUUID, pokemon.trainerUUID) && Objects.equals(originalTrainer, pokemon.originalTrainer) && Objects.equals(actualTrainer, pokemon.actualTrainer) && Objects.equals(level, pokemon.level) && Objects.equals(name, pokemon.name) && Objects.equals(displayName, pokemon.displayName) && type1 == pokemon.type1 && type2 == pokemon.type2 && Objects.equals(nextLevel, pokemon.nextLevel) && Objects.equals(exp, pokemon.exp) && Objects.equals(baseExp, pokemon.baseExp) && Objects.equals(nature, pokemon.nature) && Objects.equals(hp, pokemon.hp) && Objects.equals(attack, pokemon.attack) && Objects.equals(defense, pokemon.defense) && Objects.equals(spAttack, pokemon.spAttack) && Objects.equals(spDefense, pokemon.spDefense) && Objects.equals(speed, pokemon.speed) && Objects.equals(isShiny, pokemon.isShiny) && Objects.equals(deleted, pokemon.deleted) && Objects.equals(deletedDate, pokemon.deletedDate) && Objects.equals(createdDate, pokemon.createdDate) && Objects.equals(moves, pokemon.moves);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, uuid, number, trainerUUID, originalTrainer, actualTrainer, level, name, displayName, type1, type2, nextLevel, exp, baseExp, effortType, effortValue, nature, status, base, ev, iv, isShiny, deleted, deletedDate, createdDate, moves);
+        return Objects.hash(id, uuid, number, trainerUUID, originalTrainer, actualTrainer, level, name, displayName, type1, type2, nextLevel, exp, baseExp, nature, hp, attack, defense, spAttack, spDefense, speed, isShiny, deleted, deletedDate, createdDate, moves);
     }
 
     @Override
     public String toString() {
         return "Pokemon{" +
                 "id=" + id +
-                ", uuid=" + uuid +
+                ", uuid='" + uuid + '\'' +
                 ", number=" + number +
-                ", trainerUUID=" + trainerUUID +
+                ", trainerUUID='" + trainerUUID + '\'' +
                 ", originalTrainer='" + originalTrainer + '\'' +
                 ", actualTrainer='" + actualTrainer + '\'' +
                 ", level=" + level +
                 ", name='" + name + '\'' +
                 ", displayName='" + displayName + '\'' +
-                ", type1='" + type1 + '\'' +
-                ", type2='" + type2 + '\'' +
+                ", type1=" + type1 +
+                ", type2=" + type2 +
                 ", nextLevel=" + nextLevel +
                 ", exp=" + exp +
                 ", baseExp=" + baseExp +
-                ", effortType='" + effortType + '\'' +
-                ", effortValue=" + effortValue +
                 ", nature='" + nature + '\'' +
-                ", status=" + status +
-                ", base=" + base +
-                ", ev=" + ev +
-                ", iv=" + iv +
+                ", hp=" + hp +
+                ", attack=" + attack +
+                ", defense=" + defense +
+                ", spAttack=" + spAttack +
+                ", spDefense=" + spDefense +
+                ", speed=" + speed +
                 ", isShiny=" + isShiny +
                 ", deleted=" + deleted +
                 ", deletedDate=" + deletedDate +
                 ", createdDate=" + createdDate +
                 ", moves=" + moves +
                 '}';
-    }
-
-    public Status getOriginStatus() {
-        return originStatus;
-    }
-
-    public void setOriginStatus(Status originStatus) {
-        this.originStatus = originStatus;
-    }
-
-
-    public void settingStatus(List<Integer> list){
-        this.getStatus().setHp(list.get(0));
-        this.getStatus().setAttack(list.get(1));
-        this.getStatus().setDef(list.get(2));
-        this.getStatus().setSp_atk(list.get(3));
-        this.getStatus().setSp_def(list.get(4));
-        this.getStatus().setSpeed(list.get(5));
-    }
-    public void settingOriginStatus(List<Integer> list){
-        this.getOriginStatus().setHp(list.get(0));
-        this.getOriginStatus().setAttack(list.get(1));
-        this.getOriginStatus().setDef(list.get(2));
-        this.getOriginStatus().setSp_atk(list.get(3));
-        this.getOriginStatus().setSp_def(list.get(4));
-        this.getOriginStatus().setSpeed(list.get(5));
     }
 }
