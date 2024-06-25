@@ -16,7 +16,7 @@ public class EmailSender {
         this.javaMailSender = javaMailSender;
     }
 
-    public void sendEmail(SimpleMailMessage msg) throws MessagingException, UnsupportedEncodingException {
+    public void sendEmail(SimpleMailMessage msg) {
         javaMailSender.send(msg);
     }
 }

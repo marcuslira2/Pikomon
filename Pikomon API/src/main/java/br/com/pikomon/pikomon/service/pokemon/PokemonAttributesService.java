@@ -13,30 +13,31 @@ public class PokemonAttributesService {
 
     private final Random rnd = new Random();
 
-    private final String ADAMANT = "Adamant";
-    private final String NAUGHTY = "Naughty";
-    private final String LONELY = "Lonely";
-    private final String BRAVE = "Brave";
-    private final String BOLD = "Bold";
-    private final String IMPISH = "Impish";
-    private final String LAX = "Lax";
-    private final String RELAXED = "Relaxed";
-    private final String MODEST = "Modest";
-    private final String MILD = "Mild";
-    private final String RASH = "Rash";
-    private final String QUIET = "Quiet";
-    private final String CALM = "Calm";
-    private final String GENTLE = "Gentle";
-    private final String CAREFUL = "Careful";
-    private final String SASSY = "Sassy";
-    private final String TIMID = "Timid";
-    private final String HASTY = "Hasty";
-    private final String JOLLY = "Jolly";
-    private final String NAIVE = "Naive";
+    private final String adamant = "Adamant";
+    private final String naughty = "Naughty";
+    private final String lonely = "Lonely";
+    private final String brave = "Brave";
+    private final String bold = "Bold";
+    private final String impish = "Impish";
+    private final String lax = "Lax";
+    private final String relaxed = "Relaxed";
+    private final String modest = "Modest";
+    private final String mild = "Mild";
+    private final String rash = "Rash";
+    private final String quiet = "Quiet";
+    private final String calm = "Calm";
+    private final String gentle = "Gentle";
+    private final String careful = "Careful";
+    private final String sassy = "Sassy";
+    private final String timid = "Timid";
+    private final String hasty = "Hasty";
+    private final String jolly = "Jolly";
+    private final String naive = "Naive";
+
+
 
 
     public Pokemon calcBattleStatus(Pokemon pokemon) {
-        List<Integer> status = new ArrayList<>(6);
 
         int hp = (((2*pokemon.getHp().getBaseStatus()+pokemon.getHp().getIv()+(pokemon.getHp().getEv()/4))*pokemon.getLevel()/100+10));
         int atk = (((2 * pokemon.getAttack().getBaseStatus()+pokemon.getAttack().getIv()+ (pokemon.getAttack().getEv()/4)) * pokemon.getLevel()/100 + 5));
@@ -48,39 +49,38 @@ public class PokemonAttributesService {
         String nature = pokemon.getNature();
 
         //BUFF
-        if (nature.equals(LONELY) || nature.equals(ADAMANT) || nature.equals(NAUGHTY) || nature.equals(BRAVE)) {
+        if (nature.equals(lonely) || nature.equals(adamant) || nature.equals(naughty) || nature.equals(brave)) {
             atk = (int) (atk * 1.1f);
         }
-        if (nature.equals(BOLD) || nature.equals(IMPISH) || nature.equals(LAX) || nature.equals(RELAXED)) {
+        if (nature.equals(bold) || nature.equals(impish) || nature.equals(lax) || nature.equals(relaxed)) {
             def = (int) (def * 1.1f);
         }
-        if (nature.equals(MODEST) || nature.equals(MILD) || nature.equals(RASH) || nature.equals(QUIET)) {
+        if (nature.equals(modest) || nature.equals(mild) || nature.equals(rash) || nature.equals(quiet)) {
             spAtk = (int) (spAtk * 1.1f);
         }
-        if (nature.equals(CALM) || nature.equals(GENTLE) || nature.equals(CAREFUL) || nature.equals(SASSY)) {
+        if (nature.equals(calm) || nature.equals(gentle) || nature.equals(careful) || nature.equals(sassy)) {
             spDef = (int) (spDef * 1.1f);
         }
-        if (nature.equals(TIMID) || nature.equals(HASTY) || nature.equals(JOLLY) || nature.equals(NAIVE)) {
+        if (nature.equals(timid) || nature.equals(hasty) || nature.equals(jolly) || nature.equals(naive)) {
             speed = (int) (speed * 1.1f);
         }
 
-        if (nature.equals(BOLD) || nature.equals(MODEST) || nature.equals(CALM) || nature.equals(TIMID)) {
+        if (nature.equals(bold) || nature.equals(modest) || nature.equals(calm) || nature.equals(timid)) {
             atk = (int) (atk * 0.9f);
         }
-        if (nature.equals(LONELY) || nature.equals(MILD) || nature.equals(GENTLE) || nature.equals(HASTY)) {
+        if (nature.equals(lonely) || nature.equals(mild) || nature.equals(gentle) || nature.equals(hasty)) {
             def = (int) (def * 0.9f);
         }
-        if (nature.equals(ADAMANT) || nature.equals(IMPISH) || nature.equals(CAREFUL) || nature.equals(JOLLY)) {
+        if (nature.equals(adamant) || nature.equals(impish) || nature.equals(careful) || nature.equals(jolly)) {
             spAtk = (int) (spAtk * 0.9f);
         }
-        if (nature.equals(NAUGHTY) || nature.equals(LAX) || nature.equals(RASH) || nature.equals(NAIVE)) {
+        if (nature.equals(naughty) || nature.equals(lax) || nature.equals(rash) || nature.equals(naive)) {
             spDef = (int) (spDef * 0.9f);
         }
-        if (nature.equals(BRAVE) || nature.equals(RELAXED) || nature.equals(QUIET) || nature.equals(SASSY)) {
+        if (nature.equals(brave) || nature.equals(relaxed) || nature.equals(quiet) || nature.equals(sassy)) {
             speed = (int) (speed * 0.9f);
         }
 
-        status.add(0, hp);
         pokemon.getHp().setBattleStatus(hp);
         pokemon.getAttack().setBattleStatus(atk);
         pokemon.getDefense().setBattleStatus(def);
@@ -94,11 +94,11 @@ public class PokemonAttributesService {
     public String generateNature() {
         ArrayList<String> natureList = new ArrayList<>();
         Collections.addAll(natureList,
-                "Hardy", LONELY, ADAMANT, NAUGHTY, BRAVE,
-                            BOLD, "Docile", IMPISH, LAX, RELAXED,
-                            MODEST, MILD, "Bashful", RASH, QUIET,
-                            CALM, GENTLE, CAREFUL, "Quirky", SASSY,
-                            TIMID, HASTY, JOLLY, NAIVE, "Serious");
+                "Hardy", lonely, adamant, naughty, brave,
+                bold, "Docile", impish, lax, relaxed,
+                modest, mild, "Bashful", rash, quiet,
+                calm, gentle, careful, "Quirky", sassy,
+                timid, hasty, jolly, naive, "Serious");
 
         int selectNature = this.rnd.nextInt(natureList.size());
         return natureList.get(selectNature);

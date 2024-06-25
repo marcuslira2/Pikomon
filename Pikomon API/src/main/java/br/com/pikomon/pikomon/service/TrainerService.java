@@ -86,7 +86,7 @@ public class TrainerService {
         Trainer trainer = trainerRepository.findByIdAndDeletedFalse(id).orElseThrow(() -> new NoSuchElementException(TRAINER_NOT_FOUND));
         return this.converterToDTO(trainer);
     }
-    public Trainer findById(Integer id) throws Exception {
+    public Trainer findById(Integer id) {
         return trainerRepository.findByIdAndDeletedFalse(id).orElseThrow(() -> new NoSuchElementException(TRAINER_NOT_FOUND));
     }
 

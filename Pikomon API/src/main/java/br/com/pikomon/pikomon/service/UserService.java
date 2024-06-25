@@ -71,7 +71,7 @@ public class UserService {
         return this.convertToDTO(user);
     }
 
-    public UserDto findById(Integer id) throws Exception {
+    public UserDto findById(Integer id) {
         User user = userRepository.findById(id).orElseThrow(() -> new NoSuchElementException(USER_NOT_FOUND));
         log.info("Searching user...");
         return this.convertToDTO(user);
