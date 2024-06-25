@@ -54,7 +54,7 @@ public class BattleService {
     }
 
 
-    public Battle create(CreateBattleDTO dto) throws ExecutionException {
+    public Battle create(CreateBattleDTO dto) {
         Battle battle = new Battle();
 
         battle.setOpponent(OpponentTypeEnum.valueOf(dto.opponent()));

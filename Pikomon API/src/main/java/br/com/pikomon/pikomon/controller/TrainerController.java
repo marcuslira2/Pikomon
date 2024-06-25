@@ -29,13 +29,13 @@ public class TrainerController {
     }
 
     @GetMapping(path = "/{id}")
-    public ResponseEntity<TrainerDTO> findById(@PathVariable Integer id) throws NoSuchElementException {
+    public ResponseEntity<TrainerDTO> findById(@PathVariable Integer id) {
         TrainerDTO trainerDTO = trainerService.findDTOById(id);
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(trainerDTO);
     }
 
     @PostMapping
-    public ResponseEntity<TrainerDTO> create(@RequestBody @Valid CreateTrainerDTO trainerDTO) throws ExecutionException {
+    public ResponseEntity<TrainerDTO> create(@RequestBody @Valid CreateTrainerDTO trainerDTO){
         TrainerDTO dto = trainerService.save(trainerDTO);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(dto);

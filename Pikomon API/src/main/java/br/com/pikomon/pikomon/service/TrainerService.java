@@ -52,7 +52,7 @@ public class TrainerService {
         );
     }
 
-    public TrainerDTO save(CreateTrainerDTO dto) throws ExecutionException {
+    public TrainerDTO save(CreateTrainerDTO dto) {
         User user = userRepository.findById(dto.userID()).orElseThrow(() -> new NoSuchElementException(USER_NOT_FOUND));
         Trainer trainer = new Trainer();
         trainer.setName(dto.name());

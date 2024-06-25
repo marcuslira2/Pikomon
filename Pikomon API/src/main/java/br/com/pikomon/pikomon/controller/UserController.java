@@ -55,7 +55,7 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<UserDto> create(@RequestBody @Valid CreateUserDto dto) throws ExecutionException {
+    public ResponseEntity<UserDto> create(@RequestBody @Valid CreateUserDto dto) {
         UserDto user = userService.save(dto);
         return ResponseEntity.status(HttpStatus.CREATED).body(user);
     }

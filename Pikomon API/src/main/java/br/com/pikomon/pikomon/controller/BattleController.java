@@ -22,7 +22,7 @@ public class BattleController {
     }
 
     @PostMapping()
-    public ResponseEntity<Battle> create(@RequestBody CreateBattleDTO dto) throws ExecutionException {
+    public ResponseEntity<Battle> create(@RequestBody CreateBattleDTO dto) {
         Battle battle = battleService.create(dto);
         return ResponseEntity.status(HttpStatus.CREATED).body(battle);
     }

@@ -52,7 +52,7 @@ public class UserService {
         );
     }
 
-    public UserDto save(CreateUserDto dto) throws ExecutionException {
+    public UserDto save(CreateUserDto dto) {
         UserDetails byLogin = userRepository.findByLogin(dto.login());
 
         if (byLogin !=null){

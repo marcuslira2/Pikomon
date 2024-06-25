@@ -67,7 +67,7 @@ public class PokemonService {
         return pokemonRepository.findById(id).orElseThrow(() -> new NoSuchElementException(POKEMON_NOT_FOUND));
     }
 
-    public Pokemon save(Long id, int level, String trainerName) throws ExecutionException {
+    public Pokemon save(Long id, int level, String trainerName) {
 
         Trainer trainer = trainerRepository.findByName(trainerName).orElseThrow(
                 () -> new NoSuchElementException(TRAINER_NOT_FOUND));

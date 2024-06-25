@@ -34,7 +34,7 @@ public class PokemonController {
     }
 
     @PostMapping
-    public ResponseEntity<Pokemon> create(@RequestBody CreatePokemonDTO dto) throws ExecutionException {
+    public ResponseEntity<Pokemon> create(@RequestBody CreatePokemonDTO dto) {
         Pokemon pokemon = pokemonService.save(dto.id(),dto.level(),dto.trainerUUID());
         return ResponseEntity.status(HttpStatus.CREATED).body(pokemon);
 
