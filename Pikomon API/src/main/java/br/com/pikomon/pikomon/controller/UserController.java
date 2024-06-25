@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 @Validated
 @RestController
@@ -54,19 +55,19 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<UserDto> create(@RequestBody @Valid CreateUserDto dto) throws Exception {
+    public ResponseEntity<UserDto> create(@RequestBody @Valid CreateUserDto dto) throws ExecutionException {
         UserDto user = userService.save(dto);
         return ResponseEntity.status(HttpStatus.CREATED).body(user);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<String> updatePWD(@PathVariable Integer id, @RequestBody @Valid ModifyPasswordDto pwd) throws Exception {
+    public ResponseEntity<String> updatePWD(@PathVariable Integer id, @RequestBody @Valid ModifyPasswordDto pwd) {
         String userName = userService.changePWD(id, pwd);
         return ResponseEntity.status(HttpStatus.ACCEPTED).body("Password changed for user " + userName);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteById(@PathVariable Integer id) throws Exception {
+    public ResponseEntity<String> deleteById(@PathVariable Integer id) {
         String userName = userService.deleteById(id);
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(userName + " deleted.");
 

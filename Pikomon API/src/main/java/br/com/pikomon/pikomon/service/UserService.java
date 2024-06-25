@@ -15,6 +15,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.UUID;
+import java.util.concurrent.ExecutionException;
 
 @Service
 public class UserService {
@@ -51,7 +52,7 @@ public class UserService {
         );
     }
 
-    public UserDto save(CreateUserDto dto) throws Exception {
+    public UserDto save(CreateUserDto dto) throws ExecutionException {
         UserDetails byLogin = userRepository.findByLogin(dto.login());
 
         if (byLogin !=null){
@@ -77,7 +78,7 @@ public class UserService {
         return this.convertToDTO(user);
     }
 
-    public String deleteById(Integer id) throws Exception {
+    public String deleteById(Integer id) {
         User user = userRepository.findById(id).orElseThrow(() -> new NoSuchElementException(USER_NOT_FOUND));
         log.info("Deleting user...");
         user.setDeletedDate(new Date());
@@ -90,7 +91,7 @@ public class UserService {
         return user.getUsername();
     }
 
-    public String changePWD(Integer id, ModifyPasswordDto pwddto) throws Exception {
+    public String changePWD(Integer id, ModifyPasswordDto pwddto) {
         User user = userRepository.findById(id).orElseThrow(() -> new NoSuchElementException(USER_NOT_FOUND));
         log.info("Updating user...");
         user.setPassword(pwddto.password());

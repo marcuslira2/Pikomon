@@ -16,6 +16,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.UUID;
+import java.util.concurrent.ExecutionException;
 
 @Service
 public class TrainerService {
@@ -51,7 +52,7 @@ public class TrainerService {
         );
     }
 
-    public TrainerDTO save(CreateTrainerDTO dto) throws Exception {
+    public TrainerDTO save(CreateTrainerDTO dto) throws ExecutionException {
         User user = userRepository.findById(dto.userID()).orElseThrow(() -> new NoSuchElementException(USER_NOT_FOUND));
         Trainer trainer = new Trainer();
         trainer.setName(dto.name());
@@ -92,7 +93,7 @@ public class TrainerService {
 
 
 
-    public String deleteById(Integer id) throws Exception {
+    public String deleteById(Integer id) {
         Trainer trainer = trainerRepository.findByIdAndDeletedFalse(id).orElseThrow(() -> new NoSuchElementException(TRAINER_NOT_FOUND));
         User user = userRepository.findById(trainer.getUserId()).orElseThrow(() -> new NoSuchElementException(USER_NOT_FOUND));
         log.info("Deleting trainer...");

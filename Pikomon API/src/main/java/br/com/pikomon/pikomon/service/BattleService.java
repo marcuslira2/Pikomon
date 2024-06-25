@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import java.security.SecureRandom;
 import java.util.Random;
 import java.util.UUID;
+import java.util.concurrent.ExecutionException;
 
 @Service
 public class BattleService {
@@ -53,7 +54,7 @@ public class BattleService {
     }
 
 
-    public Battle create(CreateBattleDTO dto) throws Exception {
+    public Battle create(CreateBattleDTO dto) throws ExecutionException {
         Battle battle = new Battle();
 
         battle.setOpponent(OpponentTypeEnum.valueOf(dto.opponent()));
@@ -72,7 +73,7 @@ public class BattleService {
         return battleRepository.findById(id).orElseThrow(() -> new RuntimeException("Battle not found."));
     }
 
-    public String makeAMove(BattleActionDTO dto) throws Exception {
+    public String makeAMove(BattleActionDTO dto) {
         BattleActionValidateDTO validateBattle = validate(dto);
         Battle battle = battleRepository.findByuuid(dto.battleUUID());
         Pokemon pokemon = validateBattle.trainer().getPokemons().get(0);
@@ -138,7 +139,7 @@ public class BattleService {
     }
 
 
-    private BattleActionValidateDTO validate(BattleActionDTO dto) throws Exception {
+    private BattleActionValidateDTO validate(BattleActionDTO dto) {
         Trainer trainer = trainerService.findById(dto.trainerId());
         Pokemon wildPokemon = pokemonService.findById(dto.wildPokemonId());
         Battle battle = battleRepository.findByuuid(dto.battleUUID());

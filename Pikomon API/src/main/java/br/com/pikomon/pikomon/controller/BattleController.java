@@ -8,6 +8,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.concurrent.ExecutionException;
+
 @RestController
 @RequestMapping("/battle")
 public class BattleController {
@@ -20,7 +22,7 @@ public class BattleController {
     }
 
     @PostMapping()
-    public ResponseEntity<Battle> create(@RequestBody CreateBattleDTO dto) throws Exception {
+    public ResponseEntity<Battle> create(@RequestBody CreateBattleDTO dto) throws ExecutionException {
         Battle battle = battleService.create(dto);
         return ResponseEntity.status(HttpStatus.CREATED).body(battle);
     }
@@ -32,7 +34,7 @@ public class BattleController {
     }
 
     @PostMapping(path = "/{uuid}")
-    public ResponseEntity<String> makeAMove(@PathVariable String uuid,@RequestBody BattleActionDTO dto) throws Exception {
+    public ResponseEntity<String> makeAMove(@PathVariable String uuid,@RequestBody BattleActionDTO dto) {
         String battle = battleService.makeAMove(dto);
         return ResponseEntity.status(HttpStatus.CREATED).body(battle);
     }

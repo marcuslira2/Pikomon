@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.security.SecureRandom;
 import java.util.*;
+import java.util.concurrent.ExecutionException;
 
 @Service
 public class PokemonService {
@@ -66,7 +67,7 @@ public class PokemonService {
         return pokemonRepository.findById(id).orElseThrow(() -> new NoSuchElementException(POKEMON_NOT_FOUND));
     }
 
-    public Pokemon save(Long id, int level, String trainerName) throws Exception {
+    public Pokemon save(Long id, int level, String trainerName) throws ExecutionException {
 
         Trainer trainer = trainerRepository.findByName(trainerName).orElseThrow(
                 () -> new NoSuchElementException(TRAINER_NOT_FOUND));

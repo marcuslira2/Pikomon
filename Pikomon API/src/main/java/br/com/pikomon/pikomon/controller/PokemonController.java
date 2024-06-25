@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 @RestController
 @RequestMapping("/pokemon")
@@ -27,13 +28,13 @@ public class PokemonController {
     }
 
     @GetMapping(path = "/{id}")
-    public ResponseEntity<PokemonDTO> findById(@PathVariable Long id) throws Exception {
+    public ResponseEntity<PokemonDTO> findById(@PathVariable Long id)  {
         PokemonDTO dto = pokemonService.findDTOById(id);
         return ResponseEntity.status(HttpStatus.OK).body(dto);
     }
 
     @PostMapping
-    public ResponseEntity<Pokemon> create(@RequestBody CreatePokemonDTO dto) throws Exception {
+    public ResponseEntity<Pokemon> create(@RequestBody CreatePokemonDTO dto) throws ExecutionException {
         Pokemon pokemon = pokemonService.save(dto.id(),dto.level(),dto.trainerUUID());
         return ResponseEntity.status(HttpStatus.CREATED).body(pokemon);
 
@@ -41,7 +42,7 @@ public class PokemonController {
 
     @DeleteMapping(path = "/{id}")
 
-    public ResponseEntity<String> deleteById(@PathVariable Long id) throws Exception{
+    public ResponseEntity<String> deleteById(@PathVariable Long id){
         String pokemonName = pokemonService.deleteById(id);
 
         return ResponseEntity.status(HttpStatus.ACCEPTED).body("Good Bye " + pokemonName);
