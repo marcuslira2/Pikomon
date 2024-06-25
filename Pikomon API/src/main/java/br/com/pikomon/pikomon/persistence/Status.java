@@ -13,8 +13,8 @@ public class Status {
     private Integer baseStatus;
     private Integer effort;
     private Integer Iv;
-    private Integer EV;
-    private Integer BattleStatus;
+    private Integer Ev;
+    private Integer battleStatus;
 
     public Long getId() {
         return id;
@@ -56,19 +56,19 @@ public class Status {
         Iv = iv;
     }
 
-    public Integer getEV() {
-        return EV;
+    public Integer getEv() {
+        return Ev;
     }
 
-    public void setEV(Integer EV) {
-        this.EV = EV;
+    public void setEv(Integer ev) {
+        this.Ev = ev;
     }
 
     public Integer getBattleStatus() {
-        return BattleStatus;
+        return battleStatus;
     }
 
     public void setBattleStatus(Integer battleStatus) {
-        BattleStatus = battleStatus;
+        this.battleStatus = battleStatus;
     }
 }

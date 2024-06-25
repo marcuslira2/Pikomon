@@ -1,7 +1,6 @@
 package br.com.pikomon.pikomon.service;
 
 import br.com.pikomon.pikomon.enums.CategoryEnum;
-import br.com.pikomon.pikomon.enums.StatusEnum;
 import br.com.pikomon.pikomon.enums.TypeEnum;
 import br.com.pikomon.pikomon.persistence.Move;
 import br.com.pikomon.pikomon.persistence.Pokemon;
@@ -88,12 +87,12 @@ public class CalcService {
     public Pokemon calcEv(Pokemon pokemon, Pokemon enemyPokemon) {
         int totalEv = calculateTotalEv(pokemon);
         if (totalEv < 510) {
-            pokemon.getHp().setEV(validateEv(enemyPokemon.getHp().getEffort(), pokemon.getHp().getEV()));
-            pokemon.getAttack().setEV(validateEv(enemyPokemon.getAttack().getEffort(), pokemon.getAttack().getEV()));
-            pokemon.getDefense().setEV(validateEv(enemyPokemon.getDefense().getEffort(), pokemon.getDefense().getEV()));
-            pokemon.getSpAttack().setEV(validateEv(enemyPokemon.getSpAttack().getEffort(), pokemon.getSpAttack().getEV()));
-            pokemon.getSpDefense().setEV(validateEv(enemyPokemon.getSpDefense().getEffort(), pokemon.getSpDefense().getEV()));
-            pokemon.getSpeed().setEV(validateEv(enemyPokemon.getSpeed().getEffort(), pokemon.getSpeed().getEV()));
+            pokemon.getHp().setEv(validateEv(enemyPokemon.getHp().getEffort(), pokemon.getHp().getEv()));
+            pokemon.getAttack().setEv(validateEv(enemyPokemon.getAttack().getEffort(), pokemon.getAttack().getEv()));
+            pokemon.getDefense().setEv(validateEv(enemyPokemon.getDefense().getEffort(), pokemon.getDefense().getEv()));
+            pokemon.getSpAttack().setEv(validateEv(enemyPokemon.getSpAttack().getEffort(), pokemon.getSpAttack().getEv()));
+            pokemon.getSpDefense().setEv(validateEv(enemyPokemon.getSpDefense().getEffort(), pokemon.getSpDefense().getEv()));
+            pokemon.getSpeed().setEv(validateEv(enemyPokemon.getSpeed().getEffort(), pokemon.getSpeed().getEv()));
         }
         return pokemon;
     }
@@ -109,8 +108,8 @@ public class CalcService {
     }
 
     private Integer calculateTotalEv(Pokemon pokemon) {
-        return pokemon.getHp().getEV() + pokemon.getAttack().getEV() + pokemon.getDefense().getEV()
-                + pokemon.getSpAttack().getEV() + pokemon.getSpDefense().getEV() + pokemon.getSpeed().getEV();
+        return pokemon.getHp().getEv() + pokemon.getAttack().getEv() + pokemon.getDefense().getEv()
+                + pokemon.getSpAttack().getEv() + pokemon.getSpDefense().getEv() + pokemon.getSpeed().getEv();
     }
 
     private Double resolveNormalAttack(Pokemon pokemon) {
