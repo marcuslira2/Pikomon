@@ -1,5 +1,6 @@
 package br.com.pikomon.pikomon.persistence;
 
+import br.com.pikomon.pikomon.enums.NatureEnum;
 import br.com.pikomon.pikomon.enums.TypeEnum;
 import jakarta.persistence.*;
 
@@ -40,7 +41,7 @@ public class Pokemon {
 
     private Integer baseExp;
 
-    private String nature;
+    private NatureEnum nature;
     @ManyToOne(cascade=CascadeType.ALL)
     private Status hp;
     @ManyToOne(cascade = CascadeType.ALL)
@@ -181,11 +182,11 @@ public class Pokemon {
         this.baseExp = baseExp;
     }
 
-    public String getNature() {
+    public NatureEnum getNature() {
         return nature;
     }
 
-    public void setNature(String nature) {
+    public void setNature(NatureEnum nature) {
         this.nature = nature;
     }
 
@@ -282,7 +283,7 @@ public class Pokemon {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Pokemon pokemon = (Pokemon) o;
-        return Objects.equals(id, pokemon.id) && Objects.equals(uuid, pokemon.uuid) && Objects.equals(number, pokemon.number) && Objects.equals(trainerUUID, pokemon.trainerUUID) && Objects.equals(originalTrainer, pokemon.originalTrainer) && Objects.equals(actualTrainer, pokemon.actualTrainer) && Objects.equals(level, pokemon.level) && Objects.equals(name, pokemon.name) && Objects.equals(displayName, pokemon.displayName) && type1 == pokemon.type1 && type2 == pokemon.type2 && Objects.equals(nextLevel, pokemon.nextLevel) && Objects.equals(exp, pokemon.exp) && Objects.equals(baseExp, pokemon.baseExp) && Objects.equals(nature, pokemon.nature) && Objects.equals(hp, pokemon.hp) && Objects.equals(attack, pokemon.attack) && Objects.equals(defense, pokemon.defense) && Objects.equals(spAttack, pokemon.spAttack) && Objects.equals(spDefense, pokemon.spDefense) && Objects.equals(speed, pokemon.speed) && Objects.equals(isShiny, pokemon.isShiny) && Objects.equals(deleted, pokemon.deleted) && Objects.equals(deletedDate, pokemon.deletedDate) && Objects.equals(createdDate, pokemon.createdDate) && Objects.equals(moves, pokemon.moves);
+        return Objects.equals(id, pokemon.id) && Objects.equals(uuid, pokemon.uuid) && Objects.equals(number, pokemon.number) && Objects.equals(trainerUUID, pokemon.trainerUUID) && Objects.equals(originalTrainer, pokemon.originalTrainer) && Objects.equals(actualTrainer, pokemon.actualTrainer) && Objects.equals(level, pokemon.level) && Objects.equals(name, pokemon.name) && Objects.equals(displayName, pokemon.displayName) && type1 == pokemon.type1 && type2 == pokemon.type2 && Objects.equals(nextLevel, pokemon.nextLevel) && Objects.equals(exp, pokemon.exp) && Objects.equals(baseExp, pokemon.baseExp) && nature == pokemon.nature && Objects.equals(hp, pokemon.hp) && Objects.equals(attack, pokemon.attack) && Objects.equals(defense, pokemon.defense) && Objects.equals(spAttack, pokemon.spAttack) && Objects.equals(spDefense, pokemon.spDefense) && Objects.equals(speed, pokemon.speed) && Objects.equals(isShiny, pokemon.isShiny) && Objects.equals(deleted, pokemon.deleted) && Objects.equals(deletedDate, pokemon.deletedDate) && Objects.equals(createdDate, pokemon.createdDate) && Objects.equals(moves, pokemon.moves);
     }
 
     @Override
@@ -307,7 +308,7 @@ public class Pokemon {
                 ", nextLevel=" + nextLevel +
                 ", exp=" + exp +
                 ", baseExp=" + baseExp +
-                ", nature='" + nature + '\'' +
+                ", nature=" + nature +
                 ", hp=" + hp +
                 ", attack=" + attack +
                 ", defense=" + defense +

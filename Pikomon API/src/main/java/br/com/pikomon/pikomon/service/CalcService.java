@@ -1,7 +1,6 @@
 package br.com.pikomon.pikomon.service;
 
 import br.com.pikomon.pikomon.enums.CategoryEnum;
-import br.com.pikomon.pikomon.enums.TypeEnum;
 import br.com.pikomon.pikomon.persistence.Move;
 import br.com.pikomon.pikomon.persistence.Pokemon;
 import org.springframework.stereotype.Service;
@@ -12,7 +11,7 @@ public class CalcService {
     public Integer calcDamage(Pokemon ally, Pokemon wild, Move move) {
         int damage = 0;
 
-        double modify = resistance(move, wild);
+        double modify = damageModify(move, wild);
         CategoryEnum category = move.getCategory();
         double stab = 1.0;
         double critical = 1.0;
@@ -31,46 +30,8 @@ public class CalcService {
         return damage;
     }
 
-    private Double resistance(Move move, Pokemon pokemon) {
-        if (move.getType().equals(TypeEnum.NORMAL)) {
-            return resolveNormalAttack(pokemon);
-        } else if (move.getType().equals(TypeEnum.FIRE)) {
-            return resolveFireAttack(pokemon);
-        } else if (move.getType().equals(TypeEnum.WATER)) {
-            return resolveWaterAttack(pokemon);
-        } else if (move.getType().equals(TypeEnum.ELECTRIC)) {
-            return resolveElectricAttack(pokemon);
-        } else if (move.getType().equals(TypeEnum.GRASS)) {
-            return resolveGrassAttack(pokemon);
-        } else if (move.getType().equals(TypeEnum.ICE)) {
-            return resolveIceAttack(pokemon);
-        } else if (move.getType().equals(TypeEnum.FIGHTING)) {
-            return resolveFightingAttack(pokemon);
-        } else if (move.getType().equals(TypeEnum.POISON)) {
-            return resolvePoisonAttack(pokemon);
-        } else if (move.getType().equals(TypeEnum.GROUND)) {
-            return resolveGroundAttack(pokemon);
-        } else if (move.getType().equals(TypeEnum.FLYING)) {
-            return resolveFlyingAttack(pokemon);
-        } else if (move.getType().equals(TypeEnum.PSYCHIC)) {
-            return resolvePsychAttack(pokemon);
-        } else if (move.getType().equals(TypeEnum.BUG)) {
-            return resolveBugAttack(pokemon);
-        } else if (move.getType().equals(TypeEnum.ROCK)) {
-            return resolveRockAttack(pokemon);
-        } else if (move.getType().equals(TypeEnum.GHOST)) {
-            return resolveGhostAttack(pokemon);
-        } else if (move.getType().equals(TypeEnum.DRAGON)) {
-            return resolveDragonAttack(pokemon);
-        } else if (move.getType().equals(TypeEnum.STEEL)) {
-            return resolveSteelAttack(pokemon);
-        } else if (move.getType().equals(TypeEnum.FAIRY)) {
-            return resolveFairyAttack(pokemon);
-        } else if (move.getType().equals(TypeEnum.DARK)) {
-            return resolveDarkAttack(pokemon);
-        }
-
-        return 1.0;
+    private Double damageModify(Move move, Pokemon pokemon) {
+        return move.getType().resolveAttack(pokemon);
     }
 
     public Pokemon calcExp(Pokemon pokemon, Pokemon pk) {
@@ -110,208 +71,6 @@ public class CalcService {
     private Integer calculateTotalEv(Pokemon pokemon) {
         return pokemon.getHp().getEv() + pokemon.getAttack().getEv() + pokemon.getDefense().getEv()
                 + pokemon.getSpAttack().getEv() + pokemon.getSpDefense().getEv() + pokemon.getSpeed().getEv();
-    }
-
-    private Double resolveNormalAttack(Pokemon pokemon) {
-        if (pokemon.getType1().equals(TypeEnum.ROCK) || pokemon.getType1().equals(TypeEnum.STEEL)) {
-            return 0.5;
-        } else if (pokemon.getType1().equals(TypeEnum.GHOST)) {
-            return 0.0;
-        }
-        return 1.0;
-    }
-
-    private Double resolveFireAttack(Pokemon pokemon) {
-        if (pokemon.getType1().equals(TypeEnum.FIRE) || pokemon.getType1().equals(TypeEnum.WATER)
-                || pokemon.getType1().equals(TypeEnum.ROCK) || pokemon.getType1().equals(TypeEnum.DRAGON)) {
-            return 0.5;
-        } else if (pokemon.getType1().equals(TypeEnum.GRASS) || pokemon.getType1().equals(TypeEnum.ICE)
-                || pokemon.getType1().equals(TypeEnum.BUG) || pokemon.getType1().equals(TypeEnum.STEEL)) {
-            return 2.0;
-        }
-        return 1.0;
-    }
-
-    private Double resolveWaterAttack(Pokemon pokemon) {
-        if (pokemon.getType1().equals(TypeEnum.WATER) || pokemon.getType1().equals(TypeEnum.GRASS)
-                || pokemon.getType1().equals(TypeEnum.DRAGON)) {
-            return 0.5;
-        } else if (pokemon.getType1().equals(TypeEnum.FIRE) || pokemon.getType1().equals(TypeEnum.GROUND)
-                || pokemon.getType1().equals(TypeEnum.ROCK)) {
-            return 2.0;
-        }
-        return 1.0;
-    }
-
-    private Double resolveGrassAttack(Pokemon pokemon) {
-        if (pokemon.getType1().equals(TypeEnum.FIRE) || pokemon.getType1().equals(TypeEnum.GRASS)
-                || pokemon.getType1().equals(TypeEnum.POISON) || pokemon.getType1().equals(TypeEnum.FLYING)
-                || pokemon.getType1().equals(TypeEnum.BUG) || pokemon.getType1().equals(TypeEnum.DRAGON)
-                || pokemon.getType1().equals(TypeEnum.STEEL)) {
-            return 0.5;
-        } else if (pokemon.getType1().equals(TypeEnum.WATER) || pokemon.getType1().equals(TypeEnum.GROUND)
-                || pokemon.getType1().equals(TypeEnum.ROCK)) {
-            return 2.0;
-        }
-        return 1.0;
-    }
-
-    private Double resolveIceAttack(Pokemon pokemon) {
-        if (pokemon.getType1().equals(TypeEnum.FIRE) || pokemon.getType1().equals(TypeEnum.WATER)
-                || pokemon.getType1().equals(TypeEnum.ICE) || pokemon.getType1().equals(TypeEnum.STEEL)) {
-            return 0.5;
-        } else if (pokemon.getType1().equals(TypeEnum.GRASS) || pokemon.getType1().equals(TypeEnum.GROUND)
-                || pokemon.getType1().equals(TypeEnum.FLYING) || pokemon.getType1().equals(TypeEnum.DRAGON)) {
-            return 2.0;
-        }
-        return 0.0;
-    }
-
-    private Double resolveGhostAttack(Pokemon pokemon) {
-        if (pokemon.getType1().equals(TypeEnum.DARK)) {
-            return 0.5;
-        } else if (pokemon.getType1().equals(TypeEnum.PSYCHIC) || pokemon.getType1().equals(TypeEnum.GHOST)) {
-            return 2.0;
-        } else if (pokemon.getType1().equals(TypeEnum.NORMAL)) {
-            return 0.0;
-        }
-        return 1.0;
-    }
-
-    private Double resolvePsychAttack(Pokemon pokemon) {
-        if (pokemon.getType1().equals(TypeEnum.PSYCHIC) || pokemon.getType1().equals(TypeEnum.STEEL)) {
-            return 0.5;
-        } else if (pokemon.getType1().equals(TypeEnum.FIGHTING) || pokemon.getType1().equals(TypeEnum.GROUND)) {
-            return 2.0;
-        } else if (pokemon.getType1().equals(TypeEnum.DARK)) {
-            return 0.0;
-        }
-        return 1.0;
-    }
-
-    private Double resolveDarkAttack(Pokemon pokemon) {
-        if (pokemon.getType1().equals(TypeEnum.FIGHTING) || pokemon.getType1().equals(TypeEnum.DARK) || pokemon.getType1().equals(TypeEnum.FAIRY)) {
-            return 0.5;
-        } else if (pokemon.getType1().equals(TypeEnum.PSYCHIC) || pokemon.getType1().equals(TypeEnum.GHOST)) {
-            return 2.0;
-        }
-        return 1.0;
-    }
-
-    private Double resolveDragonAttack(Pokemon pokemon) {
-        if (pokemon.getType1().equals(TypeEnum.STEEL)) {
-            return 0.5;
-        } else if (pokemon.getType1().equals(TypeEnum.DRAGON)) {
-            return 2.0;
-        } else if (pokemon.getType1().equals(TypeEnum.FAIRY)) {
-            return 0.0;
-        }
-        return 1.0;
-    }
-
-    private Double resolveElectricAttack(Pokemon pokemon) {
-        if (pokemon.getType1().equals(TypeEnum.ELECTRIC) || pokemon.getType1().equals(TypeEnum.GRASS)
-                || pokemon.getType1().equals(TypeEnum.DRAGON)) {
-            return 0.5;
-        } else if (pokemon.getType1().equals(TypeEnum.WATER) || pokemon.getType1().equals(TypeEnum.FLYING)) {
-            return 2.0;
-        } else if (pokemon.getType1().equals(TypeEnum.GROUND)) {
-            return 0.0;
-        }
-        return 1.0;
-    }
-
-    private Double resolveFightingAttack(Pokemon pokemon) {
-        if (pokemon.getType1().equals(TypeEnum.POISON) || pokemon.getType1().equals(TypeEnum.FLYING)
-                || pokemon.getType1().equals(TypeEnum.PSYCHIC) || pokemon.getType1().equals(TypeEnum.BUG)
-                || pokemon.getType1().equals(TypeEnum.FAIRY)) {
-            return 0.5;
-        } else if (pokemon.getType1().equals(TypeEnum.NORMAL) || pokemon.getType1().equals(TypeEnum.ROCK)
-                || pokemon.getType1().equals(TypeEnum.ICE) || pokemon.getType1().equals(TypeEnum.STEEL)
-                || pokemon.getType1().equals(TypeEnum.DARK)) {
-            return 2.0;
-        }
-        return 1.0;
-    }
-
-    private Double resolvePoisonAttack(Pokemon pokemon) {
-        if (pokemon.getType1().equals(TypeEnum.POISON) || pokemon.getType1().equals(TypeEnum.GROUND)
-                || pokemon.getType1().equals(TypeEnum.ROCK) || pokemon.getType1().equals(TypeEnum.GHOST)) {
-            return 0.5;
-        } else if (pokemon.getType1().equals(TypeEnum.GRASS) || pokemon.getType1().equals(TypeEnum.FAIRY)) {
-            return 2.0;
-        } else if (pokemon.getType1().equals(TypeEnum.STEEL)) {
-            return 0.0;
-        }
-        return 1.0;
-    }
-
-    private Double resolveGroundAttack(Pokemon pokemon) {
-        if (pokemon.getType1().equals(TypeEnum.BUG) || pokemon.getType1().equals(TypeEnum.GRASS)) {
-            return 0.5;
-        } else if (pokemon.getType1().equals(TypeEnum.FIRE) || pokemon.getType1().equals(TypeEnum.ELECTRIC)
-                || pokemon.getType1().equals(TypeEnum.POISON) || pokemon.getType1().equals(TypeEnum.ROCK)
-                || pokemon.getType1().equals(TypeEnum.STEEL)) {
-            return 2.0;
-        } else if (pokemon.getType1().equals(TypeEnum.FLYING)) {
-            return 0.0;
-        }
-        return 1.0;
-    }
-
-    private Double resolveFlyingAttack(Pokemon pokemon) {
-        if (pokemon.getType1().equals(TypeEnum.ELECTRIC) || pokemon.getType1().equals(TypeEnum.ROCK)
-                || pokemon.getType1().equals(TypeEnum.STEEL)) {
-            return 0.5;
-        } else if (pokemon.getType1().equals(TypeEnum.GRASS) || pokemon.getType1().equals(TypeEnum.FIGHTING)
-                || pokemon.getType1().equals(TypeEnum.BUG)) {
-            return 2.0;
-        }
-        return 1.0;
-    }
-
-    private Double resolveBugAttack(Pokemon pokemon) {
-        if (pokemon.getType1().equals(TypeEnum.FIRE) || pokemon.getType1().equals(TypeEnum.FIGHTING)
-                || pokemon.getType1().equals(TypeEnum.POISON) || pokemon.getType1().equals(TypeEnum.GHOST)
-                || pokemon.getType1().equals(TypeEnum.STEEL) || pokemon.getType1().equals(TypeEnum.FAIRY)) {
-            return 0.5;
-        } else if (pokemon.getType1().equals(TypeEnum.GRASS) || pokemon.getType1().equals(TypeEnum.PSYCHIC)
-                || pokemon.getType1().equals(TypeEnum.DARK)) {
-            return 2.0;
-        }
-        return 1.0;
-    }
-
-    private Double resolveFairyAttack(Pokemon pokemon) {
-        if (pokemon.getType1().equals(TypeEnum.FIRE) || pokemon.getType1().equals(TypeEnum.POISON)
-                || pokemon.getType1().equals(TypeEnum.STEEL)) {
-            return 0.5;
-        } else if (pokemon.getType1().equals(TypeEnum.DRAGON) || pokemon.getType1().equals(TypeEnum.FIGHTING)
-                || pokemon.getType1().equals(TypeEnum.DARK)) {
-            return 2.0;
-        }
-        return 1.0;
-    }
-
-    private Double resolveRockAttack(Pokemon pokemon) {
-        if (pokemon.getType1().equals(TypeEnum.FIGHTING) || pokemon.getType1().equals(TypeEnum.GROUND)
-                || pokemon.getType1().equals(TypeEnum.STEEL)) {
-            return 0.5;
-        } else if (pokemon.getType1().equals(TypeEnum.FIRE) || pokemon.getType1().equals(TypeEnum.ICE)
-                || pokemon.getType1().equals(TypeEnum.FLYING) || pokemon.getType1().equals(TypeEnum.BUG)) {
-            return 2.0;
-        }
-        return 1.0;
-    }
-
-    private Double resolveSteelAttack(Pokemon pokemon) {
-        if (pokemon.getType1().equals(TypeEnum.FIRE) || pokemon.getType1().equals(TypeEnum.WATER)
-                || pokemon.getType1().equals(TypeEnum.ELECTRIC) || pokemon.getType1().equals(TypeEnum.STEEL)) {
-            return 0.5;
-        } else if (pokemon.getType1().equals(TypeEnum.ICE) || pokemon.getType1().equals(TypeEnum.FAIRY)) {
-            return 2.0;
-        }
-        return 1.0;
     }
 
 }
