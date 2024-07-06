@@ -1,7 +1,8 @@
 package br.com.pikomon.pikomon.schedule;
 
 import br.com.pikomon.pikomon.enums.TypeEnum;
-import br.com.pikomon.pikomon.modal.*;
+import br.com.pikomon.pikomon.modal.MoveData;
+import br.com.pikomon.pikomon.modal.PokemonData;
 import br.com.pikomon.pikomon.persistence.Pokemon;
 import br.com.pikomon.pikomon.persistence.PokemonMove;
 import br.com.pikomon.pikomon.persistence.Status;

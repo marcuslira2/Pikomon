@@ -1,10 +1,10 @@
 package br.com.pikomon.pikomon.enums;
 
 public enum LocationEnum {
-    PALLET_TOWN("Pallet Town",null ,null ),
+    PALLET_TOWN("Pallet Town", null, null),
     ROUTE_01("Route 1", new int[]{2, 5}, new int[]{2, 7}),
-    VERIDIAN("Veridian City",null ,null ),
-    ROUT_02("Route 2",new int[]{1, 2}, new int[]{1, 2});
+    ROUTE_02("Route 2", new int[]{1, 2}, new int[]{1, 2}),
+    VERIDIAN("Veridian City", null, null);
 
     private final String location;
     private final int[] pokemonIdList;

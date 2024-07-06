@@ -2,7 +2,11 @@ package br.com.pikomon.pikomon.persistence;
 
 import br.com.pikomon.pikomon.enums.CategoryEnum;
 import br.com.pikomon.pikomon.enums.TypeEnum;
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 
 
 @Entity

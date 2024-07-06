@@ -4,7 +4,11 @@ import br.com.pikomon.pikomon.enums.BattleResultEnum;
 import br.com.pikomon.pikomon.enums.BattleStatusEnum;
 import br.com.pikomon.pikomon.enums.LocationEnum;
 import br.com.pikomon.pikomon.enums.OpponentTypeEnum;
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "battle")

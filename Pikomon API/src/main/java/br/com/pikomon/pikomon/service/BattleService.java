@@ -3,10 +3,14 @@ package br.com.pikomon.pikomon.service;
 import br.com.pikomon.pikomon.dto.battle.BattleActionDTO;
 import br.com.pikomon.pikomon.dto.battle.BattleActionValidateDTO;
 import br.com.pikomon.pikomon.dto.battle.CreateBattleDTO;
+import br.com.pikomon.pikomon.enums.BattleResultEnum;
 import br.com.pikomon.pikomon.enums.BattleStatusEnum;
 import br.com.pikomon.pikomon.enums.LocationEnum;
 import br.com.pikomon.pikomon.enums.OpponentTypeEnum;
-import br.com.pikomon.pikomon.persistence.*;
+import br.com.pikomon.pikomon.persistence.Battle;
+import br.com.pikomon.pikomon.persistence.Move;
+import br.com.pikomon.pikomon.persistence.Pokemon;
+import br.com.pikomon.pikomon.persistence.Trainer;
 import br.com.pikomon.pikomon.repository.BattleRepository;
 import br.com.pikomon.pikomon.service.pokemon.PokemonAttributesService;
 import br.com.pikomon.pikomon.service.pokemon.PokemonService;
@@ -15,7 +19,7 @@ import org.springframework.stereotype.Service;
 import java.security.SecureRandom;
 import java.util.Random;
 import java.util.UUID;
-import java.util.concurrent.ExecutionException;
+
 
 @Service
 public class BattleService {
@@ -109,6 +113,7 @@ public class BattleService {
         } else if (pokemon.getHp().getBattleStatus() > 0 || wildPokemon.getHp().getBattleStatus() == 0) {
 
             battle.setStatus(BattleStatusEnum.FINISHED);
+            battle.setResult(BattleResultEnum.WIN);
             Integer nextLevel = pokemon.getNextLevel();
             pokemon = calcService.calcExp(pokemon, wildPokemon);
             log = "Battle has finished! you win";
@@ -128,6 +133,7 @@ public class BattleService {
         } else {
             log = "You loose";
             battle.setStatus(BattleStatusEnum.FINISHED);
+            battle.setResult(BattleResultEnum.LOSE);
             pokemon = attributesService.calcBattleStatus(pokemon);
             pokemonService.updatePokemon(pokemon);
             battleRepository.save(battle);
