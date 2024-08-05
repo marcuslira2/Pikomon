@@ -140,26 +140,23 @@ public class PokemonAutoCreationScheduler {
         }
     }
 
-    public void imageDownloader(String urlOrigin,String savePath){
-        try {
-            URL url = new URL(urlOrigin);
-            HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
-            int responseCode = httpURLConnection.getResponseCode();
+    public void imageDownloader(String urlOrigin,String savePath) throws IOException {
+        URL url = new URL(urlOrigin);
+        HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
+        int responseCode = httpURLConnection.getResponseCode();
 
-            if (responseCode == HttpURLConnection.HTTP_OK) {
-                try (InputStream inputStream = httpURLConnection.getInputStream();
-                     FileOutputStream outputStream = new FileOutputStream(savePath)) {
-                    byte[] buffer = new byte[1024];
-                    int bytesRead;
-                    while ((bytesRead = inputStream.read(buffer)) != -1) {
-                        outputStream.write(buffer, 0, bytesRead);
-                    }
+        if (responseCode == HttpURLConnection.HTTP_OK) {
+            try (InputStream inputStream = httpURLConnection.getInputStream();
+                 FileOutputStream outputStream = new FileOutputStream(savePath)) {
+                byte[] buffer = new byte[1024];
+                int bytesRead;
+                while ((bytesRead = inputStream.read(buffer)) != -1) {
+                    outputStream.write(buffer, 0, bytesRead);
                 }
-            } else {
-                System.out.println("Falha ao baixar a imagem. Código de status: " + responseCode);
             }
-        } catch (IOException e) {
-            System.out.println("Ocorreu um erro: " + e.getMessage());
+        } else {
+            String responseMessage = "Falha ao baixar a imagem. Código de status: " + responseCode;
+            log.info(responseMessage);
         }
     }
 

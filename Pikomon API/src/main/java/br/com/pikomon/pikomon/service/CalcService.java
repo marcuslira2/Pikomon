@@ -8,30 +8,33 @@ import org.springframework.stereotype.Service;
 @Service
 public class CalcService {
 
-    public Integer calcDamage(Pokemon ally, Pokemon wild, Move move) {
+    public Integer calcDamage(Pokemon pkAttacker, Pokemon pkDefender, Move move) {
         int damage = 0;
 
-        double modify = damageModify(move, wild);
-        CategoryEnum category = move.getCategory();
-        double stab = 1.0;
+        double modify = damageModify(move, pkDefender);
+        double stab = calcStab(pkAttacker,move);
         double critical = 1.0;
-        if (move.getType().equals(ally.getType1()) || move.getType().equals(ally.getType2())) {
-            stab = 1.5;
-        }
 
-        if (category.equals(CategoryEnum.PHYSICAL)) {
-            damage = (int) Math.floor((((((double) 2 * ally.getLevel() / 5 + 2) * ally.getAttack().getBattleStatus()
-                    * move.getPower() / wild.getDefense().getBattleStatus()) / 50) + 2) * stab * modify * critical * (80f / 100));
-        } else if (category.equals(CategoryEnum.SPECIAL)) {
-            damage = (int) Math.floor((((((double) 2 * ally.getLevel() / 5 + 2) * ally.getSpAttack().getBattleStatus()
-                    * move.getPower() / wild.getSpDefense().getBattleStatus()) / 50) + 2) * stab * modify * critical * (80f / 100));
+        if (move.getCategory().equals(CategoryEnum.PHYSICAL)) {
+            damage = (int) Math.floor((((((double) 2 * pkAttacker.getLevel() / 5 + 2) * pkAttacker.getAttack().getBattleStatus()
+                    * move.getPower() / pkDefender.getDefense().getBattleStatus()) / 50) + 2) * stab * modify * critical * (80f / 100));
+        } else if (move.getCategory().equals(CategoryEnum.SPECIAL)) {
+            damage = (int) Math.floor((((((double) 2 * pkAttacker.getLevel() / 5 + 2) * pkAttacker.getSpAttack().getBattleStatus()
+                    * move.getPower() / pkDefender.getSpDefense().getBattleStatus()) / 50) + 2) * stab * modify * critical * (80f / 100));
         }
 
         return damage;
     }
 
     private Double damageModify(Move move, Pokemon pokemon) {
-        return move.getType().resolveAttack(pokemon);
+
+        Double firstTypeModify = move.getType().resolveAttack(pokemon.getType1());
+        if(pokemon.getType2()!=null){
+            Double secondTypeModify = move.getType().resolveAttack(pokemon.getType2());
+            return secondTypeModify * firstTypeModify;
+        }
+
+        return firstTypeModify;
     }
 
     public Pokemon calcExp(Pokemon pokemon, Pokemon pk) {
@@ -71,6 +74,14 @@ public class CalcService {
     private Integer calculateTotalEv(Pokemon pokemon) {
         return pokemon.getHp().getEv() + pokemon.getAttack().getEv() + pokemon.getDefense().getEv()
                 + pokemon.getSpAttack().getEv() + pokemon.getSpDefense().getEv() + pokemon.getSpeed().getEv();
+    }
+
+
+    private Double calcStab(Pokemon pokemon, Move move){
+        if (pokemon.getType1().equals(move.getType()) ||(pokemon.getType2() !=null && pokemon.getType2().equals(move.getType())) ){
+            return  1.5;
+        }
+        return 1.0;
     }
 
 }
